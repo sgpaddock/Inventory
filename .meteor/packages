@@ -1,0 +1,29 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+twbs:bootstrap
+coffeescript
+iron:router
+aldeed:simple-schema
+aldeed:collection2
+mrt:moment
+accounts-base
+hive:accounts-ldap
+hive:file-registry
+reywood:publish-composite
+natestrauser:select2
+mizzao:autocomplete
+meteorhacks:aggregate
+cottz:iron-query
+matb33:collection-hooks
+mizzao:user-status
+tmeasday:publish-counts
+email
+differential:workers
+hive:facets
+hive:email-ingestion
+multipart
