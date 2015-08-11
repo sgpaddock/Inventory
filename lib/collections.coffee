@@ -1,35 +1,130 @@
-@Assets = new Mongo.Collection('assets')
-@Assets.attachSchema new SimpleSchema
+@Inventory = new Mongo.Collection 'inventory'
+@Inventory.attachSchema new SimpleSchema
   name:
     type: String
+    denyUpdate: true
   description:
     type: String
     optional: true
+    denyUpdate: true
   propertyTag:
     type: String
     optional: true
+    denyUpdate: true
+    unique: true
   deviceType:
     type: String
-    optional: true
+    allowedValues: [
+      'PC'
+      'Laptop'
+      'iPad'
+      'iMac'
+      'Other Tablet'
+      'Monitor'
+      'Other Computer'
+    ]
   serialNo:
     type: String
     optional: true
+    label: "Serial Number"
+    denyUpdate: true
   enteredByUserId:
     type: String
+    denyUpdate: true
   manufacturer:
     type: String
+    denyUpdate: true
+    allowedValues: [
+      'Apple'
+      'Dell'
+      'Microsoft'
+      'Other/Not Listed'
+    ]
     optional: true
   modelNo:
     type: String
     optional: true
+    label: "Model Number"
+    denyUpdate: true
   department:
     type: String
+    allowedValues: [
+      'AAAS'
+      'Air Force'
+      'American Studies'
+      'Anthropology'
+      'Appalachian Center'
+      'Army ROTC'
+      'Biology'
+      'Chemistry'
+      "Dean's Administration"
+      'Earth and Environmental Sciences'
+      'English'
+      'Environmental and Sustainability Studies'
+      'Center for English as a Second Language'
+      'Geography'
+      "Gender and Women's Studies"
+      'History'
+      'Hispanic Studies'
+      'Hive'
+      'IBU'
+      'International Studies'
+      'Linguistics'
+      'Mathematics'
+      'Modern and Classical Languages, Literatures and Cultures'
+      'Physics and Astronomy'
+      'Philosophy'
+      'Political Science'
+      'Psychology'
+      'Sociology'
+      'Social Theory'
+      'Statistics'
+      'Writing, Rhetoric & Digital Studies'
+      'Other/Not listed'
+      'Unassigned'
+    ]
   owner:
     type: String
   building:
     type: String
+    optional: true
+    allowedValues: [
+      '1020 EXPORT STREET'
+      '343 WALLER AVE'
+      '424 EUCLID AVENUE'
+      'APPALACHIAN CENTER'
+      'ASTeCC'
+      'AVIARY FACILITY'
+      'BARKER HALL'
+      'BBSRB'
+      'BOWMAN HALL'
+      'BRADLEY HALL'
+      'BRECKENRIDGE HALL'
+      'CHEMISTRY-PHYSICS'
+      'ECOLOGICAL RESEARCH'
+      'FUNKHOUSER'
+      'JESSE HARRIS CENTER'
+      'KASTLE HALL'
+      'LAFFERTY HALL'
+      'MACADAM OBSERVATORY'
+      'MARKEY CANCER CENTER'
+      'MATH HOUSE'
+      'MDR3'
+      'MDS'
+      'MILLER HALL'
+      'MINING/MINERALS BLDG'
+      'PATTERSON OFFICE TOWER'
+      'SCOTT ST BLDG'
+      'SLONE RESEARCH BLDG'
+      'SMALL ANIMAL LAB'
+      'THOMAS HUNT MORGAN'
+      'TOBACCO RESEARCH LAB'
+      'UK LEXMARK CENTER'
+      'WHITE HALL CLASSROOM'
+    ]
   officeNo:
     type: String
+    optional: true
     label: "Office Number"
   attachments:
     type: [Object]
@@ -53,6 +148,7 @@
     type: String
     optional: true
   category:
+    optional: true
     type: String
   quantity:
     type: Number
@@ -62,7 +158,7 @@
     optional: true
     allowedValues: ['units', 'oz', 'spools']
 
-@Deliveries = new Mongo.Collection('deliveries')
+@Deliveries = new Mongo.Collection 'deliveries'
 @Deliveries.attachSchema new SimpleSchema
   assetId:
     type: String
