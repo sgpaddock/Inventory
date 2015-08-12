@@ -1,6 +1,27 @@
 <template name="inventory">
   <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
-  {{#each assets}}
-    {{this}}
-  {{/each}}
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        {{#each fields}}
+          <th>{{this}}</th>
+        {{/each}}
+      </tr>
+    </thead>
+    <tbody>
+      {{#each assets}}
+        <tr>
+          {{#each fields}}
+            <td>
+              {{#with fieldCellContext this .. ../.. }}
+                {{value}}
+              {{/with}}
+            </td>
+          {{/each}}
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
 </template>
+
+
