@@ -20,17 +20,17 @@ Template.newAssetModal.events
 
 
 checkUsername = (tpl, winCb, failCb) ->
-  # A check username function for this template only. 
-    val = tpl.$('input[data-schema-key=owner]').val()
-    unless val.length < 1
-      Meteor.call 'checkUsername', val, (err, res) ->
-        if res
-          tpl.$('input[data-schema-key=owner]').parent().parent().removeClass('has-error').addClass('has-success')
-          tpl.$('button[data-action=checkUsername]').html('<span class="glyphicon glyphicon-ok"></span>')
-          tpl.$('button[data-action=checkUsername]').removeClass('btn-danger').removeClass('btn-primary').addClass('btn-success')
-          winCb()
-        else
-          tpl.$('input[data-schema-key=owner]').parent().parent().removeClass('has-success').addClass('has-error')
-          tpl.$('button[data-action=checkUsername]').removeClass('btn-success').removeClass('btn-primary').addClass('btn-danger')
-          tpl.$('button[data-action=checkUsername]').html('<span class="glyphicon glyphicon-remove"></span>')
-          failCb()
+  # A check username function for this template only.
+  val = tpl.$('input[data-schema-key=owner]').val()
+  unless val.length < 1
+    Meteor.call 'checkUsername', val, (err, res) ->
+      if res
+        tpl.$('input[data-schema-key=owner]').parent().parent().removeClass('has-error').addClass('has-success')
+        tpl.$('button[data-action=checkUsername]').html('<span class="glyphicon glyphicon-ok"></span>')
+        tpl.$('button[data-action=checkUsername]').removeClass('btn-danger').removeClass('btn-primary').addClass('btn-success')
+        winCb()
+      else
+        tpl.$('input[data-schema-key=owner]').parent().parent().removeClass('has-success').addClass('has-error')
+        tpl.$('button[data-action=checkUsername]').removeClass('btn-success').removeClass('btn-primary').addClass('btn-danger')
+        tpl.$('button[data-action=checkUsername]').html('<span class="glyphicon glyphicon-remove"></span>')
+        failCb()
