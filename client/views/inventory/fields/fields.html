@@ -1,0 +1,28 @@
+<template name="ownerField">
+  <div class="assigned-user">
+    {{> userPortrait username=value class="in-row" }}
+    <div class="inline-edit">
+      {{value}}
+      <div class="inline-edit-icon pull-right">
+        <button type="button" class="btn btn-xs btn-link" data-action="showAssignItem">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="assign-user-field">
+    {{> inputAutocomplete settings=userSettings name="assign-user" placeholder="Assign User" data-toggle="tooltip" data-trigger="manual" title="User not found."}}
+    <button type="button" class="btn btn-xs btn-primary" data-action="assignItem">
+      <span class="glyphicon glyphicon-ok"></span>
+    </button>
+  </div>
+</template>
+
+<template name="attachmentField">
+  {{value}}
+</template>
+
+<template name="atDefaultField">
+  {{value}}
+</template>

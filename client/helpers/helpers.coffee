@@ -1,3 +1,16 @@
+UI.registerHelper 'userSettings', ->
+  {
+    position: "bottom"
+    limit: 5
+    rules: [
+      collection: Meteor.users
+      field: 'username'
+      template: Template.userPill
+      noMatchTemplate: Template.noMatchUserPill
+    ]
+  }
+
+
 UI.registerHelper 'arrayify', (obj) ->
   #Transforms objects with k/v pairs into arrays of objects so Handlebars can iterate over them properly.
   result = []

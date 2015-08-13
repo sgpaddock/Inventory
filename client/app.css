@@ -215,133 +215,6 @@ body {
   transition: opacity 200ms ease;
 }
 
-.assign-user-field {
-  width: 200px;
-  vertical-align: middle;
-  white-space: nowrap;
-  position: relative;
-}
-
-.assign-user-field input {
-  width: 40px;
-  height: 40px;
-  background: #bbb;
-  border: none;
-  font-size: 10pt;
-  float: left;
-  color: #000;
-  padding-left: 40px;
-  margin-right: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  
-  -webkit-transition: width .55s ease;
-  -moz-transition: width .55s ease;
-  -ms-transition: width .55s ease;
-  -o-transition: width .55s ease;
-  transition: width .55s ease;
-  
-}
-
-.assign-user-field input::-webkit-input-placeholder {
-   color: #000;
-}
-.assign-user-field input:-moz-placeholder { /* Firefox 18- */
-   color: #000;  
-}
-.assign-user-field input::-moz-placeholder {  /* Firefox 19+ */
-   color: #000;  
-}
-.assign-user-field input:-ms-input-placeholder {  
-   color: #000;  
-}
-
-.assign-user-field .icon{
-  position: absolute;
-  display: block;
-  top: 50%;
-  margin-left: 14px;
-  margin-top: 12px;
-  z-index: 1;
-  color: #000;
-}
-
-.assign-user-field input:focus, .assign-user-field input:active {
-  outline:none;
-}
-.assign-user-field input:hover, .assign-user-field input:focus {
-    outline:none; 
-    width: 200px;
-}
-.assign-user-field:hover .icon +input{
-    width: 200px;
-}
-.assign-user-field:hover .icon {
-    color: #fff;
-}
-
-
-.add-tag-field {
-  width: 100px;
-  vertical-align: middle;
-  white-space: nowrap;
-  position: relative;
-}
-.add-tag-field input {
-  width: 40px;
-  height: 40px;
-  background: #bbb;
-  border: none;
-  font-size: 10pt;
-  float: left;
-  color: #000;
-  padding-left: 40px;
-  margin-right: 10px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  
-  -webkit-transition: width .55s ease;
-  -moz-transition: width .55s ease;
-  -ms-transition: width .55s ease;
-  -o-transition: width .55s ease;
-  transition: width .55s ease;
-  
-}
-
-.add-tag-field input::-webkit-input-placeholder {
-   color: #000;
-}
-.add-tag-field input:-moz-placeholder { /* Firefox 18- */
-   color: #000;  
-}
-.add-tag-field input::-moz-placeholder {  /* Firefox 19+ */
-   color: #000;  
-}
-.add-tag-field input:-ms-input-placeholder {  
-   color: #000;  
-}
-
-.add-tag-field .icon {
-  display: block;
-  position: absolute;
-  top: 50%;
-  margin-left: 14px;
-  margin-top: 12px;
-  z-index: 1;
-  color: #000;
-}
-
-.add-tag-field input:hover, .add-tag-field input:focus {
-  width: 130px;
-}
-.add-tag-field:hover .icon +input{
-  width: 130px;
-}
-.add-tag-field:hover .icon {
-  color: #fff;
-}
 
 .add-attachment-btn {
   width: 40px;
@@ -367,59 +240,11 @@ body {
   color: #fff;
 }
 
-.ticket-requester-portrait{
-  float: left;
-  text-align: center;
-  padding-right: 5px;
-  max-height: 24px;
-  width: 40px;
-}
-.ticket-status-input {
-  padding-left: 20px;
-  padding-right: 5px;
-}
-
 blockquote {
   width: 100%;
   background: #ffffff;
   border: 2px solid #ccc;
 }
-
-.ticket-row-panel-body {
-  bottom: 0px;
-}
-
-.ticket-row-panel {
-  margin-bottom: 0px;
-  border-bottom: none;
-  border-top: none;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  bottom: 0px;
-}
-.tag { 
-  display: inline-block; 
-  position: relative; 
-} 
- 
-.tag .remove-tag { 
-  position: absolute; 
-  display: block; 
-  border: 1px solid; 
-  top: 17px;
-  left: 20%; 
-  z-index: 9999; 
-  width: 4.4em;
-  background: rgba(255, 255, 255, 0.9); 
-  padding: 2px 4px 2px 4px; 
-  visibility: hidden; 
-  -moz-border-radius: 3px; 
-  -webkit-border-radius: 3px; 
-} 
- 
-.tag:hover .remove-tag { 
-  visibility: visible; 
-} 
 
 .attachment { 
   display: block;
@@ -444,14 +269,6 @@ blockquote {
 .attachment:hover .remove-attachment { 
   visibility: visible; 
 } 
-
-.note-well {
-  margin-bottom: 0px;
-}
-
-.panel {
-  word-wrap: break-word;
-}
 
 .error {
   font-weight: bold;
@@ -546,3 +363,18 @@ blockquote {
     }
   }
 
+.inline-edit {
+  display: inline-block;
+  width: auto;
+  overflow: hidden;
+}
+.inline-edit .inline-edit-icon {
+  opacity: 0;
+}
+.inline-edit:hover .inline-edit-icon {
+  opacity: 1;
+}
+
+.assign-user-field {
+  display: none;
+}

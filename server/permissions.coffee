@@ -9,5 +9,5 @@ Meteor.users.allow
 
 Inventory.allow
   insert: (userId, doc) -> doc.enteredByUserId is userId
-  update: -> false
+  update: -> true
   remove: -> false
