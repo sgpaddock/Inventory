@@ -1,27 +1,40 @@
 <template name="inventory">
   <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
   <table class="table table-bordered table-condensed">
-    <thead>
-      <tr>
-        {{#each fields}}
-          <th>{{this}}</th>
-        {{/each}}
-      </tr>
-    </thead>
-    <tbody>
-      {{#each assets}}
+    {{#with context}}
+      <thead>
         <tr>
           {{#each fields}}
-            <td>
-              {{#with fieldCellContext this .. ../.. }}
-                {{value}}
-              {{/with}}
-            </td>
+            <th>{{fieldName}}</th>
           {{/each}}
         </tr>
-      {{/each}}
-    </tbody>
+      </thead>
+      <tbody>
+        {{#each assets}}
+          <tr>
+            {{#each ../fields}}
+              <td>
+                {{#with fieldCellContext fieldName .. }}
+                  {{> renderCell this}}
+                {{/with}}
+              </td>
+            {{/each}}
+          </tr>
+        {{/each}}
+      </tbody>
+    {{/with}}
   </table>
 </template>
 
+<template name="ownerField">
+  {{> userPortrait username=value class="in-row" }}
+  {{value}}
+</template>
 
+<template name="atDefaultField">
+  {{value}}
+</template>
+
+<template name="attachmentField">
+  {{value}}
+</template>

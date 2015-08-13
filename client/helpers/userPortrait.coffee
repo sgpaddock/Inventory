@@ -1,5 +1,5 @@
 Template.userPortrait.helpers
-  user: -> Meteor.users.findOne @userId
+  user: -> Meteor.users.findOne @userId || Meteor.users.findOne { username: @username }
   online: ->
     if @fadeIfOffline
       if Meteor.users.findOne(@userId).status?.idle or not Meteor.users.findOne(@userId).status?.online
