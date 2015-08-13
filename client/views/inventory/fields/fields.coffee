@@ -35,3 +35,15 @@ hideFields = (tpl) ->
   tpl.$('div.assign-user-field').hide()
   tpl.$('div.assigned-user').fadeIn(100)
   tpl.$('[data-toggle=tooltip]').tooltip('hide')
+
+
+Template.attachmentField.helpers
+  file: ->
+    FileRegistry.findOne(@fileId)
+
+Template.attachmentField.events
+  'click button[data-action=attachFile]': (e, tpl) ->
+    id = Template.parentData(3)._id #I hate you Blaze
+    Media.pickLocalFile (fileId) ->
+      Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
+
