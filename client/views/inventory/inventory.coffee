@@ -11,7 +11,11 @@ Template.inventory.helpers
       fieldName: k
     return context
 
-  assets: -> Inventory.find()
+  assets: ->
+    sortKey = Session.get('sortKey') || 'name'
+    sort = {}
+    sort[sortKey] = Session.get('sortOrder') || -1
+    Inventory.find {}, {sort: sort}
 
   fieldCellContext: (fn, doc) ->
     { fieldName: fn, value: doc[fn], tpl: customTemplates[fn] }
@@ -19,10 +23,23 @@ Template.inventory.helpers
   renderCell: ->
     Template[@tpl] or Template.atDefaultField
 
+  isSortkey: ->
+    @fieldName is Session.get('sortKey')
+
+  isAscending: ->
+    Session.get('sortOrder') is 1
+
 Template.inventory.events
   'click button[name=newAssetButton]': (e, tpl) ->
     Blaze.render Template.newAssetModal, $('body').get(0)
     $('#newAssetModal').modal('show')
+
+  'click span[class=field-table-heading]': (e, tpl) ->
+    if Session.get('sortKey') is $(e.target).data('sort-key')
+      Session.set 'sortOrder', (-1 * Session.get('sortOrder'))
+    else
+      Session.set 'sortOrder', 1
+    Session.set 'sortKey', $(e.target).data('sort-key')
 
 
 # This is the thing where the autotable package being fleshed out would be very helpful, to have something like
@@ -34,3 +51,4 @@ customTemplates = {
   owner: 'ownerField'
   attachments: 'attachmentField'
 }
+

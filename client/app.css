@@ -378,3 +378,7 @@ blockquote {
 .assign-user-field {
   display: none;
 }
+
+.field-table-heading {
+  cursor: pointer;
+}

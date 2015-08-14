@@ -5,8 +5,15 @@
       <thead>
         <tr>
           {{#each fields}}
-            <th>{{fieldName}}</th>
-          {{/each}}
+            <th><span class="field-table-heading" data-sort-key="{{fieldName}}">
+                {{fieldName}} &nbsp;
+                {{#if isSortkey}} {{#if isAscending}}
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    {{else}}
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                {{/if}}{{/if}} 
+                </span></th>
+              {{/each}}
         </tr>
       </thead>
       <tbody>
