@@ -11,9 +11,11 @@ Router.map ->
   @route 'default',
     path: '/'
     template: 'inventory'
-    onBeforeAction: ->
+    waitOn: ->
       Meteor.subscribe 'userData'
-      Meteor.subscribe 'inventory'
+    onBeforeAction: ->
+      filter = Filter.getFilterFromQuery @params.query
+      Meteor.subscribe 'inventory', filter
       @next()
 
   @route 'userDashboard',

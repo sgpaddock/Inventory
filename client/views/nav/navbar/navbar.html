@@ -1,34 +1,71 @@
 <template name="navbar">
-<nav class="navbar navbar-default navbar-static-top navbar-no-padding">
-<div class="container-fluid">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
-      <span class="sr-only">A&S Inventory</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" href="/">A&S Inventory</a>
-  </div>
-  {{#if currentUser }}
-  <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" id="navbar-collapse">
-    <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-        {{currentUser.username}}
-        <img src="https://as.uky.edu/profile-picture/{{currentUser.username}}" style="max-height: 23px; max-width: 100px;">
-        <b class="caret"></b>
-      </a>
-      <ul class="dropdown-menu">
-        <li><a href="/my/dashboard">Settings</a></li>
-        <li class="divider"></li>
-        <li><a href="#" id="logout">Logout</a></li>
-      </ul>
-      </li>
-    </ul>
-  </div><!-- /.navbar-collapse -->
-  {{/if}}
-</div>
-</nav>
+  <nav class="navbar navbar-default navbar-static-top yamm">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+          <span class="sr-only">A&S Inventory</span>
+        </button>
+        <a class="navbar-brand" href="/">A&S Inventory</a>
+      </div>
+      {{#if currentUser}}
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+
+          <!-- Filter YAMM -->
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                Filters<b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  <div class="yamm-content">
+                    <div class="row">
+                      {{#each facetKeys}}
+                        <ul class="col-sm-2 list-unstyled">
+                          <li>
+                            <p><strong>{{this}}</strong></p>
+                          </li>
+                          {{#each value}}
+                            {{> facetCheckbox}}
+                          {{/each}}
+                        </ul>
+                      {{/each}}
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <!-- User Dropdown -->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                {{currentUser.username}}
+                <img src="https://as.uky.edu/profile-picture/{{currentUser.username}}" style="max-height: 23px; max-width: 100px;">
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/my/dashboard">Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="#" id="logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div><!-- /.navbar-collapse -->
+      {{/if}}
+    </div><!-- /.container-fluid -->
+  </nav>
+</template>
+
+<template name="facetCheckbox">
+  <li>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" id="filter-{{key}}-{{name}}" data-facet-key="{{key}}" data-facet-value="{{name}}" {{checked}}>
+        {{name}} ({{count}})
+      </label>
+    </div>
+  </li>
 </template>

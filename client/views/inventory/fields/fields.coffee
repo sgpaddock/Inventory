@@ -42,8 +42,13 @@ Template.attachmentField.helpers
     FileRegistry.findOne(@fileId)
 
 Template.attachmentField.events
-  'click button[data-action=attachFile]': (e, tpl) ->
+  'click a[data-action=uploadFile]': (e, tpl) ->
     id = Template.parentData(3)._id #I hate you Blaze
     Media.pickLocalFile (fileId) ->
+      Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
+
+  'click a[data-action=takePicture]': (e, tpl) ->
+    id = Template.parentData(3)._id
+    Media.capturePhoto (fileId) ->
       Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
 

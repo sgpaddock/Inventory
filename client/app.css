@@ -117,9 +117,6 @@ body {
 
 /***************************** NAV *****************************/
 
-.navbar {
-  position: static;
-}
 
 .navbar .nav .dropdown > li {
   z-index: 10001;
@@ -381,4 +378,37 @@ blockquote {
 
 .field-table-heading {
   cursor: pointer;
+}
+
+/*!
+ * Yamm!3 - Yet another megamenu for Bootstrap 3
+ * http://geedmo.github.com/yamm3
+ * 
+ * @geedmo - Licensed under the MIT license
+ */
+.yamm .nav,
+.yamm .collapse,
+.yamm .dropup,
+.yamm .dropdown {
+  position: static;
+}
+.yamm .container {
+  position: relative;
+}
+.yamm .dropdown-menu {
+  left: auto;
+}
+.yamm .yamm-content {
+  padding: 20px 30px;
+}
+.yamm .dropdown.yamm-fw .dropdown-menu {
+  left: 0;
+  right: 0;
+}
+.list-unstyled,
+.list-unstyled ul { min-width: 160px }
+
+label {
+  font-weight: normal;
+  color: #000;
 }
