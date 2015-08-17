@@ -1,4 +1,4 @@
-excludedKeys = [ 'enteredByUserId', 'imageId', 'barcode']
+excludedKeys = [ 'enteredByUserId', 'imageId', 'barcode', 'enteredAtTimestamp' ]
 
 Template.inventory.helpers
   context: ->

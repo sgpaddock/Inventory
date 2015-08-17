@@ -11,7 +11,10 @@ Router.map ->
   @route 'default',
     path: '/'
     template: 'inventory'
-    waitOn: -> Meteor.subscribe 'userData'
+    onBeforeAction: ->
+      Meteor.subscribe 'userData'
+      Meteor.subscribe 'inventory'
+      @next()
 
   @route 'userDashboard',
     path: '/my/dashboard'
@@ -37,9 +40,7 @@ Router.map ->
 
       Meteor.call 'checkUsername', @request.body.username
 
-      blackboxKeys = _.difference(_.keys(@request.body), requiredParams.concat(['submitter_name', 'subject_line'], Tickets.simpleSchema()._schemaKeys))
-      formFields = _.pick(@request.body, blackboxKeys)
-
+      ###
       Tickets.insert
         title: @request.body.subject_line
         body: @request.body.description
@@ -54,6 +55,7 @@ Router.map ->
         tags: @request.body.tags?.split(';\n') || []
         formFields: formFields
         attachmentIds: _.pluck(@request.files, '_id')
+        ###
 
       @response.end 'Submission successful.'
 
