@@ -14,7 +14,7 @@ Router.map ->
     waitOn: ->
       Meteor.subscribe 'userData'
     onBeforeAction: ->
-      Session.set 'itmeSet', []
+      Session.set 'itemSet', []
       filter = Filter.getFilterFromQuery @params.query
       Meteor.subscribe 'inventory', filter
       Meteor.subscribe 'newInventory', filter, new Date()
