@@ -9,7 +9,6 @@ Template.newAssetModal.events
       obj = {}
       _.each fields, (f) ->
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
-      console.log obj
       Inventory.insert obj
       $('#newAssetModal').modal('hide')
 
