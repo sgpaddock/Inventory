@@ -5,10 +5,11 @@ Template.inventory.helpers
     # This is totally unnecessary at the moment
     context = _.extend {}, @
 
-    schema = Inventory.simpleSchema()._schema
-    fieldKeys = _.filter _.difference(_.keys(schema), excludedKeys), (k) -> k.indexOf('.$') == -1
+    ss = Inventory.simpleSchema()
+    fieldKeys = _.filter _.difference(ss._schemaKeys, excludedKeys), (k) -> k.indexOf('.$') == -1
     context.fields = _.map fieldKeys, (k) ->
       fieldName: k
+      fieldLabel: ss.label(k)
     return context
 
   assets: ->
