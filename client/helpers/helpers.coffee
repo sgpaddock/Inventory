@@ -1,3 +1,6 @@
+UI.registerHelper 'isCordova', ->
+  Meteor.isCordova
+
 UI.registerHelper 'userSettings', ->
   {
     position: "bottom"
