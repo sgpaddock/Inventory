@@ -25,7 +25,7 @@ Template.inventory.helpers
     Template[@tpl] || Template.atDefaultField
 
   oneItem: ->
-    # Check if there's an item in the local db. Maybe could be a better name for this. 
+    # Check if there's an item in the local db. Maybe could be a better name for this.
     Inventory.findOne()
   columnCount: ->
     _.difference(_.keys(Inventory.simpleSchema()._schema), excludedKeys).length
