@@ -14,16 +14,14 @@ Router.map ->
     waitOn: ->
       Meteor.subscribe 'userData'
     onBeforeAction: ->
+      Session.set 'itmeSet', []
       filter = Filter.getFilterFromQuery @params.query
       Meteor.subscribe 'inventory', filter
+      Meteor.subscribe 'newInventory', filter, new Date()
       @next()
 
   @route 'userDashboard',
     path: '/my/dashboard'
-    onBeforeAction: ->
-      Session.set 'queueName', null
-      Session.set 'pseudoQueue', null
-      @next()
 
   @route 'apiSubmit',
     path: '/api/1.0/submit'

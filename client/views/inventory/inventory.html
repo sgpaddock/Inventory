@@ -12,11 +12,19 @@
                     {{else}}
                     <span class="glyphicon glyphicon-chevron-up"></span>
                 {{/if}}{{/if}} 
-                </span></th>
-              {{/each}}
+            </span></th>
+          {{/each}}
         </tr>
       </thead>
       <tbody>
+        {{#unless oneItem}}
+          <td colspan='{{columnCount}}'>
+          No items found matching your query. 
+          {{#if filter}}
+            <a href='#' data-action='clearFilter'>Clear your filters?</a>
+          {{/if}}
+        </td>
+        {{/unless}}
         {{#each assets}}
           <tr>
             {{#each ../fields}}
