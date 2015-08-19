@@ -37,3 +37,4 @@ App.launchScreens({
   'android_xhdpi_landscape': 'resources/Launch Screens/PNG/AS_icon_1280x720.png'
 });
 
+App.setPreference('AutoHideSplashScreen', 'true');
