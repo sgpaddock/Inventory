@@ -1,4 +1,4 @@
-excludedKeys = [ 'enteredByUserId', 'imageId', 'barcode', 'enteredAtTimestamp' ]
+excludedKeys = [ 'enteredByUserId', 'imageId', 'barcode', 'enteredAtTimestamp', 'category', 'quantity', 'quantityUnit' ]
 
 Template.inventory.helpers
   context: ->
@@ -63,6 +63,9 @@ Template.inventory.events
 customTemplates = {
   owner: 'ownerField'
   attachments: 'attachmentField'
+  department: 'departmentField'
+  building: 'buildingField'
+  officeNo: 'officeNoField'
 }
 
 Tracker.autorun ->

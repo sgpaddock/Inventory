@@ -1,5 +1,5 @@
 <template name="ownerField">
-  <div class="assigned-user">
+  <div class="field-area">
     {{> userPortrait username=value class="in-row" }}
     <div class="inline-edit">
       {{value}}
@@ -11,7 +11,7 @@
     </div>
   </div>
 
-  <div class="assign-user-field">
+  <div class="field-edit-area">
     {{> inputAutocomplete settings=userSettings name="assign-user" placeholder="Assign User" data-toggle="tooltip" data-trigger="manual" title="User not found."}}
     <button type="button" class="btn btn-xs btn-primary" data-action="assignItem">
       <span class="glyphicon glyphicon-ok"></span>
@@ -42,4 +42,66 @@
 
 <template name="atDefaultField">
   {{value}}
+</template>
+
+<template name="departmentField">
+  <div class="field-area">
+    <div class="inline-edit">
+      {{value}}
+      <div class="inline-edit-icon pull-right">
+        <button type="button" class="btn btn-xs btn-link" data-action="editDepartment">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-edit-area">
+    <select name="department">
+      {{#each department}}
+        <option value="{{this}}">{{this}}</option>
+      {{/each}}
+    </select>
+    <button type="button" class="btn btn-xs btn-primary" data-action="saveDepartment">Save</button>
+  </div>
+</template>
+
+<template name="buildingField">
+  <div class="field-area">
+    <div class="inline-edit">
+      {{value}}
+      <div class="inline-edit-icon pull-right">
+        <button type="button" class="btn btn-xs btn-link" data-action="editBuilding">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-edit-area">
+    <select name="building">
+      {{#each building}}
+        <option value="{{this}}">{{this}}</option>
+      {{/each}}
+    </select>
+    <button type="button" class="btn btn-xs btn-primary" data-action="saveBuilding">Save</button>
+  </div>
+</template>
+
+<template name="officeNoField">
+  <div class="field-area">
+    <div class="inline-edit">
+      {{value}}
+      <div class="inline-edit-icon pull-right">
+        <button type="button" class="btn btn-xs btn-link" data-action="editOfficeNo">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="field-edit-area">
+    <input type="text" name="officeNo">
+    <button type="button" class="btn btn-xs btn-primary" data-action="saveOfficeNo">Save</button>
+  </div>
 </template>
