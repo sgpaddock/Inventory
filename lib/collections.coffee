@@ -163,6 +163,35 @@
     optional: true
     allowedValues: ['units', 'oz', 'spools']
 
+@Changelog = new Mongo.Collection 'changelog'
+@Changelog.attachSchema new SimpleSchema
+  itemId:
+    type: String
+    label: "Item ID"
+  timestamp:
+    type: new Date()
+  userId:
+    type: String
+    optional: true
+  username:
+    type: String
+    optional: true
+  type:
+    type: String
+    allowedValues: [ 'field', 'attachment' ]
+  oldValue:
+    type: String
+    optional: true
+  newValue:
+    type: String
+    optional: true
+  field:
+    type: String
+    optional: true
+  otherId:
+    type: String
+    optional: true
+
 @Deliveries = new Mongo.Collection 'deliveries'
 @Deliveries.attachSchema new SimpleSchema
   assetId:
