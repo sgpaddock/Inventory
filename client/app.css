@@ -365,11 +365,15 @@ blockquote {
   width: auto;
   overflow: hidden;
 }
-.inline-edit .inline-edit-icon {
+.inline-edit-icon {
   opacity: 0;
 }
-.inline-edit:hover .inline-edit-icon {
+.field-area:hover .inline-edit-icon {
   opacity: 1;
+}
+
+.field-area {
+  width: 100%;
 }
 
 .field-edit-area {
