@@ -94,6 +94,7 @@ Template.officeNoField.events
     unless val is ""
       Inventory.update Template.parentData(3)._id, { $set: { officeNo: val } }
       hideEditField tpl
+
   'keyup input[name=officeNo]': (e, tpl) ->
     if e.which is 13
       val = tpl.$('input[name=officeNo]').val()

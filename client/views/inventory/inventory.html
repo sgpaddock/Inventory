@@ -40,3 +40,16 @@
     {{/with}}
   </table>
 </template>
+
+
+<template name="inventory2">
+  <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
+  {{#autotable collection="Inventory" fields=fields}}
+    {{> atColumn field="department" edit=true}}
+    {{> atColumn field="owner" template="ownerField"}}
+    {{> atColumn field="building" edit=true values=buildingValues}}
+    {{> atColumn field="officeNo" edit=true}}
+    {{> atColumn field="attachments" template="attachmentField"}}
+  {{/autotable}}
+</template>
+

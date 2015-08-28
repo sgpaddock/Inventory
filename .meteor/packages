@@ -27,3 +27,4 @@ hive:facets
 hive:email-ingestion
 multipart
 aldeed:autoform
+noahadler:autotable

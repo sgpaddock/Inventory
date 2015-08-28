@@ -1,4 +1,3 @@
-excludedKeys = [ 'enteredByUserId', 'imageId', 'barcode', 'enteredAtTimestamp', 'category', 'quantity', 'quantityUnit' ]
 
 Template.inventory.helpers
   context: ->
@@ -55,6 +54,15 @@ Template.inventory.events
     _.each _.keys(Iron.query.get()), (k) ->
       Iron.query.set k
 
+      
+Template.inventory2.helpers
+  fields: -> [ 'name', 'description', 'propertyTag', 'deviceType', 'serialNo', 'manufacturer', 'modelNo', 'department', 'owner', 'building', 'officeNo', 'attachments' ]
+
+Template.inventory2.events
+  'click button[name=newAssetButton]': (e, tpl) ->
+    Blaze.render Template.newAssetModal, $('body').get(0)
+    $('#newAssetModal').modal('show')
+
 # This is the thing where the autotable package being fleshed out would be very helpful, to have something like
 # AutoTable.configureTemplates
 #   fieldName: 'owner'
@@ -74,3 +82,5 @@ Tracker.autorun ->
   Inventory.find(filter).observe
     added: (item) ->
       Session.set 'itemSet', _.uniq(Session.get('itemSet')?.concat(item._id)) || [ item._id ]
+
+

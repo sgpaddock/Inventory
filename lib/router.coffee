@@ -10,7 +10,7 @@ Router.configure
 Router.map ->
   @route 'default',
     path: '/'
-    template: 'inventory'
+    template: 'inventory2'
     waitOn: ->
       Meteor.subscribe 'userData'
     onBeforeAction: ->
