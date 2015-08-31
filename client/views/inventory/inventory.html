@@ -44,7 +44,7 @@
 
 <template name="inventory2">
   <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
-  {{#autotable collection="Inventory" fields=fields}}
+  {{#autotable collection="Inventory" fields=fields tableStyle="table-bordered table-condensed"}}
     {{> atColumn field="department" edit=true}}
     {{> atColumn field="owner" template="ownerField"}}
     {{> atColumn field="building" edit=true values=buildingValues}}
