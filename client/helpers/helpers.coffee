@@ -10,6 +10,9 @@ UI.registerHelper 'userSettings', ->
       field: 'username'
       template: Template.userPill
       noMatchTemplate: Template.noMatchUserPill
+      selector: (match) ->
+        r = new RegExp match, 'i'
+        return { $or: [ { username: r }, { displayName: r } ] }
     ]
   }
 

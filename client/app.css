@@ -58,6 +58,15 @@ body {
   max-height: 40px;
 }
 
+.user-picture {
+  display: inline-block;
+}
+
+.user-profile-info {
+  font-size: .85em;
+  display: inline-block;
+}
+
 .in-row img  {
   max-width: 36px;
   max-height: 24px;
