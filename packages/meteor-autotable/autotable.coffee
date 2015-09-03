@@ -1,5 +1,5 @@
 Template.autotable.helpers
-  addFieldsToContext: ->
+  context: ->
     context = _.extend {}, @
     context.fieldTemplates = new ReactiveDict()
     if @collection? and window[@collection]
@@ -17,15 +17,14 @@ Template.autotable.helpers
           label: ss.label(k)
         
         return context
-        
   reactiveConfig: ->
-    console.log 'reactiveConfig', @, arguments
-    return @fieldTemplates
-        
+    @fieldTemplates
+
   records: ->
-    sort = {}
-    sortKey = Session.get('sortKey') || 'name'
-    sort[sortKey] = Session.get('sortOrder') || -1
+    if Session.get('sortKey')
+      sort = {}
+      sortKey = Session.get('sortKey')
+      sort[sortKey] = Session.get('sortOrder') || -1
     window[@collection].find({}, {sort: sort})
     
   fieldCount: (f) ->
@@ -41,24 +40,26 @@ Template.autotable.helpers
     'update-' + @_id
   
   fieldCellContext: (fieldName, doc, grandparent) ->
-    return { fieldName: fieldName, value: doc[fieldName], fieldConfig: grandparent.fieldTemplates }
-    
-  renderCell: ->
-    tpl = @fieldConfig.get @fieldName
-    if tpl?
-      return Template[tpl]
-    else
-      return Template.atDefaultColumn
+    tpl = grandparent.fieldTemplates.get(fieldName) || 'atDefaultColumn'
+    return {
+      fieldName: fieldName
+      value: doc[fieldName]
+      template: tpl
+      collection: grandparent.collection
+      _id: doc._id
+    }
 
   modalId: ->
     'autotable-quick-add'
     
 Template.autotable.events
   'click button.add': (e,tpl) ->
-    $(tpl.find 'div[role="dialog"]').modal('show')
+    tpl.$('div[role="dialog"]').modal('show')
+
   'click tbody tr': (e,tpl) ->
     if tpl.data.updateRows
       $(e.target).closest('tr').next().toggle()
+
   'click span[class=field-table-heading]': (e, tpl) ->
     if Session.get('sortKey') is $(e.target).data('sort-key')
       Session.set 'sortOrder', (-1 * Session.get('sortOrder'))
@@ -80,20 +81,18 @@ Template.atEditColumn.helpers
     if @values
       @values
     else
-      collection = Template.parentData(4).collection
-      return window[collection].simpleSchema()._schema[@fieldName].allowedValues || null
+      return window[@collection].simpleSchema()._schema[@fieldName].allowedValues || null
 
 Template.atEditColumn.events
   "click button[data-action=show-edit-field]": (e, tpl) ->
-    item = Template.parentData(3) # GET RID OF PARENTDATA
+    item = window[@collection].findOne(@_id)
     showEditField tpl
     tpl.$("[name=edit-field]").val(item[tpl.data.fieldName])
 
   'click button[data-action=save-field]': (e, tpl) ->
-    collection = Template.parentData(4).collection # GET RID OF PARENTDATA
     set = {}
     set[tpl.data.fieldName] = tpl.$('[name=edit-field]').val()
-    window[collection].update Template.parentData(3)._id, { $set: set } # GET RID OF PARENTDATA
+    window[@collection].update @_id, { $set: set }
     hideEditField tpl
 
   'keydown input[name=edit-field]': (e, tpl) ->
@@ -106,12 +105,16 @@ Template.atEditColumn.events
       unless val is ""
         set = {}
         set[tpl.data.fieldName] = val
-        collection = Template.parentData(4).collection # GET RID OF PARENTDATA
-        window[collection].update Template.parentData(3)._id, { $set: set } # GET RID OF PARENTDATA
+        window[tpl.data.collection].update tpl.data._id, { $set: set }
         hideEditField tpl
 
 
 showEditField = (tpl) ->
+  # Hide all other edit fields before showing one. Can we do this in Blaze?
+  $('div.field-edit-area').hide()
+  $('div.field-area').fadeIn(100)
+  
+  # And then hide the current field and show the edit area.
   tpl.$('div.field-area').hide()
   tpl.$('div.field-edit-area').fadeIn(100)
   tpl.$('[data-toggle=tooltip]').tooltip('hide')

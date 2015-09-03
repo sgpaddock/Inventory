@@ -1,5 +1,5 @@
 (exports ? this).escape = (str) ->
-  str.replace(/&/g, '&amp;')
+  str?.replace(/&/g, '&amp;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#x27;')
     .replace(/</g, '&lt;')

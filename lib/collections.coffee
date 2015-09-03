@@ -1,12 +1,5 @@
 @Inventory = new Mongo.Collection 'inventory'
 @Inventory.attachSchema new SimpleSchema
-  name:
-    type: String
-    denyUpdate: true
-  description:
-    type: String
-    optional: true
-    denyUpdate: true
   propertyTag:
     type: String
     optional: true
@@ -17,8 +10,8 @@
     allowedValues: [
       'PC'
       'Laptop'
-      'iPad'
-      'iMac'
+      'IPad'
+      'IMac'
       'Other Tablet'
       'Monitor'
       'Other Computer'
@@ -53,6 +46,7 @@
     denyUpdate: true
   department:
     type: String
+    optional: true
     allowedValues: [
       'AAAS'
       'Air Force'
@@ -60,6 +54,7 @@
       'Anthropology'
       'Appalachian Center'
       'Army ROTC'
+      'Aux Services'
       'Biology'
       'Chemistry'
       "Dean's Administration"
@@ -68,7 +63,7 @@
       'Environmental and Sustainability Studies'
       'Center for English as a Second Language'
       'Geography'
-      "Gender and Women's Studies"
+      "Gender and Womens Studies"
       'History'
       'Hispanic Studies'
       'Hive'
@@ -90,6 +85,7 @@
     ]
   owner:
     type: String
+    optional: true
   building:
     type: String
     optional: true
@@ -104,8 +100,10 @@
       'BBSRB'
       'BOWMAN HALL'
       'BRADLEY HALL'
-      'BRECKENRIDGE HALL'
+      'BRECKINRIDGE HALL'
+      'CENTER FOR APPLIED ENERGY'
       'CHEMISTRY-PHYSICS'
+      'COMBS RESEARCH BUILDING'
       'ECOLOGICAL RESEARCH'
       'FUNKHOUSER'
       'JESSE HARRIS CENTER'
@@ -146,6 +144,13 @@
     ]
   'attachments.$.fileId':
     type: String
+  notes:
+    type: String
+    optional: true
+  ticketNo:
+    type: String
+    optional: true
+    label: "Waggle/Triage Ticket"
   imageId:
     type: String
     optional: true

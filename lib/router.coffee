@@ -10,15 +10,20 @@ Router.configure
 Router.map ->
   @route 'default',
     path: '/'
-    template: 'inventory2'
+    template: 'inventory'
     waitOn: ->
       Meteor.subscribe 'userData'
     onBeforeAction: ->
       Session.set 'itemSet', []
       filter = Filter.getFilterFromQuery @params.query
-      Meteor.subscribe 'inventory', filter
+      Meteor.subscribe 'inventory', filter, onReady: ->
+        Session.set 'ready', true
       Meteor.subscribe 'newInventory', filter, new Date()
       @next()
+
+  @route 'import',
+    path: '/import'
+    template: 'import'
 
   @route 'userDashboard',
     path: '/my/dashboard'
