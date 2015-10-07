@@ -21,6 +21,15 @@ Router.map ->
       Meteor.subscribe 'newInventory', filter, new Date()
       @next()
 
+      if @params.query.attachmentId
+        file = FileRegistry.findOne(@params.query.attachmentId)
+
+      if file
+        Blaze.renderWithData Template.attachmentModal, { attachmentId: @params.query.attachmentId }, $('body').get(0)
+        $('#attachmentModal').modal('show')
+      else
+        $('#attachmentModal').modal('hide')
+
   @route 'import',
     path: '/import'
     template: 'import'
@@ -69,3 +78,8 @@ Router.map ->
     where: 'server'
     action: FileRegistry.serveFile
 
+  @route 'downloadFile',
+    path: '/download/:filename'
+    where: 'server'
+    action: FileRegistry.serveFile
+      disposition: 'attachment'

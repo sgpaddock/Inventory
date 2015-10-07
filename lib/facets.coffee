@@ -1,10 +1,11 @@
 @Filter =
   getFilterFromQuery: (query) ->
-    unless _.keys(query).length is 0
+    q = _.omit(query, 'attachmentId')
+    unless _.keys(q).length is 0
       filter = {}
       filter.$and = []
 
-      for k,v of query
+      for k,v of q
         obj = {}
         obj[k] = { $in: v.split(',') }
         filter.$and.push obj

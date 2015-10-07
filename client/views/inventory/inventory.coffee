@@ -2,7 +2,7 @@ Template.inventory.helpers
   fields: -> [ 'name', 'description', 'propertyTag', 'deviceType', 'serialNo', 'manufacturer', 'modelNo', 'department', 'owner', 'building', 'officeNo', 'attachments' ]
   ready: -> Session.get 'ready'
 
-Template.inventory2.events
+Template.inventory.events
   'click button[name=newAssetButton]': (e, tpl) ->
     Blaze.render Template.newAssetModal, $('body').get(0)
     $('#newAssetModal').modal('show')

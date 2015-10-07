@@ -34,7 +34,7 @@
         {{#if file.thumbnail}}
           <img class="img-thumbnail" style="max-width: 64px; max-height:24px;" src="/file/{{file.thumbnail}}" />
         {{/if}}
-        <a data-action="downloadAttachment" href="/file/{{file.filenameOnDisk}}" target="_blank">{{file.filename}}</a><br />
+        <a data-action="showAttachmentModal" class="cursor-pointer" data-fileId="{{file._id}}">{{file.filename}}</a><br />
       </div>
     </div>
   {{/each}}

@@ -43,3 +43,21 @@ hideEditField = (tpl) ->
   tpl.$('[data-toggle=tooltip]').tooltip('hide')
 
 
+Template.attachmentField.helpers
+  file: ->
+    FileRegistry.findOne(@fileId)
+
+Template.attachmentField.events
+  'click a[data-action=showAttachmentModal]': (e, tpl) ->
+    Iron.query.set 'attachmentId', @fileId
+
+  'click a[data-action=uploadFile]': (e, tpl) ->
+    id = @_id
+    Media.pickLocalFile (fileId) ->
+      Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
+      console.log Inventory.findOne(@_id)
+
+  'click a[data-action=takePicture]': (e, tpl) ->
+    id = @_id
+    Media.capturePhoto (fileId) ->
+      Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
