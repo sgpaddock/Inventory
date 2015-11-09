@@ -1,127 +1,142 @@
-Template.autotable.helpers
-  context: ->
-    context = _.extend {}, @
-    context.fieldTemplates = new ReactiveDict()
-    if @collection? and window[@collection]
-      if window[@collection].simpleSchema?
-        ss = window[@collection].simpleSchema()
-        if @fields
-          keys = _.intersection(ss._schemaKeys, @fields)
-        else if @omit
-          keys = _.difference(ss._schemaKeys, @omit)
-        else
-          keys = ss._schemaKeys
-        fieldKeys = _.filter keys, (k) -> k.indexOf('.$') == -1
-        context.fields = _.map fieldKeys, (k) ->
-          fieldName: k
-          label: ss.label(k)
-        
-        return context
-  reactiveConfig: ->
-    @fieldTemplates
+# TODO: Implement action button actions
+# TODO: Pagination on the server, page limits
+# TODO: Filtering
 
-  records: ->
-    if Session.get('sortKey')
-      sort = {}
-      sortKey = Session.get('sortKey')
-      sort[sortKey] = Session.get('sortOrder') || -1
-    window[@collection].find({}, {sort: sort})
+setup = ->
+  context = {}
+  context.ready = new ReactiveVar(false)
+  context.templateData = @data
+  @data.settings = @data.settings || {}
+  collection = @data.collection || @data.settings.collection || @data
+  # Set up collection - determine if Collection or String
+  if collection instanceof Mongo.Collection
+    context.collection = collection
+  else if _.isString(collection)
+    if window[collection]
+      context.collection = window[collection]
+    else
+      console.error("Error: No collection found with name #{collection}")
+  else
+    console.error("Error: argument is not a valid collection")
+    context.collection = new Mongo.Collection(null)
+  if collection.simpleSchema()
+    context.schema = collection.simpleSchema()
+
+  fields = @data.fields || @data.settings.fields || _.filter context.schema._firstLevelSchemaKeys, (k) ->
+    context.schema._schema[k].autotable?.included
     
-  fieldCount: (f) ->
-    (f or @).fields.length
+  fields = _.filter fields, (k) ->
+    # Filter out array keys in case one was somehow left in
+    if _.isString(k) then k.indexOf('.$') == -1
+    else k.key.indexOf('.$') == -1
 
-  isSortKey: ->
-    @fieldName is Session.get('sortKey')
-
-  isAscending: ->
-    Session.get('sortOrder') is 1
-
-  updateFormId: ->
-    'update-' + @_id
-  
-  fieldCellContext: (fieldName, doc, grandparent) ->
-    tpl = grandparent.fieldTemplates.get(fieldName) || 'atDefaultColumn'
-    return {
-      fieldName: fieldName
-      value: doc[fieldName]
-      template: tpl
-      collection: grandparent.collection
-      _id: doc._id
+  fields = _.map fields, (f) ->
+    if _.isString(f) then f = { key: f } # SimpleSchema does weird things with obj inputs
+    if _.isString(f.tpl) then f.tpl = Template[f.tpl]
+    {
+      key: f.key
+      label: f.label || context.schema?.label(f.key) || f.key
+      tpl: f.tpl
     }
 
-  modalId: ->
-    'autotable-quick-add'
+  context.fields = fields
+
+  context.sortKey = new ReactiveVar()
+  context.sortOrder = new ReactiveVar()
+
+
+  context.class = @data.class || @data.settings.class || 'table table-condensed'
+  context.addButton = @data.addButton || @data.settings.addButton || false
+  context.updateRows = @data.updateRows || @data.settings.updateRows || false
+  context.actionColumn = @data.actionColumn || @data.settings.actionColumn || false
+  context.pageLimit = @data.pageLimit || @data.settings.pageLimit || 20
+
+  context.skip = new ReactiveVar(0)
+
+  context.subscription = @data.subscription || @data.settings.subscription
+  if context.subscription
+    Meteor.subscribe "autotable-#{context.subscription}", _.uniqueId(), {}, {}, { limit: context.pageLimit },
+      onReady: -> context.ready.set(true)
+
+  @context = context
+
+Template.autotable.helpers
+  context: ->
+    if !Template.instance().context or !_.isEqual(@, Template.instance().context.templateData)
+      setup.call Template.instance()
+    Template.instance().context
+
+  ready: -> @ready.get()
+
+  records: ->
+    sort = {}
+    sortKey = @sortKey.get()
+    sort[sortKey] = @sortOrder.get() || -1
+    if @subscription
+      @collection.find({}, { sort: sort })
+    else
+      @collection.find({}, { limit: @pageLimit, skip: @skip.get(), sort: sort })
     
+  fieldCount: (f) ->
+    (f or @).fields.length + @actionColumn
+
+  isSortKey: ->
+    parentData = Template.parentData(1)
+    @key is parentData.sortKey.get()
+
+  isAscending: ->
+    parentData = Template.parentData(1)
+    parentData.sortOrder.get() is 1
+
+  getField: (rec) -> rec[@key]
+
+  # TODO: Make sure there are items at all
+  firstVisibleItem: -> @skip.get() + 1
+  lastVisibleItem: -> @skip.get() + @pageLimit
+  itemCount: -> @collection.find().count() # no good
+
+Template.autotable.rendered = ->
+  @autorun ->
+    context = @.templateInstance().context
+    if context.subscription
+      sort = {}
+      sortKey = context.sortKey.get()
+      limit = context.pageLimit
+      skip = context.skip.get()
+      sort[sortKey] = context.sortOrder.get() || -1
+      Meteor.subscribe "autotable-#{context.subscription}", _.uniqueId(), {}, {}, { limit: limit, skip: skip, sort: sort },
+        onReady: -> context.ready.set(true)
+
 Template.autotable.events
-  'click button.add': (e,tpl) ->
-    tpl.$('div[role="dialog"]').modal('show')
+  'click button[data-action=insert]': (e,tpl) ->
+    tpl.$('div[name="addDialog"]').modal('show')
 
-  'click tbody tr': (e,tpl) ->
-    if tpl.data.updateRows
-      $(e.target).closest('tr').next().toggle()
+  'click button[data-action=update]': (e,tpl) ->
+    Blaze.renderWithData Template.updateModal, { doc: @, collection: Inventory } , $('body').get(0)
+    $('div[name=updateDialog]').modal('show')
 
-  'click span[class=field-table-heading]': (e, tpl) ->
-    if Session.get('sortKey') is $(e.target).data('sort-key')
-      Session.set 'sortOrder', (-1 * Session.get('sortOrder'))
+  'click span[class=autotable-field-heading]': (e) ->
+    sortKey = Template.instance().context.sortKey.get()
+    sortOrder = Template.instance().context.sortOrder.get()
+    if sortKey is $(e.target).data('sort-key')
+      Template.instance().context.sortOrder.set (-1 * sortOrder)
     else
-      Session.set 'sortOrder', 1
-    Session.set 'sortKey', $(e.target).data('sort-key')
+      Template.instance().context.sortOrder.set 1
+    Template.instance().context.sortKey.set $(e.target).data('sort-key')
 
-Template.atColumn.helpers
-  customTemplateRenderContext: (fieldConfig) ->
-    if @template
-      fieldConfig.set @field, @template
-    else if @edit
-      fieldConfig.set @field, 'atEditColumn'
-    else
-      fieldConfig.set @field, 'atDefaultColumn'
+  'click button[data-action=nextPage]': (e, tpl) ->
+    skip = Template.instance().context.skip.get() || 0
+    pageLimit = Template.instance().context.pageLimit
+    if skip + pageLimit < Template.instance().context.collection.find().count() # no good
+      Template.instance().context.skip.set(skip + pageLimit)
 
-Template.atEditColumn.helpers
-  allowedValues: ->
-    if @values
-      @values
-    else
-      return window[@collection].simpleSchema()._schema[@fieldName].allowedValues || null
+  'click button[data-action=lastPage]': (e, tpl) ->
+    skip = Template.instance().context.skip.get() || 0
+    pageLimit = Template.instance().context.pageLimit
 
-Template.atEditColumn.events
-  "click button[data-action=show-edit-field]": (e, tpl) ->
-    item = window[@collection].findOne(@_id)
-    showEditField tpl
-    tpl.$("[name=edit-field]").val(item[tpl.data.fieldName])
+    newSkip = Math.max skip - pageLimit, 0
+    Template.instance().context.skip.set(newSkip)
 
-  'click button[data-action=save-field]': (e, tpl) ->
-    set = {}
-    set[tpl.data.fieldName] = tpl.$('[name=edit-field]').val()
-    window[@collection].update @_id, { $set: set }
-    hideEditField tpl
-
-  'keydown input[name=edit-field]': (e, tpl) ->
-    if e.keyCode is 27
-      hideEditField tpl
-
-  'keyup input[name=edit-field]': (e, tpl) ->
-    if e.which is 13
-      val = tpl.$('[name=edit-field]').val()
-      unless val is ""
-        set = {}
-        set[tpl.data.fieldName] = val
-        window[tpl.data.collection].update tpl.data._id, { $set: set }
-        hideEditField tpl
-
-
-showEditField = (tpl) ->
-  # Hide all other edit fields before showing one. Can we do this in Blaze?
-  $('div.field-edit-area').hide()
-  $('div.field-area').fadeIn(100)
-  
-  # And then hide the current field and show the edit area.
-  tpl.$('div.field-area').hide()
-  tpl.$('div.field-edit-area').fadeIn(100)
-  tpl.$('[data-toggle=tooltip]').tooltip('hide')
-  tpl.$('[name=edit-field]').focus()
-
-hideEditField = (tpl) ->
-  tpl.$('div.field-edit-area').hide()
-  tpl.$('div.field-area').fadeIn(100)
-  tpl.$('[data-toggle=tooltip]').tooltip('hide')
-
+Template.updateModal.events
+  'hidden.bs.modal': (e, tpl) ->
+    Blaze.remove tpl.view

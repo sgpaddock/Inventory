@@ -14,16 +14,10 @@ Router.map ->
     waitOn: ->
       Meteor.subscribe 'userData'
     onBeforeAction: ->
-      Session.set 'itemSet', []
-      filter = Filter.getFilterFromQuery @params.query
-      Meteor.subscribe 'inventory', filter, onReady: ->
-        Session.set 'ready', true
-      Meteor.subscribe 'newInventory', filter, new Date()
       @next()
 
       if @params.query.attachmentId
         file = FileRegistry.findOne(@params.query.attachmentId)
-
       if file
         Blaze.renderWithData Template.attachmentModal, { attachmentId: @params.query.attachmentId }, $('body').get(0)
         $('#attachmentModal').modal('show')

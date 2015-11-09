@@ -25,7 +25,6 @@ differential:workers
 hive:facets
 multipart
 aldeed:autoform
-noahadler:autotable
 standard-minifiers
 meteor-base
 mobile-experience
@@ -40,3 +39,4 @@ random
 ejson
 spacebars
 check
+hive:autotable

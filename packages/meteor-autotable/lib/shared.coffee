@@ -1,2 +1,5 @@
-@AutoTable = {}
-@AutoTable.Counts = new Mongo.Collection('autotable-counts')
+AutoTable = AutoTable || {}
+AutoTable.counts = new Mongo.Collection('autotable-counts')
+
+SimpleSchema.extendOptions
+  autotable: Match.Optional(Object)

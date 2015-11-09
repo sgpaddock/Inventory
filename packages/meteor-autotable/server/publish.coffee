@@ -1,9 +1,8 @@
-AutoTable = {}
+AutoTable = AutoTable || {}
 # AutoTable.publish is called on the server. A collection is passed to it, as well as a default
 # Mongo selector (if limiting the result set is needed on the server) 
-AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemovalOrFunction) ->
+AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) ->
   Meteor.publish "autotable-#{name}", (publicationId, filters, fields, options) ->
-    console.log 'subbing to ' + name
     ###
     check publicationId, String
     check filters, [ Match.OneOf(String, Object) ]
@@ -11,6 +10,7 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemovalOr
     check options, { skip: Match.Integer, limit: Match.Integer, sort: Object }
     ###
     self = @
+
     if _.isFunction(collectionOrFunction)
       collection = collectionOrFunction.call @
     else
@@ -20,11 +20,10 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemovalOr
       selector = selectorOrFunction.call @
     else
       selector = selectorOrFunction
-
+    
     unless collection instanceof Mongo.Collection
       console.log 'Collection is not a valid collection'
-
-    [cursor, facetCursor] = collection.findWithFacets(selector)
+    [cursor, facetCursor] = collection.findWithFacets(selector, options)
     count = cursor.count()
     
     getRow = (row, idx) ->
@@ -53,7 +52,7 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemovalOr
           self.added collection._name, row._id, row
           rows[row._id] = row
 
-    self.added 'autotable-counts', publicationId, { count: count }
+    self.added "autotable-counts-#{name}", publicationId, { count: count }
     _.each rows, (row) ->
       self.added collection._name, row._id, row
 
@@ -61,18 +60,21 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemovalOr
     handle = cursor.observeChanges
       added: (id, fields) ->
         unless initializing
-          self.changed 'autotable-counts', publicationId, { count: cursor.count() }
+          self.changed "autotable-counts", publicationId, { count: cursor.count() }
           updateRows()
         
       changed: (id, fields) ->
         updateRows()
+
       removed: (id, fields) ->
-        unless noResultRemoval
+        unless noRemoval?
           self.removed collection._name, id
           delete rows[id]
           updateRows()
 
-        self.changed 'autotable-counts', publicationId, { count: cursor.count() }
+        self.changed "autotable-counts", publicationId, { count: cursor.count() }
+
+    initializing = false
 
     # TODO: Clean this up   
     facetHandle = facetCursor.observeChanges
@@ -82,9 +84,8 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemovalOr
       changed: (id, fields) ->
         self.changed 'facets', id, fields
       removed: (id, fields) ->
-        self.removed 'facets', id, fields
+        self.removed 'facets', id
 
-    initializing = false
 
     
     self.ready()

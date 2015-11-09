@@ -1,104 +1,111 @@
 <template name="autotable">
   {{#with context}}
     {{>UI.contentBlock reactiveConfig}}
-    <table class="table {{tableStyle}}">
-      <thead>
-        <tr>
-          {{#each fields}}
-            <th><span class="field-table-heading" data-sort-key="{{fieldName}}">
-                {{label}} &nbsp;
-                {{#if isSortKey}} {{#if isAscending}}
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                    {{else}}
-                    <span class="glyphicon glyphicon-chevron-up"></span>
-                {{/if}}{{/if}}
-            </span></th>
-          {{/each}}
-        </tr>
-      </thead>
-      <tbody>
-        {{#each records}}
+    {{#if ready}}
+      {{#if pageLimit}}
+        <div class="row">
+          <div class="pull-right">
+            <strong>{{firstVisibleItem}}-{{lastVisibleItem}}</strong> of <strong>{{itemCount}}</strong>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default" data-action="lastPage" {{lastDisabled}}><span class="glyphicon glyphicon-chevron-left"></span></button>
+              <button type="button" class="btn btn-default" data-action="nextPage" {{nextDisabled}}><span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+          </div>
+        </div>
+      {{/if}}
+      <table class="{{class}}">
+        <thead>
           <tr>
-            {{#each ../fields}}
-              <td>
-                {{#with fieldCellContext fieldName .. ../.. }}
-                  {{> UI.dynamic template=template}}
-                {{/with}}
-              </td>
+            {{#each fields}}
+              <th><span class="autotable-field-heading" data-sort-key="{{key}}">
+                  {{label}} &nbsp;
+                  {{#if isSortKey}} {{#if isAscending}}
+                      <span class="glyphicon glyphicon-chevron-down"></span>
+                      {{else}}
+                      <span class="glyphicon glyphicon-chevron-up"></span>
+                  {{/if}}{{/if}}
+              </span></th>
             {{/each}}
+            {{#if actionColumn}}
+              <th>Actions</th>
+            {{/if}}
+
           </tr>
-          {{#if ../updateRows}}
-            <tr style="display: none;">
-              <td colspan={{fieldCount ..}}>
-                <div style="margin-left: 10%; margin-right: 10%">
-                  {{> quickForm id=updateFormId doc=this collection=../collection type="update" template="bootstrap3-horizontal" label-class="col-sm-3" input-col-class="col-sm-9"}}
+        </thead>
+        <tbody>
+          {{#each records}}
+            <tr class="{{rowClass}}">
+              {{#each ../fields}}
+                <td>
+                  {{#if tpl}}
+                    {{#with ..}}
+                      {{> ../tpl}}
+                    {{/with}}
+                    {{else}}
+                    {{getField ..}}
+                  {{/if}}
+                </td>
+              {{/each}}
+              {{#if ../actionColumn}}
+                <td>
+                  <button type="button" class="btn btn-sm btn-primary" data-action="cloneItem" title="Clone"><span class="glyphicon glyphicon-duplicate"></span></button>
+                  &nbsp;
+                  <button type="button" class="btn btn-sm btn-warning" data-action="editItem" title="Edit"><span class="glyphicon glyphicon-pencil"></span></button>
+                  &nbsp;
+                  <button type="button" class="btn btn-sm btn-danger" data-action="deleteItem" title="Delete"><span class="glyphicon glyphicon-trash"></span></button>
+                </td>
+              {{/if}}
+            </tr>
+          {{/each}}
+          {{#if addButton}}
+            <tr>
+              <td colspan={{fieldCount}}>
+                <button class="btn" data-action="insert">Add...</button>
+
+                <div class="modal fade" role="dialog" name="addDialog">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Create new</h4>
+                      </div>
+                      <div class="modal-body">
+                        {{> quickForm id='ayy' collection=collection type="insert" template="bootstrap3-horizontal" label-class="col-sm-3" input-col-class="col-sm-9"}}
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </td>
             </tr>
           {{/if}}
-        {{/each}}
-        {{#if addButton}}
-          <tr>
-            <td colspan={{fieldCount}}>
-              <button class="btn add">Add...</button>
-
-              <div class="modal fade" role="dialog">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title">Create new</h4>
-                    </div>
-                    <div class="modal-body">
-                      {{> quickForm id=modalId collection=../collection type="insert" template="bootstrap3-horizontal" label-class="col-sm-3" input-col-class="col-sm-9"}}
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
-        {{/if}}
-      </tbody>
-    </table>
-  {{/with}}
-</template>
-
-<template name="atColumn">
-  {{#with customTemplateRenderContext .. ../..}}
-    {{! > renderCustomTemplate}}
-  {{/with}}
-</template>
-
-<template name="atDefaultColumn">
-  {{value}}
-</template>
-
-<template name="atEditColumn">
-  <div class="field-area">
-    <div class="inline-edit">
-      {{value}}
-    </div>
-    <div class="inline-edit-icon pull-right">
-      <button type="button" class="btn btn-xs btn-link" data-action="show-edit-field">
-        <span class="glyphicon glyphicon-pencil"></span>
-      </button>
-    </div>
-  </div>
-
-  <div class="field-edit-area">
-    {{#if allowedValues}}
-      <select name="edit-field">
-        {{#each allowedValues}}
-          <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
+        </tbody>
+      </table>
       {{else}}
-      <input type="text" name="edit-field">
+      {{> loading}}
     {{/if}}
-    <button type="button" class="btn btn-xs btn-primary" data-action="save-field" data-field="{{field}}">Save</button>
+  {{/with}}
+</template>
+
+<template name="updateModal">
+  <div class="modal fade" role="dialog" name="updateDialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Update</h4>
+        </div>
+        <div class="modal-body">
+          {{> quickForm id='update' collection=collection type="update" doc=doc template="bootstrap3-horizontal" label-class="col-sm-3" input-col-class="col-sm-9"}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

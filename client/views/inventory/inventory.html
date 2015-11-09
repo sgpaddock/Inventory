@@ -1,15 +1,5 @@
 <template name="inventory">
-  {{#if ready}}
-    <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
-    {{#autotable collection="Inventory" fields=fields tableStyle="table-bordered table-condensed"}}
-      {{> atColumn field="department" edit=true}}
-      {{> atColumn field="owner" template="ownerField"}}
-      {{> atColumn field="building" edit=true}}
-      {{> atColumn field="officeNo" edit=true}}
-      {{> atColumn field="attachments" template="attachmentField"}}
-    {{/autotable}}
-    {{else}}
-    {{> loading}}
-  {{/if}}
+  <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
+  {{>autotable settings=settings}}
 </template>
 
