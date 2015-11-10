@@ -51,8 +51,8 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
         else
           self.added collection._name, row._id, row
           rows[row._id] = row
-
-    self.added "autotable-counts-#{name}", publicationId, { count: count }
+     
+    self.added "autotable-counts", publicationId, { count: count }
     _.each rows, (row) ->
       self.added collection._name, row._id, row
 

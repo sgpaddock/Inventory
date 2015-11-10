@@ -1,37 +1,37 @@
 <template name="autotable">
   {{#with context}}
     {{>UI.contentBlock reactiveConfig}}
-    {{#if ready}}
-      {{#if pageLimit}}
-        <div class="row">
-          <div class="pull-right">
-            <strong>{{firstVisibleItem}}-{{lastVisibleItem}}</strong> of <strong>{{itemCount}}</strong>
-            <div class="btn-group">
-              <button type="button" class="btn btn-default" data-action="lastPage" {{lastDisabled}}><span class="glyphicon glyphicon-chevron-left"></span></button>
-              <button type="button" class="btn btn-default" data-action="nextPage" {{nextDisabled}}><span class="glyphicon glyphicon-chevron-right"></span></button>
-            </div>
+    {{#if pageLimit}}
+      <div class="row">
+        <div class="pull-right">
+          <strong>{{firstVisibleItem}}-{{lastVisibleItem}}</strong> of <strong>{{itemCount}}</strong>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default" data-action="lastPage" {{lastDisabled}}><span class="glyphicon glyphicon-chevron-left"></span></button>
+            <button type="button" class="btn btn-default" data-action="nextPage" {{nextDisabled}}><span class="glyphicon glyphicon-chevron-right"></span></button>
           </div>
         </div>
-      {{/if}}
-      <table class="{{class}}">
-        <thead>
-          <tr>
-            {{#each fields}}
-              <th><span class="autotable-field-heading" data-sort-key="{{key}}">
-                  {{label}} &nbsp;
-                  {{#if isSortKey}} {{#if isAscending}}
-                      <span class="glyphicon glyphicon-chevron-down"></span>
-                      {{else}}
-                      <span class="glyphicon glyphicon-chevron-up"></span>
-                  {{/if}}{{/if}}
-              </span></th>
-            {{/each}}
-            {{#if actionColumn}}
-              <th>Actions</th>
-            {{/if}}
+      </div>
+    {{/if}}
+    <table class="{{class}}">
+      <thead>
+        <tr>
+          {{#each fields}}
+            <th><span class="autotable-field-heading" data-sort-key="{{key}}">
+                {{label}} &nbsp;
+                {{#if isSortKey}} {{#if isAscending}}
+                    <span class="glyphicon glyphicon-chevron-down"></span>
+                    {{else}}
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                {{/if}}{{/if}}
+            </span></th>
+          {{/each}}
+          {{#if actionColumn}}
+            <th>Actions</th>
+          {{/if}}
 
-          </tr>
-        </thead>
+        </tr>
+      </thead>
+      {{#if ready}}
         <tbody>
           {{#each records}}
             <tr class="{{rowClass}}">
@@ -83,10 +83,10 @@
             </tr>
           {{/if}}
         </tbody>
-      </table>
-      {{else}}
-      {{> loading}}
-    {{/if}}
+        {{else}}
+        {{> loading}}
+      {{/if}}
+    </table>
   {{/with}}
 </template>
 

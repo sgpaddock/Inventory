@@ -1,6 +1,6 @@
 # TODO: Implement action button actions
-# TODO: Pagination on the server, page limits
 # TODO: Filtering
+# TODO: Make pagination experience cleaner, make sure it works well with full client-side collection
 
 setup = ->
   context = {}
@@ -55,7 +55,8 @@ setup = ->
 
   context.subscription = @data.subscription || @data.settings.subscription
   if context.subscription
-    Meteor.subscribe "autotable-#{context.subscription}", _.uniqueId(), {}, {}, { limit: context.pageLimit },
+    context.publicationId = Random.id()
+    context.handle = Meteor.subscribe "autotable-#{context.subscription}", context.publicationId, {}, {}, { limit: context.pageLimit },
       onReady: -> context.ready.set(true)
 
   @context = context
@@ -91,9 +92,16 @@ Template.autotable.helpers
   getField: (rec) -> rec[@key]
 
   # TODO: Make sure there are items at all
-  firstVisibleItem: -> @skip.get() + 1
-  lastVisibleItem: -> @skip.get() + @pageLimit
-  itemCount: -> @collection.find().count() # no good
+  firstVisibleItem: ->
+    if @collection.find().count() is 0 then 0 else @skip.get() + 1
+  lastVisibleItem: ->
+    Math.min @skip.get() + @pageLimit, (AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count())
+  lastDisabled: ->
+    if @skip.get() is 0 then "disabled"
+  nextDisabled: ->
+    if @skip.get() + @pageLimit + 1 > (AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count()) then "disabled"
+  itemCount: ->
+    AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count()
 
 Template.autotable.rendered = ->
   @autorun ->
@@ -104,7 +112,9 @@ Template.autotable.rendered = ->
       limit = context.pageLimit
       skip = context.skip.get()
       sort[sortKey] = context.sortOrder.get() || -1
-      Meteor.subscribe "autotable-#{context.subscription}", _.uniqueId(), {}, {}, { limit: limit, skip: skip, sort: sort },
+      if context.handle then context.handle.stop()
+      context.ready.set(false)
+      context.handle = Meteor.subscribe "autotable-#{context.subscription}", context.publicationId, {}, {}, { limit: limit, skip: skip, sort: sort },
         onReady: -> context.ready.set(true)
 
 Template.autotable.events
@@ -125,9 +135,10 @@ Template.autotable.events
     Template.instance().context.sortKey.set $(e.target).data('sort-key')
 
   'click button[data-action=nextPage]': (e, tpl) ->
-    skip = Template.instance().context.skip.get() || 0
-    pageLimit = Template.instance().context.pageLimit
-    if skip + pageLimit < Template.instance().context.collection.find().count() # no good
+    context = Template.instance().context
+    skip = context.skip.get()
+    pageLimit = context.pageLimit
+    if skip + pageLimit < (AutoTable.counts.findOne(context.publicationId)?.count || context.collection.find().count())
       Template.instance().context.skip.set(skip + pageLimit)
 
   'click button[data-action=lastPage]': (e, tpl) ->
