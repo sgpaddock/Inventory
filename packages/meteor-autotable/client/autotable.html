@@ -3,11 +3,13 @@
     {{>UI.contentBlock reactiveConfig}}
     {{#if pageLimit}}
       <div class="row">
-        <div class="pull-right">
-          <strong>{{firstVisibleItem}}-{{lastVisibleItem}}</strong> of <strong>{{itemCount}}</strong>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default" data-action="lastPage" {{lastDisabled}}><span class="glyphicon glyphicon-chevron-left"></span></button>
-            <button type="button" class="btn btn-default" data-action="nextPage" {{nextDisabled}}><span class="glyphicon glyphicon-chevron-right"></span></button>
+        <div class="col-md-12">
+          <div class="pull-right">
+            <strong>{{firstVisibleItem}}-{{lastVisibleItem}}</strong> of <strong>{{itemCount}}</strong>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default" data-action="lastPage" {{lastDisabled}}><span class="glyphicon glyphicon-chevron-left"></span></button>
+              <button type="button" class="btn btn-default" data-action="nextPage" {{nextDisabled}}><span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
           </div>
         </div>
       </div>
@@ -38,7 +40,7 @@
               {{#each ../fields}}
                 <td>
                   {{#if tpl}}
-                    {{#with ..}}
+                    {{#with fieldCellContext ..}}
                       {{> ../tpl}}
                     {{/with}}
                     {{else}}
@@ -84,28 +86,11 @@
           {{/if}}
         </tbody>
         {{else}}
-        {{> loading}}
+        <td colspan={{fieldCount}}>
+          {{> loading}}
+        </td>
       {{/if}}
     </table>
   {{/with}}
 </template>
 
-<template name="updateModal">
-  <div class="modal fade" role="dialog" name="updateDialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Update</h4>
-        </div>
-        <div class="modal-body">
-          {{> quickForm id='update' collection=collection type="update" doc=doc template="bootstrap3-horizontal" label-class="col-sm-3" input-col-class="col-sm-9"}}
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>

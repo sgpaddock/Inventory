@@ -1,6 +1,5 @@
 # TODO: Implement action button actions
 # TODO: Filtering
-# TODO: Make pagination experience cleaner, make sure it works well with full client-side collection
 
 setup = ->
   context = {}
@@ -58,7 +57,7 @@ setup = ->
     context.publicationId = Random.id()
     context.handle = Meteor.subscribe "autotable-#{context.subscription}", context.publicationId, {}, {}, { limit: context.pageLimit },
       onReady: -> context.ready.set(true)
-
+  else context.ready.set(true)
   @context = context
 
 Template.autotable.helpers
@@ -89,15 +88,21 @@ Template.autotable.helpers
     parentData = Template.parentData(1)
     parentData.sortOrder.get() is 1
 
-  getField: (rec) -> rec[@key]
+  getField: (doc) -> doc[@key]
 
-  # TODO: Make sure there are items at all
+  fieldCellContext: (doc) ->
+    {
+      fieldName: @key
+      value: doc[@key]
+      documentId: doc._id
+    }
+
   firstVisibleItem: ->
     if @collection.find().count() is 0 then 0 else @skip.get() + 1
   lastVisibleItem: ->
     Math.min @skip.get() + @pageLimit, (AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count())
   lastDisabled: ->
-    if @skip.get() is 0 then "disabled"
+    if @skip.get() <= 0 then "disabled"
   nextDisabled: ->
     if @skip.get() + @pageLimit + 1 > (AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count()) then "disabled"
   itemCount: ->
@@ -120,10 +125,15 @@ Template.autotable.rendered = ->
 Template.autotable.events
   'click button[data-action=insert]': (e,tpl) ->
     tpl.$('div[name="addDialog"]').modal('show')
+  'click button[data-action=deleteItem]': (e, tpl) ->
+    context = Template.instance().context
+    Blaze.renderWithData (Template[context.deleteTpl] || context.deleteTpl || Template.deleteModal), { doc: @, collection: Inventory } , $('body').get(0)
+    $('div[name=deleteModal]').modal('show')
 
-  'click button[data-action=update]': (e,tpl) ->
-    Blaze.renderWithData Template.updateModal, { doc: @, collection: Inventory } , $('body').get(0)
-    $('div[name=updateDialog]').modal('show')
+  'click button[data-action=editItem]': (e,tpl) ->
+    context = Template.instance().context
+    Blaze.renderWithData (Template[context.updateTpl] || context.updateTpl || Template.updateModal), { doc: @, collection: Inventory } , $('body').get(0)
+    $('div[name=updateModal]').modal('show')
 
   'click span[class=autotable-field-heading]': (e) ->
     sortKey = Template.instance().context.sortKey.get()
@@ -148,6 +158,3 @@ Template.autotable.events
     newSkip = Math.max skip - pageLimit, 0
     Template.instance().context.skip.set(newSkip)
 
-Template.updateModal.events
-  'hidden.bs.modal': (e, tpl) ->
-    Blaze.remove tpl.view

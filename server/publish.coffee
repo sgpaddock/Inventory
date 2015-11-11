@@ -6,6 +6,8 @@ Meteor.publish 'allUserData', ->
 
 AutoTable.publish 'inventory', Inventory, null, true
 
+Meteor.publish 'files', -> FileRegistry.find()
+
 Meteor.publishComposite 'inventory', (filter) ->
   [itemSet, facets] = Inventory.findWithFacets filter
   itemSet = _.pluck itemSet.fetch(), '_id'
