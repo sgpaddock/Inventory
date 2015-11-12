@@ -1,4 +1,3 @@
-# TODO: Implement action button actions
 # TODO: Filtering
 
 setup = ->
@@ -43,19 +42,27 @@ setup = ->
   context.sortKey = new ReactiveVar()
   context.sortOrder = new ReactiveVar()
 
-
-  context.class = @data.class || @data.settings.class || 'table table-condensed'
+  # User defined settings
+  context.class = @data.class || @data.settings.class || 'autotable table table-condensed'
   context.addButton = @data.addButton || @data.settings.addButton || false
-  context.updateRows = @data.updateRows || @data.settings.updateRows || false
   context.actionColumn = @data.actionColumn || @data.settings.actionColumn || false
   context.pageLimit = @data.pageLimit || @data.settings.pageLimit || 20
+  
+  # Action button custom templates
+  context.updateTpl = @data.updateTpl || @data.settings.updateTpl
+  context.cloneTpl = @data.cloneTpl || @data.settings.cloneTpl
+  context.deleteTpl = @data.deleteTpl || @data.settings.deleteTpl
 
   context.skip = new ReactiveVar(0)
 
   context.subscription = @data.subscription || @data.settings.subscription
   if context.subscription
     context.publicationId = Random.id()
-    context.handle = Meteor.subscribe "autotable-#{context.subscription}", context.publicationId, {}, {}, { limit: context.pageLimit },
+    context.handle = Meteor.subscribe "autotable-#{context.subscription}",
+      context.publicationId,
+      [{}],
+      [],
+      { limit: context.pageLimit },
       onReady: -> context.ready.set(true)
   else context.ready.set(true)
   @context = context
@@ -119,21 +126,43 @@ Template.autotable.rendered = ->
       sort[sortKey] = context.sortOrder.get() || -1
       if context.handle then context.handle.stop()
       context.ready.set(false)
-      context.handle = Meteor.subscribe "autotable-#{context.subscription}", context.publicationId, {}, {}, { limit: limit, skip: skip, sort: sort },
+      context.handle = Meteor.subscribe "autotable-#{context.subscription}",
+        context.publicationId,
+        [{}],
+        [],
+        { limit: limit, skip: skip, sort: sort },
         onReady: -> context.ready.set(true)
 
 Template.autotable.events
   'click button[data-action=insert]': (e,tpl) ->
-    tpl.$('div[name="addDialog"]').modal('show')
+    context = Template.instance().context
+    Blaze.renderWithData (Template[context.insertTpl] || context.insertTpl || Template.insertModal),
+      { collection: Inventory },
+      $('body').get(0)
+    $('#insertModal').modal('show')
+
+  'click button[data-action=cloneItem]': (e, tpl) ->
+    context = Template.instance().context
+    Blaze.renderWithData (Template[context.cloneTpl] || context.cloneTpl || Template.cloneModal),
+      { doc: @, collection: Inventory },
+      $('body').get(0)
+    $('#cloneModal').modal('show')
+
   'click button[data-action=deleteItem]': (e, tpl) ->
     context = Template.instance().context
-    Blaze.renderWithData (Template[context.deleteTpl] || context.deleteTpl || Template.deleteModal), { doc: @, collection: Inventory } , $('body').get(0)
-    $('div[name=deleteModal]').modal('show')
+    Blaze.renderWithData (Template[context.deleteTpl] || context.deleteTpl || Template.deleteModal),
+      { doc: @, collection: Inventory },
+      $('body').get(0)
+
+    $('#deleteModal').modal('show')
 
   'click button[data-action=editItem]': (e,tpl) ->
     context = Template.instance().context
-    Blaze.renderWithData (Template[context.updateTpl] || context.updateTpl || Template.updateModal), { doc: @, collection: Inventory } , $('body').get(0)
-    $('div[name=updateModal]').modal('show')
+    Blaze.renderWithData (Template[context.updateTpl] || context.updateTpl || Template.updateModal),
+      { doc: @, collection: Inventory },
+      $('body').get(0)
+
+    $('#updateModal').modal('show')
 
   'click span[class=autotable-field-heading]': (e) ->
     sortKey = Template.instance().context.sortKey.get()

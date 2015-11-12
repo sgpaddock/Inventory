@@ -16,7 +16,7 @@ Template.inventory.helpers
       ]
       addButton: true
       actionColumn: true
-      class: "table table-bordered table-condensed"
+      class: "autotable table table-condensed"
       subscription: "inventory"
     }
   ready: -> Session.get 'ready'

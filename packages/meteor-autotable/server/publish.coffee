@@ -3,12 +3,10 @@ AutoTable = AutoTable || {}
 # Mongo selector (if limiting the result set is needed on the server) 
 AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) ->
   Meteor.publish "autotable-#{name}", (publicationId, filters, fields, options) ->
-    ###
     check publicationId, String
     check filters, [ Match.OneOf(String, Object) ]
     check fields, [[String]]
     check options, { skip: Match.Integer, limit: Match.Integer, sort: Object }
-    ###
     self = @
 
     if _.isFunction(collectionOrFunction)

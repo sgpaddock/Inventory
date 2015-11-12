@@ -1,3 +1,7 @@
+Template.insertModal.events
+  'hidden.bs.modal': (e, tpl) ->
+    Blaze.remove tpl.view
+
 Template.cloneModal.events
   'hidden.bs.modal': (e, tpl) ->
     Blaze.remove tpl.view
