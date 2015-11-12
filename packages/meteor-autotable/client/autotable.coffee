@@ -49,6 +49,7 @@ setup = ->
   context.pageLimit = @data.pageLimit || @data.settings.pageLimit || 20
   
   # Action button custom templates
+  context.insertTpl = @data.insertTpl || @data.settings.insertTpl
   context.updateTpl = @data.updateTpl || @data.settings.updateTpl
   context.cloneTpl = @data.cloneTpl || @data.settings.cloneTpl
   context.deleteTpl = @data.deleteTpl || @data.settings.deleteTpl

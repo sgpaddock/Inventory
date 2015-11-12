@@ -6,7 +6,7 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
     check publicationId, String
     check filters, [ Match.OneOf(String, Object) ]
     check fields, [[String]]
-    check options, { skip: Match.Integer, limit: Match.Integer, sort: Object }
+    check options, { skip: Match.OneOf(Match.Integer, null), limit: Match.OneOf(Match.Integer, null), sort: Object }
     self = @
 
     if _.isFunction(collectionOrFunction)
