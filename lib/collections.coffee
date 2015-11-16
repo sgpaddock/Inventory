@@ -73,7 +73,7 @@
       'International Studies'
       'Linguistics'
       'Mathematics'
-      'Modern and Classical Languages, Literatures and Cultures'
+      'MCLLC'
       'Physics and Astronomy'
       'Philosophy'
       'Political Science'

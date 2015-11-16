@@ -4,9 +4,9 @@ AutoTable = AutoTable || {}
 AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) ->
   Meteor.publish "autotable-#{name}", (publicationId, filters, fields, options) ->
     check publicationId, String
-    check filters, [ Match.OneOf(String, Object) ]
+    check filters, Match.OneOf(Object, null)
     check fields, [[String]]
-    check options, { skip: Match.OneOf(Match.Integer, null), limit: Match.OneOf(Match.Integer, null), sort: Object }
+    #check options, { skip: Match.OneOf(Match.Integer, null), limit: Match.OneOf(Match.Integer, null), sort: Object }
     self = @
 
     if _.isFunction(collectionOrFunction)
@@ -17,8 +17,10 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
     if _.isFunction(selectorOrFunction)
       selector = selectorOrFunction.call @
     else
-      selector = selectorOrFunction
-    
+      selector = selectorOrFunction || {}
+    if filters
+      _.extend selector, filters
+
     unless collection instanceof Mongo.Collection
       console.log 'Collection is not a valid collection'
     [cursor, facetCursor] = collection.findWithFacets(selector, options)

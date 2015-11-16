@@ -55,13 +55,14 @@ setup = ->
   context.deleteTpl = @data.deleteTpl || @data.settings.deleteTpl
 
   context.skip = new ReactiveVar(0)
-
+  context.filters = @data.filters || @data.settings.filters || -> {}
+  
   context.subscription = @data.subscription || @data.settings.subscription
   if context.subscription
     context.publicationId = Random.id()
     context.handle = Meteor.subscribe "autotable-#{context.subscription}",
       context.publicationId,
-      [{}],
+      context.filters(),
       [],
       { limit: context.pageLimit },
       onReady: -> context.ready.set(true)
@@ -129,7 +130,7 @@ Template.autotable.rendered = ->
       context.ready.set(false)
       context.handle = Meteor.subscribe "autotable-#{context.subscription}",
         context.publicationId,
-        [{}],
+        context.filters(),
         [],
         { limit: limit, skip: skip, sort: sort },
         onReady: -> context.ready.set(true)

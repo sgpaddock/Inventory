@@ -1,3 +1,10 @@
+getFilters = ->
+  {
+    department: Iron.query.get 'department'
+    owner: Iron.query.get 'owner'
+    building: Iron.query.get 'building'
+  }
+
 Template.inventory.helpers
   settings: ->
     {
@@ -18,9 +25,9 @@ Template.inventory.helpers
       actionColumn: true
       class: "autotable table table-condensed"
       subscription: "inventory"
+      filters: getFilters
     }
   ready: -> Session.get 'ready'
-
 
 Template.inventory.events
   'click button[name=newAssetButton]': (e, tpl) ->

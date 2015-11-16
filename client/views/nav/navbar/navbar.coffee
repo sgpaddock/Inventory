@@ -3,14 +3,12 @@ Template.navbar.helpers
     if Facets.findOne()
       _.keys(Facets.findOne().facets)
   value: ->
-    key = @
+    key = @valueOf()
     active = Iron.query.get(key)?.split(',') || []
     _.map _.sortBy(Facets.findOne()?.facets[key], (f) -> -f.count), (l) ->
       _.extend l,
         key: key
         checked: if l.name in active then 'checked'
-
-
 
 Template.navbar.events
   'click a[id=logout]': ->
@@ -18,8 +16,6 @@ Template.navbar.events
 
   'click .yamm .dropdown-menu': (e, tpl) ->
     e.stopPropagation()
-
-
 
 Template.facetCheckbox.events
   'change input:checkbox': (e, tpl) ->
