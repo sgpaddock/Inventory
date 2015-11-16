@@ -1,9 +1,15 @@
 getFilters = ->
-  {
+  filters = {
     department: Iron.query.get 'department'
     owner: Iron.query.get 'owner'
     building: Iron.query.get 'building'
   }
+
+  for k,v of filters
+    if _.isUndefined(v)
+      delete filters[k]
+
+  return filters
 
 Template.inventory.helpers
   settings: ->
@@ -21,8 +27,8 @@ Template.inventory.helpers
         'officeNo',
         { key: 'attachments', tpl: Template.attachmentField }
       ]
-      addButton: true
-      actionColumn: true
+      addButton: false
+      actionColumn: false
       class: "autotable table table-condensed"
       subscription: "inventory"
       filters: getFilters

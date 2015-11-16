@@ -1,5 +1,3 @@
-# TODO: Filtering
-
 setup = ->
   context = {}
   context.ready = new ReactiveVar(false)
@@ -55,14 +53,14 @@ setup = ->
   context.deleteTpl = @data.deleteTpl || @data.settings.deleteTpl
 
   context.skip = new ReactiveVar(0)
-  context.filters = @data.filters || @data.settings.filters || -> {}
+  context.getFilters = @data.filters || @data.settings.filters || -> {}
   
   context.subscription = @data.subscription || @data.settings.subscription
   if context.subscription
     context.publicationId = Random.id()
     context.handle = Meteor.subscribe "autotable-#{context.subscription}",
       context.publicationId,
-      context.filters(),
+      context.getFilters(),
       [],
       { limit: context.pageLimit },
       onReady: -> context.ready.set(true)
@@ -84,7 +82,7 @@ Template.autotable.helpers
     if @subscription
       @collection.find({}, { sort: sort })
     else
-      @collection.find({}, { limit: @pageLimit, skip: @skip.get(), sort: sort })
+      @collection.find(@getFilters(), { limit: @pageLimit, skip: @skip.get(), sort: sort })
     
   fieldCount: (f) ->
     (f or @).fields.length + @actionColumn
@@ -107,15 +105,15 @@ Template.autotable.helpers
     }
 
   firstVisibleItem: ->
-    if @collection.find().count() is 0 then 0 else @skip.get() + 1
+    if @collection.find(@getFilters()).count() is 0 then 0 else @skip.get() + 1
   lastVisibleItem: ->
-    Math.min @skip.get() + @pageLimit, (AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count())
+    Math.min @skip.get() + @pageLimit, (AutoTable.counts.findOne(@publicationId)?.count || @collection.find(@getFilters()).count())
   lastDisabled: ->
     if @skip.get() <= 0 then "disabled"
   nextDisabled: ->
-    if @skip.get() + @pageLimit + 1 > (AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count()) then "disabled"
+    if @skip.get() + @pageLimit + 1 > (AutoTable.counts.findOne(@publicationId)?.count || @collection.find(@getFilters()).count()) then "disabled"
   itemCount: ->
-    AutoTable.counts.findOne(@publicationId)?.count || @collection.find().count()
+    AutoTable.counts.findOne(@publicationId)?.count || @collection.find(@getFilters()).count()
 
 Template.autotable.rendered = ->
   @autorun ->
@@ -130,7 +128,7 @@ Template.autotable.rendered = ->
       context.ready.set(false)
       context.handle = Meteor.subscribe "autotable-#{context.subscription}",
         context.publicationId,
-        context.filters(),
+        context.getFilters(),
         [],
         { limit: limit, skip: skip, sort: sort },
         onReady: -> context.ready.set(true)
