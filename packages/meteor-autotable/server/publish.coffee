@@ -25,6 +25,12 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
       console.log 'Collection is not a valid collection'
     [cursor, facetCursor] = collection.findWithFacets(selector, options)
     count = cursor.count()
+    if noRemoval
+      ids = _.pluck cursor.fetch(), '_id'
+    else
+      ids = []
+    newCursor = collection.find { $or: [ { _id: { $in: ids } }, selector ] }
+    
     
     getRow = (row, idx) ->
       _.extend {
@@ -33,12 +39,14 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
       }, row
 
     getRows = ->
-      _.map cursor.fetch(), getRow
+      _.map newCursor.fetch(), getRow
 
     rows = {}
     _.each getRows(), (row) ->
       rows[row._id] = row
 
+    if noRemoval
+      deletedRows = []
 
     updateRows = ->
       newRows = getRows()
@@ -57,7 +65,7 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
       self.added collection._name, row._id, row
 
     initializing = true
-    handle = cursor.observeChanges
+    handle = newCursor.observeChanges
       added: (id, fields) ->
         unless initializing
           self.changed "autotable-counts", publicationId, { count: cursor.count() }
@@ -67,16 +75,16 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
         updateRows()
 
       removed: (id, fields) ->
-        unless noRemoval?
-          self.removed collection._name, id
+        updateRows()
+        self.removed collection._name, id
+        unless noRemoval
           delete rows[id]
-          updateRows()
 
         self.changed "autotable-counts", publicationId, { count: cursor.count() }
 
     initializing = false
 
-    # TODO: Clean this up   
+    facetInitializing = true
     facetHandle = facetCursor.observeChanges
       added: (id, fields) ->
         unless initializing
@@ -86,8 +94,8 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
       removed: (id, fields) ->
         self.removed 'facets', id
 
+    facetInitializing = false
 
-    
     self.ready()
 
     self.onStop ->

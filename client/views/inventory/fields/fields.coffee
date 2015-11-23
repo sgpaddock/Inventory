@@ -9,7 +9,7 @@ Template.ownerField.events
 
   'keyup input[name=assign-user]': (e, tpl) ->
     if e.which is 13
-      assignItem tpl, tpl.data._id
+      assignItem tpl, tpl.data.documentId
 
   'keydown input[name=assign-user]': (e, tpl) ->
     # keyup means the input loses focus before we get the event, so keydown for escape.

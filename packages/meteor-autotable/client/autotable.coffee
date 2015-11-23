@@ -37,8 +37,9 @@ setup = ->
 
   context.fields = fields
 
-  context.sortKey = new ReactiveVar()
-  context.sortOrder = new ReactiveVar()
+  # If a default field to sort on is provided, sort on it. If not, use whatever field was given first.
+  context.sortKey = new ReactiveVar(@data.defaultSort || @data.settings.defaultSort || fields[0].key)
+  context.sortOrder = new ReactiveVar(1)
 
   # User defined settings
   context.class = @data.class || @data.settings.class || 'autotable table table-condensed'
@@ -54,7 +55,7 @@ setup = ->
 
   context.skip = new ReactiveVar(0)
   context.getFilters = @data.filters || @data.settings.filters || -> {}
-  
+
   context.subscription = @data.subscription || @data.settings.subscription
   if context.subscription
     context.publicationId = Random.id()
@@ -80,6 +81,7 @@ Template.autotable.helpers
     sortKey = @sortKey.get()
     sort[sortKey] = @sortOrder.get() || -1
     if @subscription
+      # We don't filter here in case documents were edited to fall out of the filter set.
       @collection.find({}, { sort: sort })
     else
       @collection.find(@getFilters(), { limit: @pageLimit, skip: @skip.get(), sort: sort })
@@ -119,12 +121,16 @@ Template.autotable.rendered = ->
   @autorun ->
     context = @.templateInstance().context
     if context.subscription
+      # Get sort key and order
       sort = {}
       sortKey = context.sortKey.get()
       limit = context.pageLimit
       skip = context.skip.get()
       sort[sortKey] = context.sortOrder.get() || -1
+
+      # Stop old sub if one is running
       if context.handle then context.handle.stop()
+
       context.ready.set(false)
       context.handle = Meteor.subscribe "autotable-#{context.subscription}",
         context.publicationId,
@@ -132,6 +138,7 @@ Template.autotable.rendered = ->
         [],
         { limit: limit, skip: skip, sort: sort },
         onReady: -> context.ready.set(true)
+
 
 Template.autotable.events
   'click button[data-action=insert]': (e,tpl) ->

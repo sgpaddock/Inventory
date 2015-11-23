@@ -22,7 +22,7 @@ Template.inventory.helpers
         'manufacturer',
         'modelNo',
         'department',
-        'owner',
+        { key: 'owner', tpl: Template.ownerField },
         'building',
         'officeNo',
         { key: 'attachments', tpl: Template.attachmentField }
@@ -32,6 +32,7 @@ Template.inventory.helpers
       class: "autotable table table-condensed"
       subscription: "inventory"
       filters: getFilters
+      noRemoval: true
     }
   ready: -> Session.get 'ready'
 
