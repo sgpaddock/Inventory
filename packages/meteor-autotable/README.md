@@ -1,5 +1,4 @@
 # meteor-autotable
-================
 A flexible tabular interface for collections backed by simple-schema.
 
 ### Table of Contents
