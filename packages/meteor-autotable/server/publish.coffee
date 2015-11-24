@@ -29,7 +29,7 @@ AutoTable.publish = (name, collectionOrFunction, selectorOrFunction, noRemoval) 
       ids = _.pluck cursor.fetch(), '_id'
     else
       ids = []
-    newCursor = collection.find { $or: [ { _id: { $in: ids } }, selector ] }
+    newCursor = collection.find { $or: [ { _id: { $in: ids } }, selector ] }, options
     
     
     getRow = (row, idx) ->
