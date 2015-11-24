@@ -25,7 +25,7 @@ Template.inventory.helpers
         { key: 'owner', tpl: Template.ownerField },
         'building',
         'officeNo',
-        { key: 'attachments', tpl: Template.attachmentField }
+        { key: 'attachments', tpl: Template.attachmentField, sortable: false }
       ]
       addButton: false
       actionColumn: false

@@ -33,6 +33,7 @@ setup = ->
       key: f.key
       label: f.label || context.schema?.label(f.key) || f.key
       tpl: f.tpl
+      sortable: if _.isUndefined(f.sortable) then true else f.sortable
     }
 
   context.fields = fields
