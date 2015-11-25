@@ -50,7 +50,7 @@ The autotable template accepts additional arguments. These can be passed into th
 * `defaultSort`: String. A default field to sort on. If none is provided, AutoTable will attempt to use the first field given.
 * `addButton`: Boolean. True to display a button to add documents (opens an autoform in a modal).
 * `actionColumn`: Boolean. True to display a column of actions (clone, edit, delete) - all opening in modals.
-* `insertTpl`, `updateTpl`, `cloneTpl, `deleteTpl`: Strings (corresponding to templates) or custom Template objects to be rendered in the above modals instead of the given autoforms.
+* `insertTpl`, `updateTpl`, `cloneTpl`, `deleteTpl`: Strings (corresponding to templates) or custom Template objects to be rendered in the above modals instead of the given autoforms.
 * `filters`: Function. A function returning a Mongo selector corresponding to a filter set. This is called in an autorun and will be reactive if filters are controlled by reactive data sources (Session vars, ReactiveVars, etc.)
 
 ## Server-side Pagination and Filtering
