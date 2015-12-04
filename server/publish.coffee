@@ -4,7 +4,12 @@ Meteor.publish 'userData', ->
 Meteor.publish 'allUserData', ->
   Meteor.users.find {}, {fields: {'_id': 1, 'username': 1, 'mail': 1, 'displayName': 1, 'department': 1, 'physicalDeliveryOfficeName': 1, 'status.online': 1, 'status.idle': 1}}
 
-AutoTable.publish 'inventory', Inventory, null, true
+AutoTable.publish 'inventory', ->
+  # Permissions go here
+  Inventory
+, null, true
+
+AutoTable.publish 'checkouts', Inventory, { checkout: true }, true
 
 Meteor.publish 'files', -> FileRegistry.find()
 

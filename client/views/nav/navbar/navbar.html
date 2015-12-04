@@ -5,38 +5,12 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
           <span class="sr-only">A&S Inventory</span>
         </button>
-        <a class="navbar-brand" href="/">A&S Inventory</a>
+        <a class="navbar-brand" href="/inventory">Inventory</a>
+        <span class="navbar-brand"> |</span>
+        <a class="navbar-brand" href="/checkouts">Checkouts</a>
       </div>
       {{#if currentUser}}
         <div class="collapse navbar-collapse" id="navbar-collapse">
-
-          <!-- Filter YAMM -->
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                Filters<b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <li>
-                  <div class="yamm-content">
-                    <div class="row">
-                      {{#each facetKeys}}
-                        <ul class="col-sm-2 list-unstyled">
-                          <li>
-                            <p><strong>{{this}}</strong></p>
-                          </li>
-                          {{#each value}}
-                            {{> facetCheckbox}}
-                          {{/each}}
-                        </ul>
-                      {{/each}}
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </li>
-          </ul>
-
           <!-- User Dropdown -->
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
@@ -57,15 +31,4 @@
       {{/if}}
     </div><!-- /.container-fluid -->
   </nav>
-</template>
-
-<template name="facetCheckbox">
-  <li>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" id="filter-{{key}}-{{name}}" data-facet-key="{{key}}" data-facet-value="{{name}}" {{checked}}>
-        {{name}} ({{count}})
-      </label>
-    </div>
-  </li>
 </template>

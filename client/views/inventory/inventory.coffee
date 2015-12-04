@@ -40,3 +40,16 @@ Template.inventory.events
   'click button[name=newAssetButton]': (e, tpl) ->
     Blaze.render Template.newAssetModal, $('body').get(0)
     $('#newAssetModal').modal('show')
+
+Template.inventory.rendered = ->
+  @autorun ->
+    # Render attachment modal on query parameter change.
+    attachmentParam = Iron.query.get('attachmentId')
+    if attachmentParam
+      Meteor.subscribe 'file', attachmentParam
+      file = FileRegistry.findOne(attachmentParam)
+      if file
+        Blaze.renderWithData Template.attachmentModal, { attachmentId: attachmentParam }, $('body').get(0)
+        $('#attachmentModal').modal('show')
+      else
+        $('#attachmentModal').modal('hide')

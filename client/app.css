@@ -491,3 +491,7 @@ label {
     width: 90vw;
   }
 }
+
+.inline-block {
+  display: inline-block;
+}

@@ -2,6 +2,9 @@
 
 @Inventory = new Mongo.Collection 'inventory'
 @Inventory.attachSchema new SimpleSchema
+  name:
+    type: String
+    denyUpdate: true
   propertyTag:
     type: String
     optional: true
@@ -169,6 +172,10 @@
     type: String
     optional: true
     allowedValues: ['units', 'oz', 'spools']
+  checkout:
+    label: "Available for Checkout?"
+    type: Boolean
+    defaultValue: false
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema

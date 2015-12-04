@@ -1,0 +1,27 @@
+<template name="facetDropdown">
+  {{#each facetKeys}}
+    <div class="dropdown inline-block">
+      <button class="btn btn-default dropdown-toggle" type="button" data-facet="{{this}}" data-toggle="dropdown">
+        {{this}} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="dropdown-header">{{this}}</li>
+        {{#each value}}
+          {{> facetCheckbox}}
+        {{/each}}
+      </ul>
+    </div>
+  {{/each}}
+
+</template>
+
+<template name="facetCheckbox">
+  <li>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" id="filter-{{key}}-{{name}}" data-facet-key="{{key}}" data-facet-value="{{name}}" {{checked}}>
+        {{name}} ({{count}})
+      </label>
+    </div>
+  </li>
+</template>

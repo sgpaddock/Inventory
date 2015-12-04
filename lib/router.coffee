@@ -10,23 +10,26 @@ Router.configure
 Router.map ->
   @route 'default',
     path: '/'
+    onBeforeAction: ->
+      Router.go '/inventory'
+
+  @route 'inventory',
+    path: '/inventory'
     template: 'inventory'
     waitOn: ->
       Meteor.subscribe 'userData'
-    onBeforeAction: ->
-      @next()
-
-      if @params.query.attachmentId
-        file = FileRegistry.findOne(@params.query.attachmentId)
-      if file
-        Blaze.renderWithData Template.attachmentModal, { attachmentId: @params.query.attachmentId }, $('body').get(0)
-        $('#attachmentModal').modal('show')
-      else
-        $('#attachmentModal').modal('hide')
+  
+  @route 'checkouts',
+    path: '/checkouts'
+    template: 'checkouts'
+    waitOn: ->
+      Meteor.subscribe 'userData'
 
   @route 'import',
     path: '/import'
     template: 'import'
+
+
 
   @route 'userDashboard',
     path: '/my/dashboard'
