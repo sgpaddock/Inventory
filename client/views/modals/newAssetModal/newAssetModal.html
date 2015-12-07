@@ -8,6 +8,7 @@
         </div>
         {{#autoForm collection="Inventory" id="newAssetForm"}}
           <div class="modal-body">
+            {{> afQuickField name='name'}}
             {{> afQuickField name='propertyTag'}}
             {{> afQuickField name='serialNo'}}
             {{> afQuickField name='deviceType' options='allowed'}}

@@ -9,14 +9,13 @@ Template.newAssetModal.events
       obj = {}
       _.each fields, (f) ->
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
+      obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
       Inventory.insert obj
       $('#newAssetModal').modal('hide')
-
     checkUsername tpl, win
 
   'click button[data-action=checkUsername]': (e, tpl) ->
     checkUsername tpl
-
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.

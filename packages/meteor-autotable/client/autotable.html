@@ -40,7 +40,7 @@
       {{#if ready}}
         <tbody>
           {{#each records}}
-            <tr class="{{rowClass}}">
+            <tr class="{{rowClass}}" data-doc="{{_id}}">
               {{#each ../fields}}
                 <td>
                   {{#if tpl}}

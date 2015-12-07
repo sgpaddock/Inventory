@@ -495,3 +495,7 @@ label {
 .inline-block {
   display: inline-block;
 }
+
+.autotable tr {
+  cursor: pointer;
+}
