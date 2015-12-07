@@ -1,5 +1,3 @@
-@autotablerows = new Mongo.Collection('autotable-rows-asdf')
-
 @Inventory = new Mongo.Collection 'inventory'
 @Inventory.attachSchema new SimpleSchema
   name:
