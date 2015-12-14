@@ -1,6 +1,7 @@
 fields = ['name', 'description', 'propertyTag', 'serialNo', 'deviceType', 'manufacturer', 'modelNo', 'department', 'building', 'officeNo', 'owner']
 Template.assetModal.helpers
   item: -> Inventory.findOne(@docId)
+  changelog: -> Changelog.find { itemId: @_id }
 
 Template.assetModal.events
   'click button[data-action=submit]': (e, tpl) ->
@@ -14,3 +15,6 @@ Template.assetModal.events
 
   'hidden.bs.modal': (e, tpl) ->
     Blaze.remove tpl.view
+
+Template.assetModal.created = ->
+  Meteor.subscribe 'item', @data.docId

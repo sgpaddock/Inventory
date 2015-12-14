@@ -1,6 +1,7 @@
 @Inventory = new Mongo.Collection 'inventory'
 @Inventory.attachSchema new SimpleSchema
   name:
+    optional: true
     type: String
     denyUpdate: true
   propertyTag:

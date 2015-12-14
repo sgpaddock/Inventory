@@ -1,7 +1,12 @@
 Template.facetDropdown.helpers
   facetKeys: ->
+    ###
     if Facets.findOne()
       _.keys(Facets.findOne().facets)
+    ###
+    
+    # If we don't hard code these in, they'll flicker whenever we filter.
+    [ 'department', 'owner', 'building' ]
   value: ->
     key = @valueOf()
     active = Iron.query.get(key)?.split(',') || []
@@ -12,7 +17,6 @@ Template.facetDropdown.helpers
 
 Template.facetCheckbox.events
   'change input:checkbox': (e, tpl) ->
-    e.preventDefault()
     cur = Iron.query.get(@key)?.split(',') || []
     if $(e.target).is(':checked')
       cur.push @name

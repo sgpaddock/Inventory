@@ -496,6 +496,16 @@ label {
   display: inline-block;
 }
 
-.autotable tr {
+.inventory-row {
   cursor: pointer;
+}
+
+.inventory-table-heading {
+  cursor: pointer;
+}
+
+.facet-dropdown .dropdown-menu {
+  min-width: 200px;
+  padding-left: 8px;
+  padding-right: 4px;
 }

@@ -12,9 +12,8 @@ getFilters = ->
   return filters
 
 Template.inventory.helpers
-  settings: ->
+  tableSettings: ->
     {
-      collection: Inventory
       fields: [
         'propertyTag',
         'deviceType',
@@ -27,19 +26,16 @@ Template.inventory.helpers
         'officeNo',
         { key: 'attachments', tpl: Template.attachmentField, sortable: false }
       ]
-      addButton: false
-      actionColumn: false
-      class: "autotable table table-condensed"
       subscription: "inventory"
+      class: "autotable table table-condensed"
       filters: getFilters
-      noRemoval: true
     }
-  ready: -> Session.get 'ready'
 
 Template.inventory.events
   'click tr': (e, tpl) ->
     Blaze.renderWithData Template.assetModal, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
     $('#assetModal').modal('show')
+
   'click button[name=newAssetButton]': (e, tpl) ->
     Blaze.render Template.newAssetModal, $('body').get(0)
     $('#newAssetModal').modal('show')

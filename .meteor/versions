@@ -34,7 +34,6 @@ email@1.0.8
 fastclick@1.0.7
 geojson-utils@1.0.4
 hive:accounts-ldap@0.4.0
-hive:autotable@0.1.0
 hive:facets@0.1.4
 hive:file-registry@0.9.10
 hot-code-push@1.0.0
