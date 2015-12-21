@@ -241,6 +241,10 @@
   timestamp:
     type: new Date()
 
+
+# TODO: Discuss this schema. Are we storing a separate checkout entry for every event,
+# or one checkout item with an array schedule? If we do the former, we'll have to process
+# the schedule on the client every time.
 @Checkouts = new Mongo.Collection 'checkouts'
 @Checkouts.attachSchema new SimpleSchema
   assetId:

@@ -69,6 +69,10 @@ Meteor.publishComposite 'checkouts', (filter, options) ->
           FileRegistry.find { _id: { $in: ids } }
       }
       {
+        find: (item) ->
+          Checkouts.find { assetId: item._id }
+      }
+      {
         find: -> facets
       }
     ]

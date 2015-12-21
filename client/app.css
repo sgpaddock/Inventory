@@ -455,11 +455,6 @@ blockquote {
 .list-unstyled,
 .list-unstyled ul { min-width: 160px }
 
-label {
-  font-weight: normal;
-  color: #000;
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
@@ -508,4 +503,12 @@ label {
   min-width: 200px;
   padding-left: 8px;
   padding-right: 4px;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
 }

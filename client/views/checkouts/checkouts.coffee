@@ -15,7 +15,9 @@ Template.checkouts.helpers
   settings: ->
     {
       subscription: "checkouts"
-      fields: ['name', 'modelNo', 'deviceType', 'manufacturer']
+      fields: ['name', 'modelNo', 'deviceType', 'manufacturer',
+        { key: 'available', label: 'Available?', tpl: Template.checkoutAvailableField }
+      ]
       filters: getFilters
     }
 
