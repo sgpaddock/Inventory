@@ -11,3 +11,9 @@ Inventory.allow
   insert: -> true
   update: -> true
   remove: -> false
+
+
+Checkouts.allow
+  insert: -> true
+  update: -> false
+  remove: -> false
