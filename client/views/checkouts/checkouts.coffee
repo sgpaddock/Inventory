@@ -1,24 +1,36 @@
-getFilters = ->
+checkoutFilters = ->
+  {
+    $or: [
+      { $and: [
+        { 'schedule.timeReserved': { $gte: new Date Iron.query.get('startDate') } }
+        { 'schedule.timeReserved': { $lte: new Date Iron.query.get('endDate') } }
+      ] },
+      { $and: [
+        { 'schedule.expectedReturn': { $gte: new Date Iron.query.get('startDate') } }
+        { 'schedule.expectedReturn': { $lt: new Date Iron.query.get('endDate') } }
+      ] }
+    ]
+  }
+
+inventoryFilters = ->
   filters = {
     department: Iron.query.get 'department'
-    owner: Iron.query.get 'owner'
     building: Iron.query.get 'building'
+    owner: Iron.query.get 'owner'
   }
 
   for k,v of filters
-    if _.isUndefined(v)
-      delete filters[k]
-
+    if _.isUndefined(v) then delete filters[k]
   return filters
 
 Template.checkouts.helpers
   settings: ->
     {
-      subscription: "checkouts"
       fields: ['name', 'modelNo', 'deviceType', 'manufacturer',
-        { key: 'available', label: 'Available?', tpl: Template.checkoutAvailableField }
+        { key: 'available', label: 'Available?', tpl: Template.checkoutAvailableField, sortable: false }
       ]
-      filters: getFilters
+      inventoryFilters: inventoryFilters
+      checkoutFilters: checkoutFilters
     }
 
 Template.checkouts.events

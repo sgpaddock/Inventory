@@ -54,13 +54,15 @@ Meteor.publishComposite 'inventorySet', (set) ->
   }
 
 # TODO: Add extra subs on checkouts for working reactivity or find a different pattern
-Meteor.publishComposite 'checkouts', (filter, options) ->
-  _.extend filter, { checkout: true }
-  [itemSet, facets] = Inventory.findWithFacets filter, options
+Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) ->
+  if checkoutFilter
+    ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
+  if ids then _.extend inventoryFilter, { _id: { $nin: ids } }
+  [itemSet, facets] = Inventory.findWithFacets inventoryFilter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
   {
     find: ->
-      Counts.publish this, 'inventoryCount', Inventory.find(filter), { noReady: true }
+      Counts.publish this, 'checkoutCount', Inventory.find(inventoryFilter), { noReady: true }
       Inventory.find { _id: { $in: itemSet } }
     children: [
       {

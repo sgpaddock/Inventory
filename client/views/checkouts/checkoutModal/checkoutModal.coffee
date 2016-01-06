@@ -2,9 +2,10 @@ Template.checkoutModal.helpers
   item: -> Inventory.findOne { _id: @docId }
   checkout: -> Checkouts.find { assetId: @_id }
   admin: -> true
+  displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
 
 Template.checkoutModal.rendered = ->
-  @$('.datepicker').datepicker({
+  this.$('.datepicker').datepicker({
     orientation: "top" # up is down
   })
 
@@ -14,7 +15,8 @@ Template.checkoutModal.events
 
   'click button[data-action=submit]': (e, tpl) ->
     # TODO: Validate/figure out how this is actually going to work
-    id = Meteor.call 'checkUsername', tpl.$('input[name=onBehalfOf]').val()
+    if tpl.$('input[name=onBehalfOf]').val()
+      id = Meteor.call 'checkUsername', tpl.$('input[name=onBehalfOf]').val()
     Checkouts.insert
       assetId: tpl.data.docId
       assignedTo: id || Meteor.userId()

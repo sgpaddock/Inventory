@@ -54,9 +54,9 @@
                     <tbody>
                       {{#each checkout}}
                         <tr>
-                          <td>{{assignedTo}}</td>
-                          <td>{{>dateFormatter schedule.timeReserved}}</td>
-                          <td>{{>dateFormatter schedule.expectedReturn}}</td>
+                          <td>{{>userPortrait userId=assignedTo class="in-row"}} {{displayName}}</td>
+                          <td>{{>dateFormatter date=schedule.timeReserved}}</td>
+                          <td>{{>dateFormatter date=schedule.expectedReturn}}</td>
                         </tr>
                       {{/each}}
                     </tbody>
