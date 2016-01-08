@@ -17,3 +17,4 @@ if Meteor.isServer
     department: String
     owner: String
     building: String
+    deviceType: String

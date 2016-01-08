@@ -14,9 +14,7 @@ checkoutFilters = ->
 
 inventoryFilters = ->
   filters = {
-    department: Iron.query.get 'department'
-    building: Iron.query.get 'building'
-    owner: Iron.query.get 'owner'
+    deviceType: Iron.query.get 'deviceType'
   }
 
   for k,v of filters
