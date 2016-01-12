@@ -21,15 +21,18 @@ Router.map ->
   
   @route 'checkouts',
     path: '/checkouts'
-    template: 'checkouts'
+    template: ->
+      # TODO: Check user roles somehow and render the appropriate template
+      if false
+        'checkoutsAdmin'
+      else
+        'checkoutsUser'
     waitOn: ->
       Meteor.subscribe 'userData'
 
   @route 'import',
     path: '/import'
     template: 'import'
-
-
 
   @route 'userDashboard',
     path: '/my/dashboard'

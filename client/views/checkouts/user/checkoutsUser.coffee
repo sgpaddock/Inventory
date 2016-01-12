@@ -21,7 +21,7 @@ inventoryFilters = ->
     if _.isUndefined(v) then delete filters[k]
   return filters
 
-Template.checkouts.helpers
+Template.checkoutsUser.helpers
   settings: ->
     {
       fields: ['name', 'modelNo', 'deviceType', 'manufacturer',
@@ -31,7 +31,7 @@ Template.checkouts.helpers
       checkoutFilters: checkoutFilters
     }
 
-Template.checkouts.events
+Template.checkoutsUser.events
   'click tr': (e, tpl) ->
-    Blaze.renderWithData Template.checkoutModal, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
-    $('#checkoutModal').modal('show')
+    Blaze.renderWithData Template.checkoutModalUser, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
+    $('#checkoutModalUser').modal('show')

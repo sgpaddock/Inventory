@@ -133,6 +133,9 @@
     type: String
     optional: true
     label: "Office Number"
+  pictureId:
+    type: String
+    optional: true
   attachments:
     type: [Object]
     optional: true
@@ -250,6 +253,15 @@
   schedule:
     optional: true
     type: Object
+  approval:
+    optional: true
+    type: Object
+  'approval.approved':
+    optional: true
+    type: Boolean
+  'approval.approverId':
+    optional: true
+    type: String
   'schedule.timeCheckedOut':
     optional: true
     type: new Date()

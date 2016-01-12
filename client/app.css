@@ -505,10 +505,12 @@ blockquote {
   padding-right: 4px;
 }
 
-.red {
+.unavailable, .rejected, .error {
   color: red;
+  font-weight: bold;
 }
 
-.green {
+.available,  .approved {
+  font-weight: bold;
   color: green;
 }

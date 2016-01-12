@@ -1,13 +1,20 @@
-<template name="checkoutModal">
+<template name="checkoutModalAdmin">
   {{#with item}}
-    <div class="modal fade" id="checkoutModal">
+    <div class="modal fade" id="checkoutModalAdmin">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Checkout Item {{name}}</h4>
           </div>
-            <div class="modal-body"> 
+          <div class="modal-body"> 
+            <div class="row">
+              <div class="col-xs-12">
+                {{#if error}}
+                  <span class="error">{{error}}</span>
+                {{/if}}
+              </div>
+            </div>
               <div class="row">
                 <div class="col-md-6 col-xs-12">
                   <form>
@@ -49,6 +56,7 @@
                         <td>Assigned To</td>
                         <td>Reserved From</td>
                         <td>Expected Return</td>
+                        <td>Approval</td>
                       </tr>
                     </thead>
                     <tbody>
@@ -57,6 +65,18 @@
                           <td>{{>userPortrait userId=assignedTo class="in-row"}} {{displayName}}</td>
                           <td>{{>dateFormatter date=schedule.timeReserved}}</td>
                           <td>{{>dateFormatter date=schedule.expectedReturn}}</td>
+                          <td>
+                            {{#if approval.approved}}
+                              Approved by {{> username userId}}
+                              {{else}}
+                              {{#if approval.approverId}}
+                                Rejected by {{> username userId}}
+                                {{else}}
+                                <button type="button" data-action="approve" class="btn btn-xs btn-success">Approve</button>
+                                <button type="button" data-action="reject" class="btn btn-xs btn-danger">Reject</button>
+                              {{/if}}
+                            {{/if}}
+                          </td>
                         </tr>
                       {{/each}}
                     </tbody>
