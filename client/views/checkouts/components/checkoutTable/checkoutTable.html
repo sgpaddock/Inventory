@@ -1,0 +1,61 @@
+<template name="checkoutTable">
+  {{#with context}}
+    {{>UI.contentBlock reactiveConfig}}
+    {{#if pageLimit}}
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right">
+            <strong>{{firstVisibleItem}}-{{lastVisibleItem}}</strong> of <strong>{{itemCount}}</strong>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default" data-action="lastPage" {{lastDisabled}}><span class="glyphicon glyphicon-chevron-left"></span></button>
+              <button type="button" class="btn btn-default" data-action="nextPage" {{nextDisabled}}><span class="glyphicon glyphicon-chevron-right"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/if}}
+    <table name="checkoutTable" class="table table-condensed">
+      <thead>
+        <tr>
+          {{#each fields}}
+            {{#if sortable}}
+              <th><span class="inventory-table-heading" data-sort-key="{{key}}">
+                  {{label}} &nbsp;
+                  {{#if isSortKey}} {{#if isAscending}}
+                      <span class="glyphicon glyphicon-chevron-down"></span>
+                      {{else}}
+                      <span class="glyphicon glyphicon-chevron-up"></span>
+                  {{/if}}{{/if}}
+              </span></th>
+              {{else}}
+              <th>{{label}}</th>
+            {{/if}}
+          {{/each}}
+        </tr>
+      </thead>
+      {{#if ready}}
+        <tbody>
+          {{#each records}}
+            <tr class="inventory-row {{rowClass}}" data-doc="{{_id}}">
+              {{#each ../fields}}
+                <td>
+                  {{#if tpl}}
+                    {{#with fieldCellContext ..}}
+                      {{> ../tpl}}
+                    {{/with}}
+                    {{else}}
+                    {{getField ..}}
+                  {{/if}}
+                </td>
+              {{/each}}
+            </tr>
+          {{/each}}
+        </tbody>
+        {{else}}
+        <td colspan={{fieldCount}}>
+          {{> loading}}
+        </td>
+      {{/if}}
+    </table>
+  {{/with}}
+</template>

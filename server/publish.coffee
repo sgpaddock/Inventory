@@ -4,11 +4,12 @@ Meteor.publish 'userData', ->
 Meteor.publish 'allUserData', ->
   Meteor.users.find {}, {fields: {'_id': 1, 'username': 1, 'mail': 1, 'displayName': 1, 'department': 1, 'physicalDeliveryOfficeName': 1, 'status.online': 1, 'status.idle': 1}}
 
-Meteor.publishComposite 'inventory', (filter) ->
-  [itemSet, facets] = Inventory.findWithFacets filter
+Meteor.publishComposite 'inventory', (filter, options) ->
+  [itemSet, facets] = Inventory.findWithFacets filter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
   {
     find: ->
+      Counts.publish this, 'inventoryCount', Inventory.find(filter), { noReady: true }
       Inventory.find { _id: { $in: itemSet } }
     children: [
       {
@@ -51,3 +52,33 @@ Meteor.publishComposite 'inventorySet', (set) ->
       }
     ]
   }
+
+# TODO: Add extra subs on checkouts for working reactivity or find a different pattern
+Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) ->
+  if checkoutFilter
+    ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
+  if ids then _.extend inventoryFilter, { _id: { $nin: ids } }
+  [itemSet, facets] = Inventory.findWithFacets inventoryFilter, options
+  itemSet = _.pluck itemSet.fetch(), '_id'
+  {
+    find: ->
+      Counts.publish this, 'checkoutCount', Inventory.find(inventoryFilter), { noReady: true }
+      Inventory.find { _id: { $in: itemSet } }
+    children: [
+      {
+        find: (item) ->
+          ids = _.pluck item.attachments, 'fileId' # not reactive
+          FileRegistry.find { _id: { $in: ids } }
+      }
+      {
+        find: (item) ->
+          Checkouts.find { assetId: item._id }
+      }
+      {
+        find: -> facets
+      }
+    ]
+  }
+
+Meteor.publish 'item', (itemId) ->
+  [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }) ]

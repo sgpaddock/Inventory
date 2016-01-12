@@ -10,15 +10,29 @@ Router.configure
 Router.map ->
   @route 'default',
     path: '/'
+    onBeforeAction: ->
+      Router.go '/inventory'
+
+  @route 'inventory',
+    path: '/inventory'
     template: 'inventory'
     waitOn: ->
       Meteor.subscribe 'userData'
-    onBeforeAction: ->
-      Session.set 'itemSet', []
-      filter = Filter.getFilterFromQuery @params.query
-      Meteor.subscribe 'inventory', filter
-      Meteor.subscribe 'newInventory', filter, new Date()
-      @next()
+  
+  @route 'checkouts',
+    path: '/checkouts'
+    template: ->
+      # TODO: Check user roles somehow and render the appropriate template
+      if false
+        'checkoutsAdmin'
+      else
+        'checkoutsUser'
+    waitOn: ->
+      Meteor.subscribe 'userData'
+
+  @route 'import',
+    path: '/import'
+    template: 'import'
 
   @route 'userDashboard',
     path: '/my/dashboard'
@@ -64,3 +78,8 @@ Router.map ->
     where: 'server'
     action: FileRegistry.serveFile
 
+  @route 'downloadFile',
+    path: '/download/:filename'
+    where: 'server'
+    action: FileRegistry.serveFile
+      disposition: 'attachment'

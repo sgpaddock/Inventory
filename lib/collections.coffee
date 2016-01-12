@@ -1,11 +1,8 @@
 @Inventory = new Mongo.Collection 'inventory'
 @Inventory.attachSchema new SimpleSchema
   name:
-    type: String
-    denyUpdate: true
-  description:
-    type: String
     optional: true
+    type: String
     denyUpdate: true
   propertyTag:
     type: String
@@ -17,8 +14,8 @@
     allowedValues: [
       'PC'
       'Laptop'
-      'iPad'
-      'iMac'
+      'IPad'
+      'IMac'
       'Other Tablet'
       'Monitor'
       'Other Computer'
@@ -53,6 +50,7 @@
     denyUpdate: true
   department:
     type: String
+    optional: true
     allowedValues: [
       'AAAS'
       'Air Force'
@@ -60,6 +58,7 @@
       'Anthropology'
       'Appalachian Center'
       'Army ROTC'
+      'Aux Services'
       'Biology'
       'Chemistry'
       "Dean's Administration"
@@ -68,7 +67,7 @@
       'Environmental and Sustainability Studies'
       'Center for English as a Second Language'
       'Geography'
-      "Gender and Women's Studies"
+      "Gender and Womens Studies"
       'History'
       'Hispanic Studies'
       'Hive'
@@ -76,7 +75,7 @@
       'International Studies'
       'Linguistics'
       'Mathematics'
-      'Modern and Classical Languages, Literatures and Cultures'
+      'MCLLC'
       'Physics and Astronomy'
       'Philosophy'
       'Political Science'
@@ -90,6 +89,7 @@
     ]
   owner:
     type: String
+    optional: true
   building:
     type: String
     optional: true
@@ -104,8 +104,10 @@
       'BBSRB'
       'BOWMAN HALL'
       'BRADLEY HALL'
-      'BRECKENRIDGE HALL'
+      'BRECKINRIDGE HALL'
+      'CENTER FOR APPLIED ENERGY'
       'CHEMISTRY-PHYSICS'
+      'COMBS RESEARCH BUILDING'
       'ECOLOGICAL RESEARCH'
       'FUNKHOUSER'
       'JESSE HARRIS CENTER'
@@ -131,6 +133,9 @@
     type: String
     optional: true
     label: "Office Number"
+  pictureId:
+    type: String
+    optional: true
   attachments:
     type: [Object]
     optional: true
@@ -146,6 +151,13 @@
     ]
   'attachments.$.fileId':
     type: String
+  notes:
+    type: String
+    optional: true
+  ticketNo:
+    type: String
+    optional: true
+    label: "Waggle/Triage Ticket"
   imageId:
     type: String
     optional: true
@@ -162,6 +174,10 @@
     type: String
     optional: true
     allowedValues: ['units', 'oz', 'spools']
+  checkout:
+    label: "Available for Checkout?"
+    type: Boolean
+    defaultValue: false
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema
@@ -235,20 +251,35 @@
   assignedTo:
     type: String
   schedule:
+    optional: true
     type: Object
+  approval:
+    optional: true
+    type: Object
+  'approval.approved':
+    optional: true
+    type: Boolean
+  'approval.approverId':
+    optional: true
+    type: String
   'schedule.timeCheckedOut':
+    optional: true
     type: new Date()
   'schedule.timeReturned':
+    optional: true
     type: new Date()
   'schedule.timeReserved':
+    optional: true
     type: new Date()
   'schedule.expectedReturn':
+    optional: true
     type: new Date()
   'schedule.checkedOutBy':
+    optional: true
     type: String
   'schedule.checkedInBy':
+    optional: true
     type: String
-  
 
 Meteor.users.attachSchema new SimpleSchema
   username:

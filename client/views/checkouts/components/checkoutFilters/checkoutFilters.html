@@ -1,0 +1,35 @@
+<template name="checkoutFilters">
+  <div class="dropdown inline-block facet-dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-facet="startDate" data-toggle="dropdown">
+      Available After: {{startDate}} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li class="dropdown-header">
+        <div class="date datepicker" id="startDatepicker" data-filter="startDate"></div>
+      </li>
+    </ul>
+  </div>
+  <div class="dropdown inline-block facet-dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" data-facet="endDate" data-toggle="dropdown">
+      Available Before: {{endDate}} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li class="dropdown-header">
+        <div class="date datepicker" id="endDatepicker" data-filter="endDate"></div>
+      </li>
+    </ul>
+  </div>
+  {{#each facetKeys}}
+    <div class="dropdown inline-block facet-dropdown">
+      <button class="btn btn-default dropdown-toggle" type="button" data-facet="deviceType" data-toggle="dropdown">
+        {{label}}: {{selection}} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="dropdown-header">{{label}}</li>
+        {{#each value}}
+          {{> facetCheckbox}}
+        {{/each}}
+      </ul>
+    </div>
+  {{/each}}
+</template>

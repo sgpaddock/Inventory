@@ -1,0 +1,34 @@
+<template name="navbar">
+  <nav class="navbar navbar-default navbar-static-top yamm">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+          <span class="sr-only">A&S Inventory</span>
+        </button>
+        <a class="navbar-brand" href="/inventory">Inventory</a>
+        <span class="navbar-brand"> |</span>
+        <a class="navbar-brand" href="/checkouts">Checkouts</a>
+      </div>
+      {{#if currentUser}}
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <!-- User Dropdown -->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                {{currentUser.username}}
+                <img src="https://as.uky.edu/profile-picture/{{currentUser.username}}" style="max-height: 23px; max-width: 100px;">
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/my/dashboard">Settings</a></li>
+                <li class="divider"></li>
+                <li><a href="#" id="logout">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+
+        </div><!-- /.navbar-collapse -->
+      {{/if}}
+    </div><!-- /.container-fluid -->
+  </nav>
+</template>

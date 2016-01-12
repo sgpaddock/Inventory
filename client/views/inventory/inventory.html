@@ -1,42 +1,6 @@
 <template name="inventory">
   <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
-  <table class="table table-bordered table-condensed">
-    {{#with context}}
-      <thead>
-        <tr>
-          {{#each fields}}
-            <th><span class="field-table-heading" data-sort-key="{{fieldName}}">
-                {{fieldLabel}} &nbsp;
-                {{#if isSortkey}} {{#if isAscending}}
-                    <span class="glyphicon glyphicon-chevron-down"></span>
-                    {{else}}
-                    <span class="glyphicon glyphicon-chevron-up"></span>
-                {{/if}}{{/if}} 
-            </span></th>
-          {{/each}}
-        </tr>
-      </thead>
-      <tbody>
-        {{#unless oneItem}}
-          <td colspan='{{columnCount}}'>
-          No items found matching your query. 
-          {{#if filter}}
-            <a href='#' data-action='clearFilter'>Clear your filters?</a>
-          {{/if}}
-        </td>
-        {{/unless}}
-        {{#each assets}}
-          <tr>
-            {{#each ../fields}}
-              <td>
-                {{#with fieldCellContext fieldName .. }}
-                  {{> renderCell this}}
-                {{/with}}
-              </td>
-            {{/each}}
-          </tr>
-        {{/each}}
-      </tbody>
-    {{/with}}
-  </table>
+  {{> facetDropdown}}
+  {{> inventoryTable settings=tableSettings}}
 </template>
+

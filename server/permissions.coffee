@@ -11,3 +11,9 @@ Inventory.allow
   insert: -> true
   update: -> true
   remove: -> false
+
+
+Checkouts.allow
+  insert: (userId, doc) -> !(doc.approval) or doc.approval?.approverId is (userId or null)
+  update: (userId, doc, fields, modifier) -> true
+  remove: -> false
