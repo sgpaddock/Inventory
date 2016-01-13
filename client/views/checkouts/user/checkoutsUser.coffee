@@ -1,13 +1,19 @@
 checkoutFilters = ->
+  startDate = null
+  endDate = null
+  if Iron.query.get('startDate')
+    startDate = new Date Iron.query.get('startDate')
+  if Iron.query.get('endDate')
+    endDate = new Date Iron.query.get('endDate')
   {
     $or: [
       { $and: [
-        { 'schedule.timeReserved': { $gte: new Date Iron.query.get('startDate') } }
-        { 'schedule.timeReserved': { $lte: new Date Iron.query.get('endDate') } }
+        { 'schedule.timeReserved': { $gte: startDate } }
+        { 'schedule.timeReserved': { $lte: endDate } }
       ] },
       { $and: [
-        { 'schedule.expectedReturn': { $gte: new Date Iron.query.get('startDate') } }
-        { 'schedule.expectedReturn': { $lt: new Date Iron.query.get('endDate') } }
+        { 'schedule.expectedReturn': { $gte: startDate } }
+        { 'schedule.expectedReturn': { $lt: endDate } }
       ] }
     ]
   }
@@ -25,7 +31,7 @@ Template.checkoutsUser.helpers
   settings: ->
     {
       fields: ['name', 'modelNo', 'deviceType', 'manufacturer',
-        { key: 'available', label: 'Available?', tpl: Template.checkoutAvailableField, sortable: false }
+        { key: 'available', label: 'Status', tpl: Template.checkoutStatusField, sortable: false }
       ]
       inventoryFilters: inventoryFilters
       checkoutFilters: checkoutFilters

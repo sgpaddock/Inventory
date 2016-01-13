@@ -72,7 +72,24 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
       }
       {
         find: (item) ->
-          Checkouts.find { assetId: item._id }
+          if checkoutFilter
+            timeFilter = {
+              assetId: item._id
+              $or: [
+                checkoutFilter
+                { $or: [
+                  { 'schedule.timeReserved': { $gte: new Date() } }
+                  { 'schedule.expectedReturn': { $gte: new Date() } }
+                ] }
+              ]
+            }
+          else
+            timeFilter = { assetId: item._id, $or: [
+              {'schedule.timeReserved': { $gte: new Date() } }
+              { 'schedule.expectedReturn': { $gte: new Date() } }
+            ] }
+          console.log JSON.stringify(timeFilter)
+          Checkouts.find timeFilter
       }
       {
         find: -> facets

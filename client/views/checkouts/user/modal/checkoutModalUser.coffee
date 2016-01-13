@@ -4,7 +4,7 @@ Template.checkoutModalUser.helpers
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
   checkoutShouldBeDisplayed: ->
-    @approval.approved is true or @assignedTo is Meteor.userId()
+    @approval?.approved is true or @assignedTo is Meteor.userId()
 
 Template.checkoutModalUser.rendered = ->
   this.$('.datepicker').datepicker({
@@ -17,26 +17,34 @@ Template.checkoutModalUser.events
 
   'click button[data-action=submit]': (e, tpl) ->
     # TODO: Permissions. Maybe move everything into methods.
-    Template.instance().error.set(null)
-    if tpl.$('input[name=onBehalfOf]').val()
-      userId = Meteor.call 'checkUsername', tpl.$('input[name=onBehalfOf]').val()
-    timeReserved = new Date(tpl.$('input[name=timeReserved]').val())
-    expectedReturn = new Date(tpl.$('input[name=expectedReturn]').val())
-    checkout = Checkouts.findOne {
-      assetId: tpl.data.docId
-      'schedule.timeReserved': { $lte: expectedReturn }
-      'schedule.expectedReturn': { $gte: timeReserved }
-    }
-    console.log checkout
-    if checkout
-      Template.instance().error.set('This reservation would overlap with another. Please consider a different item or reservation window.')
-    else
-      Checkouts.insert
+    tpl.error.set(null)
+    today = new Date()
+    if new Date(tpl.$('input[name=timeReserved]').val()) < today
+      tpl.error.set "Item reservation time must be after today."
+    if new Date(tpl.$('input[name=timeReserved]').val()) > new Date(tpl.$('input[name=timeReserved]').val())
+      tpl.error.set "Expected return must be after desired reservation date."
+    if not tpl.$('input[name=timeReserved]').val()
+      tpl.error.set "Item reservation time is required."
+    if not tpl.$('input[name=expectedReturn]').val()
+      tpl.error.set "Expected return time is required."
+
+    if not tpl.error.get()
+      timeReserved = new Date(tpl.$('input[name=timeReserved]').val())
+      expectedReturn = new Date(tpl.$('input[name=expectedReturn]').val())
+      checkout = Checkouts.findOne {
         assetId: tpl.data.docId
-        assignedTo: userId || Meteor.userId()
-        schedule:
-          timeReserved: new Date(tpl.$('input[name=timeReserved]').val())
-          expectedReturn: new Date(tpl.$('input[name=expectedReturn]').val())
+        'schedule.timeReserved': { $lte: expectedReturn }
+        'schedule.expectedReturn': { $gte: timeReserved }
+      }
+      if checkout
+        tpl.error.set('This reservation would overlap with another. Please consider a different item or reservation window.')
+      else
+        Checkouts.insert
+          assetId: tpl.data.docId
+          assignedTo: Meteor.userId()
+          schedule:
+            timeReserved: new Date(tpl.$('input[name=timeReserved]').val())
+            expectedReturn: new Date(tpl.$('input[name=expectedReturn]').val())
 
 Template.checkoutModalUser.onCreated ->
   this.error = new ReactiveVar()
