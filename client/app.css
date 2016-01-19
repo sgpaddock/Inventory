@@ -221,14 +221,14 @@ table {
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #ffffff;
-  }
-  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-    color: #dddfd4;
-  }
-  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
-    color: #dddfd4;
-    background-color: #173e43;
-  }
+}
+.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+  color: #dddfd4;
+}
+.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+  color: #dddfd4;
+  background-color: #173e43;
+}
 }
 
 /***************************** QUEUE/TICKETROW/SIDEBAR *****************************/
@@ -290,7 +290,7 @@ blockquote {
   display: block;
   position: relative; 
 } 
- 
+
 .attachment .remove-attachment { 
   position: absolute; 
   display: block; 
@@ -305,7 +305,7 @@ blockquote {
   -moz-border-radius: 3px; 
   -webkit-border-radius: 3px; 
 } 
- 
+
 .attachment:hover .remove-attachment { 
   visibility: visible; 
 } 
@@ -385,23 +385,23 @@ blockquote {
   margin-right: 0px !important;
 }
 
-  @media (max-width: 768px) {
-    .btn-responsive {
-      padding: 5px 5px;
-      font-size: 12px;
-      line-height: 1.5;
-      border-radius: 3px;
-    } 
-  }
+@media (max-width: 768px) {
+  .btn-responsive {
+    padding: 5px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+  } 
+}
 
-  @media (min-width: 769px) {
-    btn-responsive {
-      padding: 5px 10px;
-      font-size: 12px;
-      line-height: 1.5;
-      border-radius: 3px;
-    }
+@media (min-width: 769px) {
+  btn-responsive {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
   }
+}
 
 .inline-edit {
   display: inline-block;
@@ -433,11 +433,11 @@ blockquote {
  * 
  * @geedmo - Licensed under the MIT license
  */
-.yamm .nav,
-.yamm .collapse,
-.yamm .dropup,
-.yamm .dropdown {
-  position: static;
+  .yamm .nav,
+  .yamm .collapse,
+  .yamm .dropup,
+  .yamm .dropdown {
+    position: static;
 }
 .yamm .container {
   position: relative;
@@ -478,13 +478,13 @@ blockquote {
 @media (max-width: 768px) {
   .modal-xl {
     width: 96vw;
-  }
+}
 }
 
 @media (min-width: 769px) {
   .modal-xl {
     width: 90vw;
-  }
+}
 }
 
 .inline-block {
@@ -513,4 +513,8 @@ blockquote {
 .available,  .approved {
   font-weight: bold;
   color: green;
+}
+
+.login-input { 
+  max-width: 200px;
 }

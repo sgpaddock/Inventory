@@ -11,8 +11,17 @@ Template.checkoutModalAdmin.rendered = ->
   })
 
 Template.checkoutModalAdmin.events
+  'show.bs.modal': (e, tpl) ->
+    zIndex = 1040 + ( 10 * $('.modal:visible').length)
+    $(e.target).css('z-index', zIndex)
+    setTimeout ->
+      $('.modal-backdrop').not('.modal-stack').css('z-index',  zIndex-1).addClass('modal-stack')
+    , 10
+
   'hidden.bs.modal': (e, tpl) ->
     Blaze.remove tpl.view
+    if $('.modal:visible').length
+      $(document.body).addClass('modal-open')
 
   'click button[data-action=submit]': (e, tpl) ->
     # TODO: Permissions. Maybe move everything into methods.
@@ -43,9 +52,13 @@ Template.checkoutModalAdmin.events
     Checkouts.update @_id, { $set: { 'approval.approved': true, 'approval.approverId': Meteor.userId() } }
   'click button[data-action=reject]': (e, tpl) ->
     Checkouts.update @_id, { $set: { 'approval.approved': false, 'approval.approverId': Meteor.userId() } }
+  'click button[data-action=checkOut]': (e, tpl) ->
+    console.log this
+    Blaze.renderWithData Template.checkoutCheckoutModal, this, $('body').get(0)
+    $('#checkoutCheckoutModal').modal('show')
 
 Template.checkoutModalAdmin.onCreated ->
-  this.error = new ReactiveVar()
+  @error = new ReactiveVar()
 
 insertCheckout = (e, tpl, userId) ->
   timeReserved = new Date(tpl.$('input[name=timeReserved]').val())

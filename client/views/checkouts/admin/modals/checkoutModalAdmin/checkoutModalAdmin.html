@@ -56,7 +56,7 @@
                         <td>Assigned To</td>
                         <td>Reserved From</td>
                         <td>Expected Return</td>
-                        <td>Approval</td>
+                        <td>Status</td>
                       </tr>
                     </thead>
                     <tbody>
@@ -66,14 +66,28 @@
                           <td>{{>dateFormatter date=schedule.timeReserved}}</td>
                           <td>{{>dateFormatter date=schedule.expectedReturn}}</td>
                           <td>
-                            {{#if approval.approved}}
-                              Approved by {{> username userId}}
+                            {{#if schedule.timeCheckedOut}}
+                              {{#unless schedule.timeCheckedIn}}
+                                <span class="approved">
+                                  Checked Out
+                                </span>
+                                <button type="button" data-action="checkIn" class="btn btn-xs btn-primary">Check In</button>
+                              {{/unless}}
                               {{else}}
-                              {{#if approval.approverId}}
-                                Rejected by {{> username userId}}
+                              {{#if approval.approved}}
+                                <div>Approved by {{> username userId}}</div>
+                                <div>
+                                  {{#unless schedule.timeCheckedIn}}
+                                    <button type="button" data-action="checkOut" class="btn btn-xs btn-primary">Check Out</button>
+                                  {{/unless}}
+                                </div>
                                 {{else}}
-                                <button type="button" data-action="approve" class="btn btn-xs btn-success">Approve</button>
-                                <button type="button" data-action="reject" class="btn btn-xs btn-danger">Reject</button>
+                                {{#if approval.approverId}}
+                                  Rejected by {{> username userId}}
+                                  {{else}}
+                                  <button type="button" data-action="approve" class="btn btn-xs btn-success">Approve</button>
+                                  <button type="button" data-action="reject" class="btn btn-xs btn-danger">Reject</button>
+                                {{/if}}
                               {{/if}}
                             {{/if}}
                           </td>

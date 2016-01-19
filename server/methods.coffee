@@ -1,6 +1,6 @@
 Meteor.methods
   checkUsername: (username) ->
-    #If our user is already in Meteor.users, cool. If not, query LDAP and insert into Meteor.users.
+    # If our user is already in Meteor.users, cool. If not, query LDAP and insert into Meteor.users.
     user = Meteor.users.findOne {username: username.toLowerCase()}
     if user?
       return user._id
@@ -18,3 +18,9 @@ Meteor.methods
         else
           userId = Meteor.users.insert(userObj)
         return userId
+
+  checkPassword: (username, password) ->
+    # Check a username and password against LDAP without Meteor login.
+    client = LDAP.createClient Meteor.settings.ldap.serverUrl
+    LDAP.bind client, username, password
+    return LDAP.search(client, username)?

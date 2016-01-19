@@ -23,7 +23,7 @@ Router.map ->
     path: '/checkouts'
     template: ->
       # TODO: Check user roles somehow and render the appropriate template
-      if false
+      if true
         'checkoutsAdmin'
       else
         'checkoutsUser'

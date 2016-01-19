@@ -88,7 +88,6 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
               {'schedule.timeReserved': { $gte: new Date() } }
               { 'schedule.expectedReturn': { $gte: new Date() } }
             ] }
-          console.log JSON.stringify(timeFilter)
           Checkouts.find timeFilter
       }
       {
