@@ -53,9 +53,11 @@ Template.checkoutModalAdmin.events
   'click button[data-action=reject]': (e, tpl) ->
     Checkouts.update @_id, { $set: { 'approval.approved': false, 'approval.approverId': Meteor.userId() } }
   'click button[data-action=checkOut]': (e, tpl) ->
-    console.log this
-    Blaze.renderWithData Template.checkoutCheckoutModal, this, $('body').get(0)
-    $('#checkoutCheckoutModal').modal('show')
+    Blaze.renderWithData Template.confirmCheckoutModal, this, $('body').get(0)
+    $('#confirmCheckoutModal').modal('show')
+  'click button[data-action=checkIn]': (e, tpl) ->
+    Blaze.renderWithData Template.checkInModal, this, $('body').get(0)
+    $('#checkInModal').modal('show')
 
 Template.checkoutModalAdmin.onCreated ->
   @error = new ReactiveVar()

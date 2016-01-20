@@ -1,9 +1,9 @@
-Template.checkoutCheckoutModal.helpers
+Template.confirmCheckoutModal.helpers
   name: -> Inventory.findOne(@assetId).name
   error: -> Template.instance().error.get()
   success: -> Template.instance().success.get()
 
-Template.checkoutCheckoutModal.events
+Template.confirmCheckoutModal.events
   'show.bs.modal': (e, tpl) ->
     zIndex = 1040 + ( 10 * $('.modal:visible').length)
     $(e.target).css('z-index', zIndex)
@@ -34,6 +34,6 @@ Template.checkoutCheckoutModal.events
     if e.keyCode is 13
       tpl.$('button[data-action=login]').click()
 
-Template.checkoutCheckoutModal.onCreated ->
+Template.confirmCheckoutModal.onCreated ->
   @error = new ReactiveVar()
   @success = new ReactiveVar(false)

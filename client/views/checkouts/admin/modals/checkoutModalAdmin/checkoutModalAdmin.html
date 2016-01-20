@@ -67,12 +67,16 @@
                           <td>{{>dateFormatter date=schedule.expectedReturn}}</td>
                           <td>
                             {{#if schedule.timeCheckedOut}}
-                              {{#unless schedule.timeCheckedIn}}
+                              {{#if schedule.timeReturned}}
+                                <span class="approved">
+                                  Checked In
+                                </span>
+                                {{else}}
                                 <span class="approved">
                                   Checked Out
                                 </span>
                                 <button type="button" data-action="checkIn" class="btn btn-xs btn-primary">Check In</button>
-                              {{/unless}}
+                              {{/if}}
                               {{else}}
                               {{#if approval.approved}}
                                 <div>Approved by {{> username userId}}</div>
