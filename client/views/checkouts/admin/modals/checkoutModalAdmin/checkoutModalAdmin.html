@@ -68,11 +68,11 @@
                           <td>
                             {{#if schedule.timeCheckedOut}}
                               {{#if schedule.timeReturned}}
-                                <span class="approved">
+                                <span class="available">
                                   Checked In
                                 </span>
                                 {{else}}
-                                <span class="approved">
+                                <span class="unavailable">
                                   Checked Out
                                 </span>
                                 <button type="button" data-action="checkIn" class="btn btn-xs btn-primary">Check In</button>

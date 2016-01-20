@@ -2,6 +2,7 @@ Template.confirmCheckoutModal.helpers
   name: -> Inventory.findOne(@assetId).name
   error: -> Template.instance().error.get()
   success: -> Template.instance().success.get()
+  assignedToUsername: -> Meteor.users.findOne(@assignedTo).username
 
 Template.confirmCheckoutModal.events
   'show.bs.modal': (e, tpl) ->
