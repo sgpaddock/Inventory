@@ -1,7 +1,5 @@
 Template.checkInModal.helpers
   item: -> Inventory.findOne(@assetId)
-  error: -> Template.instance().error.get()
-  success: -> Template.instance().success.get()
 
 Template.checkInModal.events
   'show.bs.modal': (e, tpl) ->
@@ -22,7 +20,3 @@ Template.checkInModal.events
       'schedule.checkedInBy': Meteor.userId()
     }
     $('#checkInModal').modal('hide')
-
-Template.checkInModal.onCreated ->
-  @error = new ReactiveVar()
-  @success = new ReactiveVar(false)

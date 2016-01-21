@@ -256,6 +256,18 @@
   approval:
     optional: true
     type: Object
+  notes:
+    optional: true
+    type: [Object]
+  'notes.$.authorId':
+    optional: true
+    type: String
+  'notes.$.timestamp':
+    optional: true
+    type: new Date()
+  'notes.$.message':
+    optional: true
+    type: String
   'approval.approved':
     optional: true
     type: Boolean

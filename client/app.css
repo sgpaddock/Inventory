@@ -233,7 +233,7 @@ table {
 
 /***************************** QUEUE/TICKETROW/SIDEBAR *****************************/
 
-.hiddenRow {
+.hidden-row {
   padding: 0 !important;
 }
 
@@ -517,4 +517,13 @@ blockquote {
 
 .login-input { 
   max-width: 200px;
+}
+
+.checkout-row {
+  cursor: pointer;
+}
+
+.checkout-note {
+  font-size: 0.7em;
+  font-weight: lighter;
 }

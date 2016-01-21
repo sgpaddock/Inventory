@@ -65,6 +65,12 @@ Template.checkoutModalAdmin.onCreated ->
 insertCheckout = (e, tpl, userId) ->
   timeReserved = new Date(tpl.$('input[name=timeReserved]').val())
   expectedReturn = new Date(tpl.$('input[name=expectedReturn]').val())
+  if tpl.$('textarea[name=notes]').val()
+    notes = [ {
+      message: tpl.$('textarea[name=notes]').val()
+      authorId: Meteor.userId()
+      timestamp: new Date()
+    } ]
   checkout = Checkouts.findOne {
     assetId: tpl.data.docId
     'schedule.timeReserved': { $lte: expectedReturn }
@@ -76,6 +82,7 @@ insertCheckout = (e, tpl, userId) ->
     Checkouts.insert {
       assetId: tpl.data.docId
       assignedTo: userId
+      notes: notes
       schedule:
         timeReserved: timeReserved
         expectedReturn: expectedReturn

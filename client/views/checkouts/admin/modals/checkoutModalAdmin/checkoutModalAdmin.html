@@ -61,7 +61,7 @@
                     </thead>
                     <tbody>
                       {{#each checkout}}
-                        <tr>
+                        <tr data-toggle="collapse" data-target="#checkout-note-area-{{_id}}" class="accordion-toggle checkout-row">
                           <td>{{>userPortrait userId=assignedTo class="in-row"}} {{displayName}}</td>
                           <td>{{>dateFormatter date=schedule.timeReserved}}</td>
                           <td>{{>dateFormatter date=schedule.expectedReturn}}</td>
@@ -96,6 +96,7 @@
                             {{/if}}
                           </td>
                         </tr>
+                        {{> checkoutNoteArea}}
                       {{/each}}
                     </tbody>
                   </table>
