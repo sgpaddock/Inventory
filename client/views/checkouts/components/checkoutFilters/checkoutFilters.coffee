@@ -24,8 +24,10 @@ Template.checkoutFilters.helpers
 Template.checkoutFilters.rendered = ->
   this.$('#startDatepicker').datepicker({
     clearBtn: true
+    todayHighlight: true
   })
   
   this.$('#endDatepicker').datepicker({
+    todayHighlight: true
     clearBtn: true
   })

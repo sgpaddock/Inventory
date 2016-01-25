@@ -8,6 +8,7 @@ Template.checkoutModalUser.helpers
 
 Template.checkoutModalUser.rendered = ->
   this.$('.datepicker').datepicker({
+    todayHighlight: true
     orientation: "top" # up is down
   })
 

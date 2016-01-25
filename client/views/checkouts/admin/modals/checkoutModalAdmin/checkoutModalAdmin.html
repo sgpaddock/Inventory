@@ -75,22 +75,22 @@
                                 <span class="unavailable">
                                   Checked Out
                                 </span>
-                                <button type="button" data-action="checkIn" class="btn btn-xs btn-primary">Check In</button>
+                                <button type="button" data-action="checkIn" class="btn btn-xs btn-primary checkout-action-btn">Check In</button>
                               {{/if}}
                               {{else}}
                               {{#if approval.approved}}
                                 <div>Approved by {{> username userId}}</div>
                                 <div>
                                   {{#unless schedule.timeCheckedIn}}
-                                    <button type="button" data-action="checkOut" class="btn btn-xs btn-primary">Check Out</button>
+                                    <button type="button" data-action="checkOut" class="btn btn-xs btn-primary checkout-action-btn">Check Out</button>
                                   {{/unless}}
                                 </div>
                                 {{else}}
                                 {{#if approval.approverId}}
                                   Rejected by {{> username userId}}
                                   {{else}}
-                                  <button type="button" data-action="approve" class="btn btn-xs btn-success">Approve</button>
-                                  <button type="button" data-action="reject" class="btn btn-xs btn-danger">Reject</button>
+                                  <button type="button" data-action="approve" class="btn btn-xs btn-success checkout-action-btn">Approve</button>
+                                  <button type="button" data-action="reject" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
                                 {{/if}}
                               {{/if}}
                             {{/if}}

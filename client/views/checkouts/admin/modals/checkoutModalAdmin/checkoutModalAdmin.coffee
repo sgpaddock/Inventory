@@ -7,6 +7,7 @@ Template.checkoutModalAdmin.helpers
 
 Template.checkoutModalAdmin.rendered = ->
   this.$('.datepicker').datepicker({
+    todayHighlight: true
     orientation: "top" # up is down
   })
 
@@ -47,6 +48,8 @@ Template.checkoutModalAdmin.events
       else
         insertCheckout e, tpl, Meteor.userId()
 
+  'click .checkout-action-btn': (e, tpl) ->
+    e.stopPropagation()
 
   'click button[data-action=approve]': (e, tpl) ->
     Checkouts.update @_id, { $set: { 'approval.approved': true, 'approval.approverId': Meteor.userId() } }
