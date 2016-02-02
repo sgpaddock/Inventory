@@ -23,7 +23,7 @@ Template.assetModal.events
     checkUsername tpl
 
 Template.assetModal.created = ->
-  Meteor.subscribe 'item', @data.docId
+  @subscribe 'item', @data.docId
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.
