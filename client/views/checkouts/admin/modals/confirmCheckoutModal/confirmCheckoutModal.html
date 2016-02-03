@@ -11,15 +11,18 @@
             Please sign in to confirm your receipt of the item. Completing this process constitutes acceptance of the Hive Checkout Terms.
           </h5>
           {{#if error}}
-            <span class="error">{{error}}</span>
+            <div class="alert alert-danger">{{error}}</div>
+          {{/if}}
+          {{#if warning}}
+            <div class="alert alert-warning">{{warning}}</div>
           {{/if}}
           {{#if success}}
-            <span class="approved">Your reservation is confirmed.</span>
+            <div class="alert alert-success">Your reservation is confirmed.</div>
           {{/if}}
           <form>
             <div class="form-group">
               <label for="ldap" class="control-label">Username:</label>
-              <input type="text" class="form-control login-input" name="ldap" value="{{assignedToUsername}}" disabled>
+              <input type="text" class="form-control login-input" name="ldap" value="{{assignedToUsername}}">
             </div>
             <div class="form-group">
               <label for="password" class="control-label">Password:</label>
@@ -28,7 +31,11 @@
             {{#if success}}
               <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
               {{else}}
-              <button type="button" class="btn btn-primary" data-action="login">Sign In</button>
+              {{#if warning}}
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                {{else}}
+                <button type="button" class="btn btn-primary" data-action="login">Sign In</button>
+              {{/if}}
             {{/if}}
           </form>
         </div>

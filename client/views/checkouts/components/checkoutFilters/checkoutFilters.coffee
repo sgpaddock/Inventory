@@ -22,12 +22,7 @@ Template.checkoutFilters.helpers
         checked: if l.name in active then 'checked'
 
 Template.checkoutFilters.rendered = ->
-  this.$('#startDatepicker').datepicker({
+  this.$('.datepicker').datepicker({
     clearBtn: true
     todayHighlight: true
-  })
-  
-  this.$('#endDatepicker').datepicker({
-    todayHighlight: true
-    clearBtn: true
   })

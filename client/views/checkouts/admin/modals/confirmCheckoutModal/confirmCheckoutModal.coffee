@@ -2,6 +2,7 @@ Template.confirmCheckoutModal.helpers
   name: -> Inventory.findOne(@assetId).name
   error: -> Template.instance().error.get()
   success: -> Template.instance().success.get()
+  warning: -> Template.instance().warning.get()
   assignedToUsername: -> Meteor.users.findOne(@assignedTo).username
 
 Template.confirmCheckoutModal.events
@@ -23,8 +24,15 @@ Template.confirmCheckoutModal.events
       tpl.$('input[name=password]').val(),
       (err, res) ->
         if res
-          tpl.success.set(true)
+
+          if tpl.$('input[name=ldap]').val() isnt Meteor.users.findOne(tpl.data.assignedTo)?.username
+            tpl.warning.set "User checking out is not the user this item was originally assigned to.
+             User #{tpl.$('input[name=ldap]').val()} will now be responsible for this item."
+          else
+            tpl.success.set(true)
+
           Checkouts.update tpl.data._id, { $set:
+            'schedule.assignedTo': res
             'schedule.timeCheckedOut': new Date()
             'schedule.checkedOutBy': Meteor.userId()
           }
@@ -38,3 +46,4 @@ Template.confirmCheckoutModal.events
 Template.confirmCheckoutModal.onCreated ->
   @error = new ReactiveVar()
   @success = new ReactiveVar(false)
+  @warning = new ReactiveVar()
