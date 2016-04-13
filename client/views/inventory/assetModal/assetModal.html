@@ -36,7 +36,7 @@
                   <h4>Owner/Checkout History</h4>
                   {{#each changelog}}
                     <div class="row">
-                      {{>timestampFormatter timestamp}}: {{username}} changed field <strong>{{field}}</strong> from 
+                      {{>timestampFormatter date=timestamp}}: {{username}} changed field <strong>{{field}}</strong> from
                       <strong>{{oldValue}}</strong> to <strong>{{newValue}}</strong>
                     </div>
                   {{/each}}
