@@ -1,2 +1,2 @@
-Template.username.helpers
-  username: -> Meteor.users.findOne(@valueOf()).username
+Template.registerHelper 'usernameFromId', (userId) ->
+  Meteor.users.findOne(userId)?.username

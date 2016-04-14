@@ -96,5 +96,6 @@ insertCheckout = (e, tpl, userId) ->
       if res
         tpl.$('input[name=timeReserved]').val("")
         tpl.$('input[name=expectedReturn]').val("")
+        tpl.$('textarea[name=notes]').val("")
         tpl.$('input[name=onBehalfOf]').val("")
 

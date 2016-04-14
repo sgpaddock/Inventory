@@ -79,7 +79,7 @@
                               {{/if}}
                               {{else}}
                               {{#if approval.approved}}
-                                <div>Approved by {{> username userId}}</div>
+                                <div>Approved by {{usernameFromId approval.approverId}}</div>
                                 <div>
                                   {{#unless schedule.timeCheckedIn}}
                                     <button type="button" data-action="checkOut" class="btn btn-xs btn-primary checkout-action-btn">Check Out</button>
@@ -87,7 +87,7 @@
                                 </div>
                                 {{else}}
                                 {{#if approval.approverId}}
-                                  Rejected by {{> username userId}}
+                                  Rejected by {{usernameFromId approval.approverId}}
                                   {{else}}
                                   <button type="button" data-action="approve" class="btn btn-xs btn-success checkout-action-btn">Approve</button>
                                   <button type="button" data-action="reject" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
