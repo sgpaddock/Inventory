@@ -7,9 +7,13 @@ Template.checkoutModalUser.helpers
     @approval?.approved is true or @assignedTo is Meteor.userId()
 
 Template.checkoutModalUser.rendered = ->
-  this.$('.datepicker').datepicker({
+  tpl = @
+  @.$('.datepicker').datepicker({
     todayHighlight: true
-    orientation: "top" # up is down
+    orientation: "top"
+    beforeShowDay: (date) ->
+      if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date }})
+        return { enabled: false, classes: "datepicker-date-reserved", tooltip: "Reserved" }
   })
 
 Template.checkoutModalUser.events

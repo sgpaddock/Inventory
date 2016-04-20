@@ -6,9 +6,13 @@ Template.checkoutModalAdmin.helpers
   error: -> Template.instance().error.get()
 
 Template.checkoutModalAdmin.rendered = ->
-  this.$('.datepicker').datepicker({
+  tpl = @
+  @.$('.datepicker').datepicker({
     todayHighlight: true
     orientation: "top" # up is down
+    beforeShowDay: (date) ->
+      if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date }})
+        return { enabled: false, classes: "datepicker-date-reserved", tooltip: "Reserved" }
   })
 
 Template.checkoutModalAdmin.events

@@ -527,3 +527,9 @@ blockquote {
   font-size: 0.7em;
   font-weight: lighter;
 }
+
+.datepicker table tr td.disabled.datepicker-date-reserved {
+  /* Datepicker has pretty intense specificity to beat... */
+  color: red;
+  opacity: 0.5;
+}
