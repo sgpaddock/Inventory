@@ -21,14 +21,14 @@ scheduleMail = (mail) ->
 
 
 Checkouts.after.insert (userId, doc) ->
-  # Schedule reminder emails. 
+  # Schedule reminder emails.
   item = Inventory.findOne(doc.assetId)
   user = Meteor.users.findOne(doc.assignedTo)
 
   scheduleMail
     username: user.username
     subject: "REMINDER: Your checkout of item #{item.name} for #{moment(doc.schedule.timeReserved).format('LL')}"
-    html: "This email is to remind you of your request for checkout item #{item.name} for dates 
+    html: "This email is to remind you of your request for checkout item #{item.name} for dates
       #{moment(doc.schedule.timeReserved).format('LL')} through #{moment(doc.schedule.expectedReturn).format('LL')}.
       Please visit POT 915, 923, or 951 to pick up your item when ready."
     date: moment(doc.schedule.timeReserved).subtract(1, 'days').hours(17).minutes(0).seconds(0).toDate() # 1 day before time served, 5pm
