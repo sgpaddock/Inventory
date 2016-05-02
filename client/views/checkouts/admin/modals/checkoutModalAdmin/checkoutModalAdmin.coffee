@@ -4,6 +4,8 @@ Template.checkoutModalAdmin.helpers
   admin: -> true
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
+  checkSuccess: -> Template.instance().checkSuccess.get() is true # Exact comparison so we dont accidentally give fail result
+  checkFail: -> Template.instance().checkSuccess.get() is false
 
 Template.checkoutModalAdmin.rendered = ->
   tpl = @
@@ -28,9 +30,16 @@ Template.checkoutModalAdmin.events
     if $('.modal:visible').length
       $(document.body).addClass('modal-open')
 
+  'click button[data-action=checkUsername], keyup input[name=onBehalfOf]': (e, tpl) ->
+    if e.keyCode is 13 or !e.keyCode
+      checkUsername tpl
+
+   'autocompleteselect input[name=onBehalfOf]': (e, tpl) ->
+     tpl.checkSuccess.set true
+
   'click button[data-action=submit]': (e, tpl) ->
     # TODO: Permissions. Maybe move everything into methods.
-    tpl.error.set(null)
+    tpl.error.set null
 
     today = new Date()
     if new Date(tpl.$('input[name=timeReserved]').val()) < today
@@ -48,7 +57,8 @@ Template.checkoutModalAdmin.events
           if res
             insertCheckout e, tpl, res
           else
-            tpl.error.set("User not found.")
+            tpl.checkSuccess.set false
+            tpl.error.set "User not found."
       else
         insertCheckout e, tpl, Meteor.userId()
 
@@ -57,17 +67,21 @@ Template.checkoutModalAdmin.events
 
   'click button[data-action=approve]': (e, tpl) ->
     Checkouts.update @_id, { $set: { 'approval.approved': true, 'approval.approverId': Meteor.userId() } }
+
   'click button[data-action=reject]': (e, tpl) ->
     Checkouts.update @_id, { $set: { 'approval.approved': false, 'approval.approverId': Meteor.userId() } }
+
   'click button[data-action=checkOut]': (e, tpl) ->
     Blaze.renderWithData Template.confirmCheckoutModal, this, $('body').get(0)
     $('#confirmCheckoutModal').modal('show')
+
   'click button[data-action=checkIn]': (e, tpl) ->
     Blaze.renderWithData Template.checkInModal, this, $('body').get(0)
     $('#checkInModal').modal('show')
 
 Template.checkoutModalAdmin.onCreated ->
-  @error = new ReactiveVar()
+  @error = new ReactiveVar
+  @checkSuccess = new ReactiveVar
 
 insertCheckout = (e, tpl, userId) ->
   timeReserved = new Date(tpl.$('input[name=timeReserved]').val())
@@ -98,8 +112,21 @@ insertCheckout = (e, tpl, userId) ->
         approverId: Meteor.userId()
     }, (err, res) ->
       if res
+        tpl.checkSuccess.set null
         tpl.$('input[name=timeReserved]').val("")
         tpl.$('input[name=expectedReturn]').val("")
         tpl.$('textarea[name=notes]').val("")
         tpl.$('input[name=onBehalfOf]').val("")
+
+
+checkUsername = (tpl, winCb, failCb) ->
+  val = tpl.$('input[name=onBehalfOf]').val()
+  unless val.length < 1
+    Meteor.call 'checkUsername', val, (err, res) ->
+      if res
+        tpl.checkSuccess.set true
+        if winCb then winCb()
+      else
+        tpl.checkSuccess.set false
+        if failCb then failCb()
 

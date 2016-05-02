@@ -42,8 +42,22 @@
                     </div>
                     {{#if admin}}
                       <div class="form-group">
-                        <label for="onBehalfOf">Reserve on Behalf Of:</label>
-                        <input type="text" class="form-control" name="onBehalfOf">
+                        <label for="onBehalfOf">Reserve on Behalf Of: (linkblue)</label>
+                        <div class="input-group">
+                          {{> inputAutocomplete settings=userSettings class="form-control" name="onBehalfOf"}}
+                          <span class="input-group-btn">
+                            {{#if checkSuccess}}
+                              <button type="button" class="btn btn-success" data-action="checkUsername"><span class="glyphicon glyphicon-ok"></span></button>
+                            {{else}}
+                            {{#if checkFail}}
+                              <button type="button" class="btn btn-danger" data-action="checkUsername"><span class="glyphicon glyphicon-remove"></span></button>
+                              {{else}}
+                              <button type="button" class="btn btn-primary" data-action="checkUsername">Check</button>
+                            {{/if}}
+                          {{/if}}
+
+                          </span>
+                        </div>
                       </div>
                     {{/if}}
                   </form>
