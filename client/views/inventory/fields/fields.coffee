@@ -7,9 +7,11 @@ Template.attachmentField.events
     Iron.query.set 'attachmentId', @fileId
 
   'click a[data-action=uploadFile]': (e, tpl) ->
+    e.stopPropagation()
     id = @documentId
     Media.pickLocalFile (fileId) ->
       Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
+    tpl.$('.dropdown-toggle').dropdown('toggle')
 
   'click a[data-action=takePicture]': (e, tpl) ->
     id = @documentId

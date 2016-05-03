@@ -33,8 +33,9 @@ Template.inventory.helpers
 
 Template.inventory.events
   'click tr': (e, tpl) ->
-    Blaze.renderWithData Template.assetModal, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
-    $('#assetModal').modal('show')
+    unless _.contains(tpl.$(e.target)[0].classList, 'dropdown-toggle')
+      Blaze.renderWithData Template.assetModal, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
+      $('#assetModal').modal('show')
 
   'click button[name=newAssetButton]': (e, tpl) ->
     Blaze.render Template.newAssetModal, $('body').get(0)
