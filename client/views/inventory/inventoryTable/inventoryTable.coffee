@@ -35,10 +35,6 @@ setup = ->
 
   context.skip = new ReactiveVar(0)
   context.getFilters = @data.filters || @data.settings.filters || -> {}
-  context.handle = Meteor.subscribe 'inventory',
-    context.getFilters(),
-    { limit: context.pageLimit },
-    onReady: -> context.ready.set(true)
   @context = context
 
 Template.inventoryTable.helpers
@@ -120,15 +116,12 @@ Template.inventoryTable.rendered = ->
     skip = context.skip.get()
     sort[sortKey] = context.sortOrder.get() || -1
 
-    # Stop old sub if one is running
-    if context.handle then context.handle.stop()
-
-    context.ready.set(false)
-    context.handle = Meteor.subscribe 'inventory',
+    Meteor.subscribe 'inventory',
       context.getFilters(),
       { limit: limit, skip: skip, sort: sort },
-      onReady: -> context.ready.set(true)
+      onReady: ->
+        context.ready.set(true)
+      onStop: ->
+        context.ready.set(false)
 
     Meteor.subscribe 'newInventory', context.getFilters(), new Date()
-
-

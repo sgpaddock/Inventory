@@ -4,6 +4,7 @@ Template.attachmentField.helpers
 
 Template.attachmentField.events
   'click a[data-action=showAttachmentModal]': (e, tpl) ->
+    e.stopPropagation()
     Iron.query.set 'attachmentId', @fileId
 
   'click a[data-action=uploadFile]': (e, tpl) ->

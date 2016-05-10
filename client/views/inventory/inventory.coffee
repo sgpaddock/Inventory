@@ -45,7 +45,7 @@ Template.inventory.rendered = ->
   @autorun ->
     # Render attachment modal on query parameter change.
     attachmentParam = Iron.query.get('attachmentId')
-    if attachmentParam
+    if attachmentParam and not $('#attachmentModal').length
       Meteor.subscribe 'file', attachmentParam
       file = FileRegistry.findOne(attachmentParam)
       if file
