@@ -4,6 +4,7 @@
     optional: true
     type: String
     denyUpdate: true
+    label: "Asset Name"
   propertyTag:
     type: String
     optional: true
