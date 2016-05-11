@@ -1,10 +1,10 @@
 Template.checkoutFilters.events
-  'changeDate .datepicker': (e, tpl) ->
+  'changeDate .input-daterange input': (e, tpl) ->
     if e.date
-      Iron.query.set $(e.target).data('filter'), moment(e.date).format('YYYY-MM-DD')
+      Iron.query.set tpl.$(e.target).data('filter'), moment(e.date).format('YYYY-MM-DD')
     else
       # Clear button
-      Iron.query.set $(e.target).data('filter'), null
+      Iron.query.set tpl.$(e.target).data('filter'), null
     
 Template.checkoutFilters.helpers
   startDate: -> Iron.query.get 'startDate' || '1960-01-01'
@@ -22,7 +22,8 @@ Template.checkoutFilters.helpers
         checked: if l.name in active then 'checked'
 
 Template.checkoutFilters.rendered = ->
-  this.$('.datepicker').datepicker({
+  this.$('.input-daterange').datepicker({
     clearBtn: true
     todayHighlight: true
+    format: 'yyyy-mm-dd'
   })

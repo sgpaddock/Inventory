@@ -533,3 +533,23 @@ blockquote {
   color: red;
   opacity: 0.5;
 }
+
+/***** Checkout Filters *****/
+
+.input-daterange.checkout-daterange {
+  width: auto;
+  display: inline;
+}
+
+.checkout-daterange .form-control {
+  width: auto;
+  display: inline;
+}
+
+.checkout-daterange .checkout-daterange-addon {
+  padding: 3px;
+}
+
+.checkout-filters {
+  display: inline;
+}
