@@ -2,6 +2,8 @@ fields = ['name', 'description', 'propertyTag', 'serialNo', 'deviceType', 'manuf
 Template.assetModal.helpers
   item: -> Inventory.findOne(@docId)
   changelog: -> Changelog.find { itemId: @_id }
+  typeIs: (type) -> @type is type
+  filename: -> FileRegistry.findOne(@otherId).filename
 
 Template.assetModal.events
   'click button[data-action=submit]': (e, tpl) ->

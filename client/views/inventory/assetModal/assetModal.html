@@ -7,45 +7,53 @@
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">Item {{name}}</h4>
           </div>
-            <div class="modal-body"> 
-              <div class="row">
-                <div class="col-md-6 col-xs-12">
-                  {{#autoForm collection="Inventory" id="assetForm" type="update" doc=this}}
-                    {{> afQuickField name='name' disabled=true}}
-                    {{> afQuickField name='propertyTag' disabled=true}}
-                    {{> afQuickField name='serialNo' disabled=true}}
-                    {{> afQuickField name='deviceType' options='allowed' disabled=true}}
-                    {{> afQuickField name='manufacturer' options='allowed' disabled=true}}
-                    {{> afQuickField name='modelNo' disabled=true}}
-                    {{> afQuickField name='department' options='allowed'}}
-                    {{> afQuickField name='building' options='allowed'}}
-                    {{> afQuickField name='officeNo'}}
-                    <div class="form-group">
-                      <label for="owner" class="control-label">Owner:</label>
-                      <div class="input-group">
-                        <input type="text" class="form-control" data-schema-key="owner" value="{{owner}}">
-                        <span class="input-group-btn">
-                          <button type="button" class="btn btn-primary" data-action="checkUsername">Check</button>
-                        </span>
-                      </div>
+          <div class="modal-body"> 
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                {{#autoForm collection="Inventory" id="assetForm" type="update" doc=this}}
+                  {{> afQuickField name='name' disabled=true}}
+                  {{> afQuickField name='propertyTag' disabled=true}}
+                  {{> afQuickField name='serialNo' disabled=true}}
+                  {{> afQuickField name='deviceType' options='allowed' disabled=true}}
+                  {{> afQuickField name='manufacturer' options='allowed' disabled=true}}
+                  {{> afQuickField name='modelNo' disabled=true}}
+                  {{> afQuickField name='department' options='allowed'}}
+                  {{> afQuickField name='building' options='allowed'}}
+                  {{> afQuickField name='officeNo'}}
+                  <div class="form-group">
+                    <label for="owner" class="control-label">Owner:</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" data-schema-key="owner" value="{{owner}}">
+                      <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary" data-action="checkUsername">Check</button>
+                      </span>
                     </div>
-                    {{> afQuickField name='checkout'}}
-                  {{/autoForm}}
-                </div>
-                <div class="col-md-6">
-                  <h4>Owner/Checkout History</h4>
-                  {{#each changelog}}
-                    <div class="row">
-                      {{>timestampFormatter date=timestamp}}: {{username}} changed field <strong>{{field}}</strong> from
-                      <strong>{{oldValue}}</strong> to <strong>{{newValue}}</strong>
+                  </div>
+                  {{> afQuickField name='checkout'}}
+                {{/autoForm}}
+              </div>
+              <div class="col-md-6">
+                <h4>Asset History</h4>
+                {{#each changelog}}
+                  <div class="row">
+                    <div class="col-md-12">
+                      {{>timestampFormatter date=timestamp}}: <strong>{{username}}</strong>
+                      {{#if typeIs 'field'}}
+                        changed field <strong>{{field}}</strong> from
+                        <strong>{{oldValue}}</strong> to <strong>{{newValue}}</strong>
+                      {{/if}}
+                      {{#if typeIs 'attachment'}}
+                        added attachment <strong>{{filename}}</strong>
+                      {{/if}}
                     </div>
-                  {{/each}}
-                </div>
+                  </div>
+                {{/each}}
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" data-action="submit" class="btn btn-primary">Update</button>
-            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-action="submit" class="btn btn-primary">Update</button>
+          </div>
         </div>
       </div>
     </div>
