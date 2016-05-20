@@ -1,0 +1,81 @@
+<template name="viewReservationsModalAdmin">
+  {{#with item}}
+    <div class="modal fade" id="viewReservationsModalAdmin">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">History for Item {{name}}</h4>
+          </div>
+          <div class="modal-body"> 
+            <div class="row">
+              <div class="col-xs-12">
+                {{#if error}}
+                  <span class="error">{{error}}</span>
+                {{/if}}
+              </div>
+            </div>
+              <div class="row">
+                <div class="col-xs-12">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <td>Assigned To</td>
+                        <td>Reserved From</td>
+                        <td>Expected Return</td>
+                        <td>Status</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {{#each checkout}}
+                        <tr>
+                          <td>{{>userPortrait userId=assignedTo class="in-row"}} {{displayName}}</td>
+                          <td>{{numeralDateFormatter schedule.timeReserved}}</td>
+                          <td>{{numeralDateFormatter schedule.expectedReturn}}</td>
+                          <td>
+                            {{#if schedule.timeCheckedOut}}
+                              {{#if schedule.timeReturned}}
+                                <span class="available">
+                                  Checked In
+                                </span>
+                                {{else}}
+                                <span class="unavailable">
+                                  Checked Out
+                                </span>
+                                <button type="button" data-action="checkIn" class="btn btn-xs btn-primary checkout-action-btn">Check In</button>
+                              {{/if}}
+                              {{else}}
+                              {{#if approval.approved}}
+                                <div>Approved by {{usernameFromId approval.approverId}}</div>
+                                <div>
+                                {{#unless currentlyCheckedOut}}
+                                  {{#unless schedule.timeCheckedIn}}
+                                    <button type="button" data-action="checkOut" class="btn btn-xs btn-primary checkout-action-btn">Check Out</button>
+                                  {{/unless}}
+                                {{/unless}}
+                                </div>
+                                {{else}}
+                                {{#if approval.approverId}}
+                                  Rejected by {{usernameFromId approval.approverId}}
+                                  {{else}}
+                                  <button type="button" data-action="approve" class="btn btn-xs btn-success checkout-action-btn">Approve</button>
+                                  <button type="button" data-action="reject" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
+                                {{/if}}
+                              {{/if}}
+                            {{/if}}
+                          </td>
+                        </tr>
+                      {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  {{/with}}
+</template>

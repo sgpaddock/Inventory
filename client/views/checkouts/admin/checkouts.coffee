@@ -32,12 +32,9 @@ Template.checkoutsAdmin.helpers
     {
       fields: ['name', 'modelNo', 'deviceType', 'manufacturer',
         { key: 'status', label: 'Status', tpl: Template.checkoutStatusField, sortable: false }
+        { key: 'actions', label: 'Actions', tpl: Template.checkoutActionsAdminField, sortable: false }
       ]
       inventoryFilters: inventoryFilters
       checkoutFilters: checkoutFilters
     }
 
-Template.checkoutsAdmin.events
-  'click tr': (e, tpl) ->
-    Blaze.renderWithData Template.checkoutModalAdmin, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
-    $('#checkoutModalAdmin').modal('show')

@@ -37,7 +37,7 @@
                 {{#each changelog}}
                   <div class="row">
                     <div class="col-md-12">
-                      {{>timestampFormatter date=timestamp}}: <strong>{{username}}</strong>
+                      {{timestampFormatter timestamp}}: <strong>{{username}}</strong>
                       {{#if typeIs 'field'}}
                         changed field <strong>{{field}}</strong> from
                         <strong>{{oldValue}}</strong> to <strong>{{newValue}}</strong>

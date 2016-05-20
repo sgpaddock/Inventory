@@ -1,5 +1,13 @@
 Template.checkInModal.helpers
-  item: -> Inventory.findOne(@assetId)
+  item: -> Inventory.findOne(@docId)
+  checkout: ->
+    Checkouts.findOne {
+      assetId: @docId
+      'schedule.timeCheckedOut': { $lte: new Date() }
+      'schedule.timeReturned': { $exists: false }
+    }
+  displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
+
 
 Template.checkInModal.events
   'show.bs.modal': (e, tpl) ->

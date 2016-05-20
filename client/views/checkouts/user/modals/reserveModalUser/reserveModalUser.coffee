@@ -1,22 +1,20 @@
-Template.checkoutModalUser.helpers
+Template.reserveModalUser.helpers
   item: -> Inventory.findOne { _id: @docId }
   checkout: -> Checkouts.find { assetId: @_id }
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
-  checkoutShouldBeDisplayed: ->
-    @approval?.approved is true or @assignedTo is Meteor.userId()
+  success: -> Template.instance().success.get()
 
-Template.checkoutModalUser.rendered = ->
+Template.reserveModalUser.rendered = ->
   tpl = @
-  @.$('.datepicker').datepicker({
+  @.$('.datepicker').datepicker
     todayHighlight: true
     orientation: "top"
     beforeShowDay: (date) ->
       if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date }})
         return { enabled: false, classes: "datepicker-date-reserved", tooltip: "Reserved" }
-  })
 
-Template.checkoutModalUser.events
+Template.reserveModalUser.events
   'hidden.bs.modal': (e, tpl) ->
     Blaze.remove tpl.view
 
@@ -44,6 +42,7 @@ Template.checkoutModalUser.events
       if checkout
         tpl.error.set('This reservation would overlap with another. Please consider a different item or reservation window.')
       else
+        tpl.success.set true
         Checkouts.insert
           assetId: tpl.data.docId
           assignedTo: Meteor.userId()
@@ -51,5 +50,6 @@ Template.checkoutModalUser.events
             timeReserved: new Date(tpl.$('input[name=timeReserved]').val())
             expectedReturn: new Date(tpl.$('input[name=expectedReturn]').val())
 
-Template.checkoutModalUser.onCreated ->
-  this.error = new ReactiveVar()
+Template.reserveModalUser.onCreated ->
+  @error = new ReactiveVar
+  @success = new ReactiveVar false

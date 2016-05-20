@@ -13,3 +13,24 @@ Template.checkoutStatusField.helpers
       message: message
       class: css
     }
+
+
+Template.checkoutActionsAdminField.events
+  'click button[data-toggle=modal]': (e, tpl) ->
+    modal = tpl.$(e.currentTarget).data('modal')
+    Blaze.renderWithData Template[modal], { docId: tpl.data.documentId } , $('body').get(0)
+    $("##{modal}").modal('show')
+
+Template.checkoutActionsAdminField.helpers
+  checkedOut: ->
+    Checkouts.findOne({
+      assetId: @documentId
+      'schedule.timeCheckedOut': { $lte: new Date() }
+      'schedule.timeReturned': { $exists: false }
+    })?
+
+Template.checkoutActionsUserField.events
+  'click button[data-toggle=modal]': (e, tpl) ->
+    modal = tpl.$(e.currentTarget).data('modal')
+    Blaze.renderWithData Template[modal], { docId: tpl.data.documentId } , $('body').get(0)
+    $("##{modal}").modal('show')

@@ -1,3 +1,15 @@
+UI.registerHelper 'commonDateFormatter', (date) ->
+  # For short readable dates, Dec 25th, 2013
+  moment(date).format('MMM Do, YYYY')
+
+UI.registerHelper 'numeralDateFormatter', (date) ->
+  # For short numeral dates, 2013-12-25
+  moment(date).format('YYYY-MM-DD')
+
+UI.registerHelper 'timestampFormatter', (timestamp) ->
+  # For full timestamps, December 25, 2013 03:25 PM
+  moment(timestamp).format('LLL')
+
 UI.registerHelper 'isCordova', ->
   Meteor.isCordova
 

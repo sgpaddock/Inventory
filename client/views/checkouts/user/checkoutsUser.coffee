@@ -32,12 +32,8 @@ Template.checkoutsUser.helpers
     {
       fields: ['name', 'modelNo', 'deviceType', 'manufacturer',
         { key: 'available', label: 'Status', tpl: Template.checkoutStatusField, sortable: false }
+        { key: 'actions', label: 'Actions', tpl: Template.checkoutActionsUserField, sortable: false }
       ]
       inventoryFilters: inventoryFilters
       checkoutFilters: checkoutFilters
     }
-
-Template.checkoutsUser.events
-  'click tr': (e, tpl) ->
-    Blaze.renderWithData Template.checkoutModalUser, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
-    $('#checkoutModalUser').modal('show')

@@ -3,3 +3,17 @@
     <span class="{{class}}">{{message}}</span>
   {{/with}}
 </template>
+
+<template name="checkoutActionsAdminField">
+  {{#if checkedOut}}
+    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-modal="checkInModal">Check In</button>
+  {{/if}}
+  <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-modal="reserveModalAdmin">Create Reservation</button>
+  <button type="button" class="btn btn-sm" data-toggle="modal" data-modal="viewReservationsModalAdmin">View Reservations</button>
+</template>
+
+<template name="checkoutActionsUserField">
+  <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-modal="reserveModalUser">Request</button>
+  <button type="button" class="btn btn-sm" data-toggle="modal" data-modal="viewReservationsModalUser">View Availability</button>
+</template>
+

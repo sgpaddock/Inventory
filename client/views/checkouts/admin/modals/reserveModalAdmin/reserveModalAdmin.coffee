@@ -1,13 +1,11 @@
-Template.checkoutModalAdmin.helpers
+Template.reserveModalAdmin.helpers
   item: -> Inventory.findOne { _id: @docId }
-  checkout: -> Checkouts.find { assetId: @_id }
-  admin: -> true
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
   checkSuccess: -> Template.instance().checkSuccess.get() is true # Exact comparison so we dont accidentally give fail result
   checkFail: -> Template.instance().checkSuccess.get() is false
 
-Template.checkoutModalAdmin.rendered = ->
+Template.reserveModalAdmin.rendered = ->
   tpl = @
   @.$('.datepicker').datepicker({
     todayHighlight: true
@@ -17,7 +15,7 @@ Template.checkoutModalAdmin.rendered = ->
         return { enabled: false, classes: "datepicker-date-reserved", tooltip: "Reserved" }
   })
 
-Template.checkoutModalAdmin.events
+Template.reserveModalAdmin.events
   'show.bs.modal': (e, tpl) ->
     zIndex = 1040 + ( 10 * $('.modal:visible').length)
     $(e.target).css('z-index', zIndex)
@@ -56,20 +54,16 @@ Template.checkoutModalAdmin.events
         Meteor.call 'checkUsername', tpl.$('input[name=onBehalfOf]').val(), (err, res) ->
           if res
             insertCheckout e, tpl, res
+            tpl.$('#reserveModalAdmin').modal('hide')
           else
             tpl.checkSuccess.set false
             tpl.error.set "User not found."
       else
         insertCheckout e, tpl, Meteor.userId()
+        tpl.$('#reserveModalAdmin').modal('hide')
 
   'click .checkout-action-btn': (e, tpl) ->
     e.stopPropagation()
-
-  'click button[data-action=approve]': (e, tpl) ->
-    Checkouts.update @_id, { $set: { 'approval.approved': true, 'approval.approverId': Meteor.userId() } }
-
-  'click button[data-action=reject]': (e, tpl) ->
-    Checkouts.update @_id, { $set: { 'approval.approved': false, 'approval.approverId': Meteor.userId() } }
 
   'click button[data-action=checkOut]': (e, tpl) ->
     Blaze.renderWithData Template.confirmCheckoutModal, this, $('body').get(0)
@@ -79,7 +73,7 @@ Template.checkoutModalAdmin.events
     Blaze.renderWithData Template.checkInModal, this, $('body').get(0)
     $('#checkInModal').modal('show')
 
-Template.checkoutModalAdmin.onCreated ->
+Template.reserveModalAdmin.onCreated ->
   @error = new ReactiveVar
   @checkSuccess = new ReactiveVar
 

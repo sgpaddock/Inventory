@@ -1,0 +1,71 @@
+<template name="reserveModalAdmin">
+  {{#with item}}
+    <div class="modal fade" id="reserveModalAdmin">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Checkout Item {{name}}</h4>
+          </div>
+          <div class="modal-body"> 
+            <div class="row">
+              <div class="col-xs-12">
+                {{#if error}}
+                  <span class="error">{{error}}</span>
+                {{/if}}
+              </div>
+            </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <form>
+                    <div class="form-group">
+                      <label for="timeReserved">
+                        Reservation date desired:
+                      </label>
+                      <div class="input-group date datepicker">
+                        <input type="text" class="form-control" name='timeReserved'>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="expectedReturn">
+                        Expected Return Date:
+                      </label>
+                      <div class="input-group date datepicker">
+                        <input type="text" class="form-control" name='expectedReturn'>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="notes">Additional Notes:</label>
+                      <textarea name="notes" rows=3 class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="onBehalfOf">Reserve on Behalf Of: (linkblue)</label>
+                      <div class="input-group">
+                        {{> inputAutocomplete settings=userSettings class="form-control" name="onBehalfOf"}}
+                        <span class="input-group-btn">
+                          {{#if checkSuccess}}
+                            <button type="button" class="btn btn-success" data-action="checkUsername"><span class="glyphicon glyphicon-ok"></span></button>
+                            {{else}}
+                            {{#if checkFail}}
+                              <button type="button" class="btn btn-danger" data-action="checkUsername"><span class="glyphicon glyphicon-remove"></span></button>
+                              {{else}}
+                              <button type="button" class="btn btn-primary" data-action="checkUsername">Check</button>
+                            {{/if}}
+                          {{/if}}
+                        </span>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" data-action="submit" class="btn btn-primary">Reserve</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  {{/with}}
+</template>
