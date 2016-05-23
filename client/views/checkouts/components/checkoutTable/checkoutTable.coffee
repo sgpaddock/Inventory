@@ -37,11 +37,6 @@ setup = ->
   context.checkoutFilters = @data.checkoutFilters || @data.settings.checkoutFilters || -> {}
   context.inventoryFilters = @data.inventoryFilters || @data.settings.inventoryFilters || -> {}
   context.subscription = @data.subscription || @data.settings.subscription || "inventory"
-  context.handle = Meteor.subscribe 'checkouts',
-    context.checkoutFilters(),
-    context.inventoryFilters(),
-    { limit: context.pageLimit },
-    onReady: -> context.ready.set(true)
   @context = context
 
 Template.checkoutTable.helpers
@@ -123,11 +118,9 @@ Template.checkoutTable.rendered = ->
     skip = context.skip.get()
     sort[sortKey] = context.sortOrder.get() || -1
 
-    # Stop old sub if one is running
-    if context.handle then context.handle.stop()
-
     context.ready.set(false)
-    context.handle = Meteor.subscribe 'checkouts',
+
+    Meteor.subscribe 'checkouts',
       context.checkoutFilters(),
       context.inventoryFilters(),
       { limit: limit, skip: skip, sort: sort },
