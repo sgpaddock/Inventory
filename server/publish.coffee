@@ -58,6 +58,7 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
   if checkoutFilter
     ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
   if ids then _.extend inventoryFilter, { _id: { $nin: ids } }
+  _.extend inventoryFilter, { checkout: true }
   [itemSet, facets] = Inventory.findWithFacets inventoryFilter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
   {
