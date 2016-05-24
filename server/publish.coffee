@@ -99,7 +99,7 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
 Meteor.publish 'item', (itemId) ->
   [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }) ]
 
-Meteor.publishComposite 'weeklyCheckouts', ->
+Meteor.publishComposite 'upcomingItems', ->
   # Publish checkouts that are either expected to be picked up between yesterday and next week, or returned in the same time frame.
   yesterday = moment().add(-1, 'days').hours(0).minutes(0).seconds(0).toDate()
   weekFromNow = moment().add(7, 'days').hours(23).minutes(59).seconds(59).toDate()
@@ -113,7 +113,7 @@ Meteor.publishComposite 'weeklyCheckouts', ->
   ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
   {
     find: ->
-      Inventory.find { _id: { $in: ids } }
+      Inventory.find { checkout: true }
     children: [
       {
         find: (item) ->
