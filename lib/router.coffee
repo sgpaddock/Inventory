@@ -29,6 +29,10 @@ Router.map ->
         'checkoutsUser'
     waitOn: ->
       Meteor.subscribe 'userData'
+  
+  @route 'upcoming',
+    path: '/checkouts/upcoming'
+    template: 'upcoming'
 
   @route 'import',
     path: '/import'

@@ -98,3 +98,27 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
 
 Meteor.publish 'item', (itemId) ->
   [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }) ]
+
+Meteor.publishComposite 'weeklyCheckouts', ->
+  # Publish checkouts that are either expected to be picked up between yesterday and next week, or returned in the same time frame.
+  yesterday = moment().add(-1, 'days').hours(0).minutes(0).seconds(0).toDate()
+  weekFromNow = moment().add(7, 'days').hours(23).minutes(59).seconds(59).toDate()
+  checkoutFilter = {
+    'schedule.timeReturned': { $exists: false } # No need to publish already returned items.
+    $or: [
+      'schedule.timeReserved': { $gte: yesterday, $lte: weekFromNow }
+      'schedule.expectedReturn': { $gte: yesterday, $lte: weekFromNow }
+    ]
+  }
+  ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
+  {
+    find: ->
+      Inventory.find { _id: { $in: ids } }
+    children: [
+      {
+        find: (item) ->
+          newFilter = _.extend checkoutFilter, { assetId: item._id }
+          Checkouts.find newFilter
+      }
+    ]
+  }
