@@ -1,0 +1,29 @@
+<template name="upcoming">
+  <h2>Upcoming Action Items</h2>
+  <table class="table table-condensed">
+    <thead>
+      <th>Requester</th>
+      <th>Item</th>
+      <th>Time Reserved</th>
+      <th>Expected Return</th>
+      <th>Actions</th>
+    </thead>
+    <tbody>
+      {{#each checkouts}}
+        <tr>
+          <td>{{>userPortrait userId=assignedTo class="in-row"}} {{displayName assignedTo}}</td>
+          <td>{{itemName}}</td>
+          <td><span class="{{todayHighlight schedule.timeReserved}}">{{commonDateFormatter schedule.timeReserved}}</span></td>
+          <td><span class="{{todayHighlight schedule.expectedReturn}}">{{commonDateFormatter schedule.expectedReturn}}</span></td>
+          <td>
+            {{#if checkedOut}}
+              <button class="btn btn-sm" type="button" data-action="checkIn">Check In</button>
+              {{else}}
+              <button class="btn btn-sm" type="button" data-action="checkOut">Check Out to {{username assignedTo}}</button>
+            {{/if}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
