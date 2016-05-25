@@ -53,47 +53,51 @@ Meteor.publishComposite 'inventorySet', (set) ->
     ]
   }
 
-# TODO: Add extra subs on checkouts for working reactivity or find a different pattern
 Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) ->
-  if checkoutFilter
-    ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
-  if ids then _.extend inventoryFilter, { _id: { $nin: ids } }
   _.extend inventoryFilter, { checkout: true }
+
+  if checkoutFilter
+    # checkoutFilter filters for *availability*, so if checkouts exist in this range, we filter the item *out*
+    # might be cleaner to pass in startDate and endDate explicitly, form the filter here?
+    ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
+    _.extend inventoryFilter, { _id: { $nin: ids } }
+
   [itemSet, facets] = Inventory.findWithFacets inventoryFilter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
+
   {
     find: ->
       Counts.publish this, 'checkoutCount', Inventory.find(inventoryFilter), { noReady: true }
-      Inventory.find { _id: { $in: itemSet } }
+      Inventory.find
+        $or: [
+          { _id: { $in: itemSet } }
+          { checkout: true } # In case an item is marked available for checkout after render
+        ]
     children: [
+
       {
         find: (item) ->
           ids = _.pluck item.attachments, 'fileId' # not reactive
           FileRegistry.find { _id: { $in: ids } }
       }
+
       {
         find: (item) ->
-          if checkoutFilter
-            timeFilter = {
-              assetId: item._id
-              $or: [
-                checkoutFilter
-                { $or: [
-                  { 'schedule.timeReserved': { $gte: new Date() } }
-                  { 'schedule.expectedReturn': { $gte: new Date() } }
-                ] }
-              ]
-            }
-          else
-            timeFilter = { assetId: item._id, $or: [
-              {'schedule.timeReserved': { $gte: new Date() } }
+          # Checkout events after today
+          # TODO: How do we view checkout history?
+          Checkouts.find
+            assetId: item._id
+            $or: [
+              { 'schedule.timeReserved': { $gte: new Date() } }
               { 'schedule.expectedReturn': { $gte: new Date() } }
-            ] }
-          Checkouts.find timeFilter
+            ]
       }
+
       {
-        find: -> facets
+        find: ->
+          facets
       }
+
     ]
   }
 
