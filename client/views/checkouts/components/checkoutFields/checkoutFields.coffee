@@ -3,7 +3,7 @@ Template.checkoutStatusField.helpers
     if Checkouts.findOne { assetId: @documentId, 'schedule.timeCheckedOut': { $exists: true }, 'schedule.timeReturned': { $exists: false } }
       message = "Checked Out"
       css = "unavailable"
-    else if Checkouts.findOne { assetId: @documentId, 'schedule.timeReserved': { $lte: new Date() }, 'schedule.expectedReturn': { $gte: new Date() } , 'approval.approved': true }
+    else if Checkouts.findOne { assetId: @documentId, 'schedule.timeReserved': { $lte: new Date() }, 'schedule.expectedReturn': { $gte: new Date() } , 'approval.approved': true , 'schedule.timeReturned': { $exists: false } }
       message = "Reserved"
       css = "unavailable"
     else
