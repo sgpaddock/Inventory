@@ -23,7 +23,7 @@ Router.map ->
     path: '/checkouts'
     template: ->
       # TODO: Check user roles somehow and render the appropriate template
-      if true
+      if Roles.userIsInRole Meteor.userId(), 'admin'
         'checkoutsAdmin'
       else
         'checkoutsUser'

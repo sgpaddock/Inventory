@@ -19,5 +19,8 @@
     "sendEmailOnFormSubmit": false,
     "smtpPipe": "/path/to/namedPipe",
     "fromEmail": "inventory@university.edu"
+  },
+  "permissions": {
+    "admins": [ "user1", "user2" ]
   }
 }

@@ -1,4 +1,17 @@
 Accounts.onLogin (info) ->
-  usersgs = info.user.memberOf.map (x) ->
-    #Pulls the user SG out of the long string given to us by LDAP (after CN=, before ',') and converts to lower case for easier comparison.
-    return x.substr(x.indexOf('CN=')+3, x.indexOf(',')-3).toLowerCase()
+  if Meteor.settings.permissions
+
+    roles = Roles.getRolesForUser info.user._id
+
+    if info.user.username in Meteor.settings.permissions.admins
+      Roles.addUsersToRoles info.user._id, 'admin', Roles.GLOBAL_GROUP
+    else if 'admin' in roles
+      Roles.removeUsersFromRoles info.user._id, 'admin', Roles.GLOBAL_GROUP
+    
+    # Currently unused - hopefully for future Inventory functionality
+    for d,v of Meteor.settings.permissions.departmentManagers
+      if info.user.username in v
+        console.log "#{info.user.username} DM for group #{d}"
+        Roles.addUsersToRoles info.user._id, 'departmentManager', d
+
+    Roles.addUsersToRoles info.user._id, 'user', info.user.department
