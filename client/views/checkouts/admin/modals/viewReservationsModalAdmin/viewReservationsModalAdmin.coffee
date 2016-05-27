@@ -1,6 +1,6 @@
 Template.viewReservationsModalAdmin.helpers
   item: -> Inventory.findOne { _id: @docId }
-  checkout: -> Checkouts.find { assetId: @_id }
+  checkout: -> Checkouts.find { assetId: @_id }, { sort: { 'schedule.timeReserved': 1 } }
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
   currentlyCheckedOut: ->

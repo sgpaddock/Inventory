@@ -38,10 +38,9 @@ Template.reserveModalAdmin.events
   'click button[data-action=submit]': (e, tpl) ->
     # TODO: Permissions. Maybe move everything into methods.
     tpl.error.set null
-
-    today = new Date()
-    if new Date(tpl.$('input[name=timeReserved]').val()) < today
-      tpl.error.set "Item reservation time must be after today."
+    yesterday = moment().subtract(1, 'days').hours(23).minutes(59).seconds(59).toDate()
+    if new Date(tpl.$('input[name=timeReserved]').val()) < yesterday
+      tpl.error.set "Item reservation time cannot be in the past."
     if new Date(tpl.$('input[name=timeReserved]').val()) > new Date(tpl.$('input[name=timeReserved]').val())
       tpl.error.set "Expected return must be after desired reservation date."
     if not tpl.$('input[name=timeReserved]').val()
