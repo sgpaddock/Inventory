@@ -491,10 +491,6 @@ blockquote {
   display: inline-block;
 }
 
-.inventory-row {
-  cursor: pointer;
-}
-
 .inventory-table-heading {
   cursor: pointer;
 }

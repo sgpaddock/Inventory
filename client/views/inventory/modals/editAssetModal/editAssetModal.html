@@ -1,7 +1,7 @@
-<template name="assetModal">
+<template name="editAssetModal">
   {{#with item}}
-    <div class="modal fade" id="assetModal">
-      <div class="modal-dialog modal-xl">
+    <div class="modal fade" id="editAssetModal">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -9,7 +9,7 @@
           </div>
           <div class="modal-body"> 
             <div class="row">
-              <div class="col-md-6 col-xs-12">
+              <div class="col-xs-12">
                 {{#autoForm collection="Inventory" id="assetForm" type="update" doc=this}}
                   {{> afQuickField name='name' disabled=true}}
                   {{> afQuickField name='propertyTag' disabled=true}}
@@ -31,23 +31,6 @@
                   </div>
                   {{> afQuickField name='checkout'}}
                 {{/autoForm}}
-              </div>
-              <div class="col-md-6">
-                <h4>Asset History</h4>
-                {{#each changelog}}
-                  <div class="row">
-                    <div class="col-md-12">
-                      {{timestampFormatter timestamp}}: <strong>{{username}}</strong>
-                      {{#if typeIs 'field'}}
-                        changed field <strong>{{field}}</strong> from
-                        <strong>{{oldValue}}</strong> to <strong>{{newValue}}</strong>
-                      {{/if}}
-                      {{#if typeIs 'attachment'}}
-                        added attachment <strong>{{filename}}</strong>
-                      {{/if}}
-                    </div>
-                  </div>
-                {{/each}}
               </div>
             </div>
           </div>
