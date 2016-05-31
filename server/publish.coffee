@@ -31,6 +31,10 @@ Meteor.publishComposite 'inventory', (filter, options) ->
 Meteor.publishComposite 'newInventory', (filter, time) ->
   if not filter then filter = {}
   _.extend filter, { enteredAtTimestamp: { $gt: time } }
+
+  unless Roles.userIsInRole @userId, 'admin'
+    filter.owner = Meteor.users.findOne(@userId).username
+
   {
     find: ->
       Inventory.find filter
@@ -46,9 +50,12 @@ Meteor.publishComposite 'newInventory', (filter, time) ->
 
 Meteor.publishComposite 'inventorySet', (set) ->
   if not set then set = []
+  filter = { _id: { $in: set } }
+  unless Roles.userIsInRole @userId, 'admin'
+    filter.owner = Meteor.users.findOne(@userId).username
   {
     find: ->
-      Inventory.find { _id: { $in: set } }
+      Inventory.find filter
     children: [
       {
         find: (item) ->
@@ -107,7 +114,10 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
   }
 
 Meteor.publish 'item', (itemId) ->
-  [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }) ]
+  if Roles.userIsInRole @userId, 'admin'
+    [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }) ]
+  else if Inventory.findOne(itemId).owner is Meteor.users.findOne(@userId).username
+    Inventory.find { _id: itemId }
 
 Meteor.publishComposite 'upcomingItems', ->
   # Publish checkouts that are either expected to be picked up between yesterday and next week, or returned in the same time frame.
