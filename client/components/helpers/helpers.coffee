@@ -2,7 +2,6 @@ UI.registerHelper 'commonDateFormatter', (date) ->
   # For short readable dates, Dec 25th, 2013
   moment(date).format('MMM Do, YYYY')
 
-
 UI.registerHelper 'numeralDateFormatter', (date) ->
   # For short numeral dates, 2013-12-25
   moment(date).format('YYYY-MM-DD')
@@ -14,7 +13,7 @@ UI.registerHelper 'timestampFormatter', (timestamp) ->
 UI.registerHelper 'displayName', (userId) ->
   Meteor.users.findOne(userId)?.displayName
 
-UI.registerHelper 'username', (userId) ->
+UI.registerHelper 'usernameFromId', (userId) ->
   Meteor.users.findOne(userId)?.username
 
 UI.registerHelper 'isCordova', ->
