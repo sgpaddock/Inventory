@@ -18,3 +18,14 @@ Template.attachmentField.events
     id = @documentId
     Media.capturePhoto (fileId) ->
       Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
+
+
+
+Template.inventoryActionsField.helpers
+  isAdmin: -> Roles.userIsInRole Meteor.userId(), 'admin'
+
+Template.inventoryActionsField.events
+  'click button[data-toggle=modal]': (e, tpl) ->
+    modal = tpl.$(e.currentTarget).data('modal')
+    Blaze.renderWithData Template[modal], { docId: @documentId }, $('body').get(0)
+    $("##{modal}").modal('show')

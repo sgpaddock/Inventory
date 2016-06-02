@@ -1,11 +1,11 @@
 fields = ['name', 'description', 'propertyTag', 'serialNo', 'deviceType', 'manufacturer', 'modelNo', 'department', 'building', 'officeNo', 'owner']
-Template.assetModal.helpers
+Template.editAssetModal.helpers
   item: -> Inventory.findOne(@docId)
   changelog: -> Changelog.find { itemId: @_id }
   typeIs: (type) -> @type is type
   filename: -> FileRegistry.findOne(@otherId).filename
 
-Template.assetModal.events
+Template.editAssetModal.events
   'click button[data-action=submit]': (e, tpl) ->
   'click button[data-action=submit]': (e, tpl) ->
     win = ->
@@ -15,7 +15,7 @@ Template.assetModal.events
           obj[f] = tpl.$("[data-schema-key=#{f}]").val()
       obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
       Inventory.update tpl.data.docId, { $set: obj }
-      $('#assetModal').modal('hide')
+      $('#editAssetModal').modal('hide')
     checkUsername tpl, win
 
   'hidden.bs.modal': (e, tpl) ->
@@ -24,7 +24,7 @@ Template.assetModal.events
   'click button[data-action=checkUsername]': (e, tpl) ->
     checkUsername tpl
 
-Template.assetModal.created = ->
+Template.editAssetModal.created = ->
   @subscribe 'item', @data.docId
 
 checkUsername = (tpl, winCb, failCb) ->

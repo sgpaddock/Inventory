@@ -339,3 +339,8 @@ Meteor.users.attachSchema new SimpleSchema
     optional: true
     type: String
     label: "Title"
+  roles:
+    type: Object
+    optional: true
+    label: "Roles"
+    blackbox: true

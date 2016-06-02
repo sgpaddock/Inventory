@@ -13,30 +13,28 @@ getFilters = ->
 
 Template.inventory.helpers
   tableSettings: ->
-    {
-      fields: [
-        'propertyTag',
-        'deviceType',
-        'serialNo',
-        'manufacturer',
-        'modelNo',
-        'department',
-        { key: 'owner', tpl: Template.ownerField },
-        'building',
-        'officeNo',
-        { key: 'attachments', tpl: Template.attachmentField, sortable: false }
-      ]
+    fields =  [
+      'propertyTag',
+      'deviceType',
+      'serialNo',
+      'manufacturer',
+      'modelNo',
+      'department',
+      { key: 'owner', tpl: Template.ownerField },
+      'building',
+      'officeNo',
+      { key: 'attachments', tpl: Template.attachmentField, sortable: false }
+    ]
+    if Roles.userIsInRole Meteor.userId(), 'admin'
+      fields.push { key: 'actions', label: "Actions", tpl: Template.inventoryActionsField, sortable: false }
+    return {
+      fields: fields
       subscription: "inventory"
       class: "autotable table table-condensed"
       filters: getFilters
     }
 
 Template.inventory.events
-  'click tr': (e, tpl) ->
-    unless _.contains(tpl.$(e.target)[0].classList, 'dropdown-toggle')
-      Blaze.renderWithData Template.assetModal, { docId: $(e.currentTarget).data('doc') }, $('body').get(0)
-      $('#assetModal').modal('show')
-
   'click button[name=newAssetButton]': (e, tpl) ->
     Blaze.render Template.newAssetModal, $('body').get(0)
     $('#newAssetModal').modal('show')

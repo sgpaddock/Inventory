@@ -1,0 +1,38 @@
+<template name="assetHistoryModal">
+  {{#with item}}
+    <div class="modal fade" id="assetHistoryModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">History for Item {{name}}</h4>
+          </div>
+          <div class="modal-body"> 
+            <div class="row">
+              <div class="col-xs-12">
+                {{#each changelog}}
+                  <div class="row">
+                    <div class="col-md-12">
+                      {{timestampFormatter timestamp}}: <strong>{{username}}</strong>
+                      {{#if typeIs 'field'}}
+                        changed field <strong>{{field}}</strong> from
+                        <strong>{{oldValue}}</strong> to <strong>{{newValue}}</strong>
+                      {{/if}}
+                      {{#if typeIs 'attachment'}}
+                        added attachment <strong>{{filename}}</strong>
+                      {{/if}}
+                    </div>
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/with}}
+</template>
+
