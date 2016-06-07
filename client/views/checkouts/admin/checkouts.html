@@ -1,5 +1,5 @@
 <template name="checkoutsAdmin">
   {{> checkoutFilters}}
-  <a href="/checkouts/upcoming"><button class="btn btn-sm btn-success">Upcoming Action Items</button></a>
+  <a href="/checkouts/upcoming"><button class="btn btn-sm btn-success">Upcoming Action Items ({{upcomingItemsCount}})</button></a>
   {{> checkoutTable settings=settings}}
 </template>

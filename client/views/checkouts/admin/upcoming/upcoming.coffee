@@ -1,5 +1,6 @@
 Template.upcoming.helpers
   checkouts: -> Checkouts.find {}, { sort: { 'schedule.timeReserved': 1 } }
+  count: -> Checkouts.find().count()
   itemName: -> Inventory.findOne(@assetId)?.name
   checkedOut: -> Checkouts.findOne { _id: @_id, 'schedule.timeCheckedOut': { $exists: true }, 'schedule.timeReturned': { $exists: false } }
   todayHighlight: (date) ->
