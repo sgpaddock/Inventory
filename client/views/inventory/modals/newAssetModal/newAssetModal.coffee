@@ -1,37 +1,41 @@
-fields = [ 'name', 'propertyTag', 'serialNo', 'model', 'department', 'location', 'owner' ]
-Template.editAssetModal.helpers
-  item: -> Inventory.findOne(@docId)
-  changelog: -> Changelog.find { itemId: @_id }
-  typeIs: (type) -> @type is type
-  filename: -> FileRegistry.findOne(@otherId).filename
-  departments: -> _.map departments, (v) -> { label: v, value: v }
+fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'location', 'owner', 'name' ]
 
-Template.editAssetModal.events
+Template.newAssetModal.onCreated ->
+  @error = new ReactiveVar ""
+
+Template.newAssetModal.events
+  'hidden.bs.modal': (e, tpl) ->
+    Blaze.remove tpl.view
+
   'click button[data-action=submit]': (e, tpl) ->
     obj = {}
     _.each fields, (f) ->
-      unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
-        obj[f] = tpl.$("[data-schema-key=#{f}]").val()
+      $el = tpl.$("[data-schema-key=#{f}]")
+      if $el.data('required')
+        if !$el.val().length
+          $el.closest('.form-group').addClass('has-error')
+        else
+          $el.closest('.form-group').removeClass('has-error')
+
+      obj[f] = $el.val()
+
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
-    Inventory.update tpl.data.docId, { $set: obj }
-    $('#editAssetModal').modal('hide')
-
-  'click button[data-action=delete]': (e, tpl) ->
-    Blaze.renderWithData Template.confirmDeleteModal, this, $('body').get(0)
-    $('#editAssetModal').modal('hide')
-    $('#confirmDeleteModal').modal('show')
-
-  'hidden.bs.modal': (e, tpl) ->
-    Blaze.remove tpl.view
+    Inventory.insert obj, (err, res) ->
+      if err
+        tpl.error.set err
+      else
+        $('#newAssetModal').modal('hide')
 
   'click button[data-action=checkUsername]': (e, tpl) ->
     checkUsername tpl
 
-Template.editAssetModal.created = ->
-  @subscribe 'item', @data.docId
+Template.newAssetModal.helpers
+  departments: -> departments
+  error: -> Template.instance().error.get()
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.
+  # TODO: Could probably do this with less jQuery and more ReactiveVars.
   val = tpl.$('input[data-schema-key=owner]').val()
   unless val.length < 1
     Meteor.call 'checkUsername', val, (err, res) ->
@@ -46,6 +50,12 @@ checkUsername = (tpl, winCb, failCb) ->
         tpl.$('button[data-action=checkUsername]').html('<span class="glyphicon glyphicon-remove"></span>')
         if failCb then failCb()
 
+Template.addAssetQuickField.helpers
+  isBoolean: -> Inventory.simpleSchema().schema(@name).type.name is "Boolean"
+  label: -> Inventory.simpleSchema().label(@name)
+  required: -> !Inventory.simpleSchema().schema(@name).optional?
+
+# Static departments for the dropdown.
 departments = [
   'AAAS'
   'Air Force'

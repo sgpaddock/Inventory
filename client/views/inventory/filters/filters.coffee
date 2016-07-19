@@ -9,7 +9,8 @@ Template.facetDropdown.helpers
     [
       { key: 'department', label: 'Department' }
       { key: 'owner', label: 'Owner' }
-      { key: 'building', label: 'Building' }
+      { key: 'location', label: 'Location' }
+      { key: 'model', label: 'Model' }
     ]
   value: ->
     key = @key

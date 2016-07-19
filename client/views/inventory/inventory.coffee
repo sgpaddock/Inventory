@@ -15,14 +15,11 @@ Template.inventory.helpers
   tableSettings: ->
     fields =  [
       'propertyTag',
-      'deviceType',
       'serialNo',
-      'manufacturer',
-      'modelNo',
+      'model',
       'department',
       { key: 'owner', tpl: Template.ownerField },
-      'building',
-      'officeNo',
+      'location',
       { key: 'attachments', tpl: Template.attachmentField, sortable: false }
     ]
     if Roles.userIsInRole Meteor.userId(), 'admin'

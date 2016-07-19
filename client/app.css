@@ -551,3 +551,8 @@ blockquote {
 .checkout-filters {
   display: inline;
 }
+
+.required {
+  font-size: .8em;
+  color: red;
+}

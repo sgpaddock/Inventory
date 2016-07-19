@@ -12,18 +12,9 @@
     unique: true
   deviceType:
     type: String
-    allowedValues: [
-      'PC'
-      'Laptop'
-      'IPad'
-      'IMac'
-      'Other Tablet'
-      'Monitor'
-      'Other Computer'
-    ]
+    optional: true
   serialNo:
     type: String
-    optional: true
     label: "Serial Number"
     denyUpdate: true
   enteredByUserId:
@@ -34,106 +25,17 @@
     type: new Date()
     denyUpdate: true
     optional: true # Will be taken care of by the server.
-  manufacturer:
+  model:
     type: String
-    denyUpdate: true
-    allowedValues: [
-      'Apple'
-      'Dell'
-      'Microsoft'
-      'Other/Not Listed'
-    ]
-    optional: true
-  modelNo:
-    type: String
-    optional: true
-    label: "Model Number"
     denyUpdate: true
   department:
     type: String
-    optional: true
-    allowedValues: [
-      'AAAS'
-      'Air Force'
-      'American Studies'
-      'Anthropology'
-      'Appalachian Center'
-      'Army ROTC'
-      'Aux Services'
-      'Biology'
-      'Chemistry'
-      "Dean's Administration"
-      'Earth and Environmental Sciences'
-      'English'
-      'Environmental and Sustainability Studies'
-      'Center for English as a Second Language'
-      'Geography'
-      "Gender and Womens Studies"
-      'History'
-      'Hispanic Studies'
-      'Hive'
-      'IBU'
-      'International Studies'
-      'Linguistics'
-      'Mathematics'
-      'MCLLC'
-      'Physics and Astronomy'
-      'Philosophy'
-      'Political Science'
-      'Psychology'
-      'Sociology'
-      'Social Theory'
-      'Statistics'
-      'Writing, Rhetoric & Digital Studies'
-      'Other/Not listed'
-      'Unassigned'
-    ]
   owner:
     type: String
     optional: true
-  building:
+  location:
     type: String
     optional: true
-    allowedValues: [
-      '1020 EXPORT STREET'
-      '343 WALLER AVE'
-      '424 EUCLID AVENUE'
-      'APPALACHIAN CENTER'
-      'ASTeCC'
-      'AVIARY FACILITY'
-      'BARKER HALL'
-      'BBSRB'
-      'BOWMAN HALL'
-      'BRADLEY HALL'
-      'BRECKINRIDGE HALL'
-      'CENTER FOR APPLIED ENERGY'
-      'CHEMISTRY-PHYSICS'
-      'COMBS RESEARCH BUILDING'
-      'ECOLOGICAL RESEARCH'
-      'FUNKHOUSER'
-      'JESSE HARRIS CENTER'
-      'KASTLE HALL'
-      'LAFFERTY HALL'
-      'MACADAM OBSERVATORY'
-      'MARKEY CANCER CENTER'
-      'MATH HOUSE'
-      'MDR3'
-      'MDS'
-      'MILLER HALL'
-      'MINING/MINERALS BLDG'
-      'PATTERSON OFFICE TOWER'
-      'SCOTT ST BLDG'
-      'SLONE RESEARCH BLDG'
-      'SMALL ANIMAL LAB'
-      'THOMAS HUNT MORGAN'
-      'TOBACCO RESEARCH LAB'
-      'UK LEXMARK CENTER'
-      'WHITE HALL CLASSROOM'
-    ]
-  officeNo:
-    type: String
-    optional: true
-    label: "Office Number"
   pictureId:
     type: String
     optional: true
@@ -155,26 +57,9 @@
   notes:
     type: String
     optional: true
-  ticketNo:
-    type: String
-    optional: true
-    label: "Waggle/Triage Ticket"
-  imageId:
-    type: String
-    optional: true
   barcode:
     type: String
     optional: true
-  category:
-    optional: true
-    type: String
-  quantity:
-    type: Number
-    optional: true
-  quantityUnit:
-    type: String
-    optional: true
-    allowedValues: ['units', 'oz', 'spools']
   checkout:
     label: "Available for Checkout?"
     type: Boolean

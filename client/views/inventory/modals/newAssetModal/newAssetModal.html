@@ -1,0 +1,56 @@
+<template name="newAssetModal">
+  <div class="modal fade" id="newAssetModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Add New Asset</h4>
+        </div>
+        <div class="modal-body">
+          <span class="error">{{error}}</span>
+          {{> addAssetQuickField name='serialNo'}}
+          {{> addAssetQuickField name='model'}}
+          {{> addAssetQuickField name='department' options=departments}}
+          {{> addAssetQuickField name='propertyTag'}}
+          {{> addAssetQuickField name='location'}}
+          <div class="form-group">
+            <label for="owner" class="control-label">Owner:</label>
+            <div class="input-group">
+              <input type="text" class="form-control" data-schema-key="owner">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-primary" data-action="checkUsername">Check</button>
+              </span>
+            </div>
+          </div>
+          {{> addAssetQuickField name='name'}}
+          {{> addAssetQuickField name='checkout'}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-action="submit" class="btn btn-primary">Add Item</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="addAssetQuickField">
+  <div class="form-group">
+    <label for="{{name}}" class="control-label">
+      {{label}} {{#unless isBoolean}}{{#if required}} <span class="required">*</span>{{/if}}{{/unless}}
+    </label>
+    {{#if isBoolean}}
+      <input type="checkbox" name="{{name}}" data-schema-key="{{name}}">
+      {{else}}
+      {{#if options}}
+        <select name="{{name}}" data-required="{{required}}" data-schema-key="{{name}}" class="form-control">
+          <option selected></option>
+          {{#each options}}
+            <option>{{this}}</option>
+          {{/each}}
+        </select>
+        {{else}}
+        <input type="text" name="{{name}}" data-required="{{required}}" data-schema-key="{{name}}" class="form-control">
+      {{/if}}
+    {{/if}}
+  </div>
+</template>
