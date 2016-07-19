@@ -24,3 +24,10 @@ Meteor.methods
     client = LDAP.createClient Meteor.settings.ldap.serverUrl
     LDAP.bind client, username, password
     return LDAP.search(client, username)?
+
+ 
+  deleteItem: (itemId) ->
+    if Roles.userIsInRole @userId, 'admin'
+      Inventory.remove(itemId)
+      Changelog.remove { itemtId: itemId }
+      Checkouts.remove { assetId: itemId }

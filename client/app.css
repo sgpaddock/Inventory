@@ -1,5 +1,11 @@
 body {
   overflow-y: scroll;
+  /* Hacky padding-right to deal with bootstrap adding element-style padding sometimes. */
+  padding-right: 0px !important;
+}
+
+body.modal-open {
+  padding-right: 15px !important;
 }
 
 table {

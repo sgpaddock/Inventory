@@ -7,7 +7,6 @@ Template.editAssetModal.helpers
 
 Template.editAssetModal.events
   'click button[data-action=submit]': (e, tpl) ->
-  'click button[data-action=submit]': (e, tpl) ->
     win = ->
       obj = {}
       _.each fields, (f) ->
@@ -17,6 +16,11 @@ Template.editAssetModal.events
       Inventory.update tpl.data.docId, { $set: obj }
       $('#editAssetModal').modal('hide')
     checkUsername tpl, win
+
+  'click button[data-action=delete]': (e, tpl) ->
+    Blaze.renderWithData Template.confirmDeleteModal, this, $('body').get(0)
+    $('#editAssetModal').modal('hide')
+    $('#confirmDeleteModal').modal('show')
 
   'hidden.bs.modal': (e, tpl) ->
     Blaze.remove tpl.view
