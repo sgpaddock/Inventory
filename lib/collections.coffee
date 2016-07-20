@@ -1,3 +1,7 @@
+SimpleSchema.messages {
+  locationOrOwnerRequired: "Either Owner or Location must be present."
+}
+
 @Inventory = new Mongo.Collection 'inventory'
 @Inventory.attachSchema new SimpleSchema
   name:
@@ -33,9 +37,15 @@
   owner:
     type: String
     optional: true
+    custom: ->
+      unless @isSet or @field('location')?.isSet
+        "locationOrOwnerRequired"
   location:
     type: String
     optional: true
+    custom: ->
+      unless @isSet or @field('owner')?.isSet
+        "locationOrOwnerRequired"
   pictureId:
     type: String
     optional: true
