@@ -1,12 +1,17 @@
 fields = [ 'name', 'propertyTag', 'serialNo', 'model', 'department', 'location', 'owner' ]
 Template.editAssetModal.helpers
   item: -> Inventory.findOne(@docId)
-  changelog: -> Changelog.find { itemId: @_id }
-  typeIs: (type) -> @type is type
-  filename: -> FileRegistry.findOne(@otherId).filename
+  file: -> FileRegistry.findOne(@fileId)
   departments: -> _.map departments, (v) -> { label: v, value: v }
 
 Template.editAssetModal.events
+  'click button[data-action=attachFile]': (e, tpl) ->
+     Media.pickLocalFile (fileId) =>
+       Inventory.update @_id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
+
+  'click a[data-action=showAttachmentModal]': (e, tpl) ->
+    Iron.query.set 'attachmentId', @fileId
+
   'click button[data-action=submit]': (e, tpl) ->
     obj = {}
     _.each fields, (f) ->

@@ -18,18 +18,20 @@
       <thead>
         <tr>
           {{#each fields}}
-            {{#if sortable}}
-              <th><span class="inventory-table-heading" data-sort-key="{{key}}">
+            <th class="{{class}}">
+              {{#if sortable}}
+                <span class="inventory-table-heading" data-sort-key="{{key}}">
                   {{label}} &nbsp;
                   {{#if isSortKey}} {{#if isAscending}}
                       <span class="glyphicon glyphicon-chevron-down"></span>
                       {{else}}
                       <span class="glyphicon glyphicon-chevron-up"></span>
                   {{/if}}{{/if}}
-              </span></th>
+                </span>
               {{else}}
-              <th>{{label}}</th>
-            {{/if}}
+                {{label}}
+              {{/if}}
+            </th>
           {{/each}}
         </tr>
       </thead>
@@ -38,7 +40,7 @@
           {{#each records}}
             <tr class="inventory-row {{rowClass}}" data-doc="{{_id}}">
               {{#each ../fields}}
-                <td>
+                <td class="{{class}}">
                   {{#if tpl}}
                     {{#with fieldCellContext ..}}
                       {{> ../tpl}}

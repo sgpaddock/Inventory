@@ -1,4 +1,4 @@
-Template.facetDropdown.helpers
+Template.inventoryFilters.helpers
   facetKeys: ->
     ###
     if Facets.findOne()

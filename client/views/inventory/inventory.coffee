@@ -15,12 +15,12 @@ Template.inventory.helpers
   tableSettings: ->
     fields =  [
       'propertyTag',
-      'serialNo',
+      { key: 'serialNo', class: 'hidden-xs' }
       'model',
-      'department',
+      { key: 'department', class: 'hidden-xs' }
       { key: 'owner', tpl: Template.ownerField },
       'location',
-      { key: 'attachments', tpl: Template.attachmentField, sortable: false }
+      { key: 'attachments', tpl: Template.attachmentField, sortable: false, class: 'hidden-xs' }
     ]
     if Roles.userIsInRole Meteor.userId(), 'admin'
       fields.push { key: 'actions', label: "Actions", tpl: Template.inventoryActionsField, sortable: false }

@@ -17,6 +17,8 @@
                   {{> afQuickField name='model' disabled=true}}
                   {{> afQuickField name='department' options=departments}}
                   {{> afQuickField name='location'}}
+
+                  <!-- Owner w/ LDAP Username Check -->
                   <div class="form-group">
                     <label for="owner" class="control-label">Owner:</label>
                     <div class="input-group">
@@ -26,13 +28,32 @@
                       </span>
                     </div>
                   </div>
+
+                  <!-- Attachments -->
+                  <div class="panel panel-default">
+                    <div class="panel-heading">Attachments</div>
+                    <div class="panel-body">
+                      <button type="button" class="btn btn-primary" data-action="attachFile">Attach File</button>
+                      {{#each attachments}}
+                        <div class="attachment">
+                          <div class="attachment-link">
+                            {{#if file.thumbnail}}
+                              <img class="img-thumbnail" style="max-width: 64px; max-height:24px;" src="/file/{{file.thumbnail}}" />
+                            {{/if}}
+                            <a data-action="showAttachmentModal" data-fileId="{{file._id}}">{{file.filename}}</a><br />
+                          </div>
+                        </div>
+                      {{/each}}
+                    </div>
+                  </div>
                   {{> afQuickField name='checkout'}}
                 {{/autoForm}}
+                <button type="button" data-action="delete" class="btn btn-danger pull-left">Delete Asset</button>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" data-action="delete" class="btn btn-danger pull-left">Delete Asset</button>
+            <button type="button" data-dismiss="modal" class="btn btn-default pull-left">Close</button>
             <button type="button" data-action="submit" class="btn btn-primary">Update</button>
           </div>
         </div>

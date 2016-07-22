@@ -21,6 +21,7 @@ setup = ->
       label: f.label || context.schema?.label(f.key) || f.key
       tpl: f.tpl
       sortable: if _.isUndefined(f.sortable) then true else f.sortable
+      class: f.class || null
     }
 
   context.fields = fields
