@@ -16,20 +16,6 @@ getFilters = ->
 
   return filters
 
-getClientFilters = ->
-  filters = {
-    department: Iron.query.get 'department'
-    owner: Iron.query.get 'owner'
-    building: Iron.query.get 'building'
-  }
-  
-  # Mongo really doesn't like null filter values
-  for k,v of filters
-    if _.isUndefined(v)
-      delete filters[k]
-
-  return filters
-
 Template.inventory.helpers
   tableSettings: ->
     fields =  [
@@ -48,7 +34,6 @@ Template.inventory.helpers
       subscription: "inventory"
       class: "autotable table table-condensed"
       filters: getFilters
-      clientFilters: getClientFilters
     }
 
 Template.inventory.events
