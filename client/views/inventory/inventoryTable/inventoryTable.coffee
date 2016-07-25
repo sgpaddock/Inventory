@@ -36,6 +36,12 @@ setup = ->
 
   context.skip = new ReactiveVar(0)
   context.getFilters = @data.filters || @data.settings.filters || -> {}
+  context.getFiltersForClient = =>
+    # Kinda janky - if we want to have a $text filter, we have to filter it out for Minimongo.
+    # There may be others we need to consider, but this is all I know of for now.
+    filters = context.getFilters()
+    if filters.$text then delete filters.$text
+    return filters
   @context = context
 
 Template.inventoryTable.helpers
@@ -50,7 +56,7 @@ Template.inventoryTable.helpers
     sort = {}
     sortKey = @sortKey.get()
     sort[sortKey] = @sortOrder.get() || -1
-    Inventory.find(@getFilters(), { sort: sort })
+    Inventory.find(@getFiltersForClient(), { sort: sort })
     
   fieldCount: (f) ->
     (f or @).fields.length + @actionColumn
@@ -73,15 +79,15 @@ Template.inventoryTable.helpers
     }
 
   firstVisibleItem: ->
-    if Inventory.find(@getFilters()).count() is 0 then 0 else @skip.get() + 1
+    if Inventory.find(@getFiltersForClient()).count() is 0 then 0 else @skip.get() + 1
   lastVisibleItem: ->
-    Math.min @skip.get() + @pageLimit, (Counts.get('inventoryCount') || Inventory.find(@getFilters()).count())
+    Math.min @skip.get() + @pageLimit, (Counts.get('inventoryCount') || Inventory.find(@getFiltersForClient()).count())
   lastDisabled: ->
     if @skip.get() <= 0 then "disabled"
   nextDisabled: ->
-    if @skip.get() + @pageLimit + 1 > (Counts.get('inventoryCount') || Inventory.find(@getFilters()).count()) then "disabled"
+    if @skip.get() + @pageLimit + 1 > (Counts.get('inventoryCount') || Inventory.find(@getFiltersForClient()).count()) then "disabled"
   itemCount: ->
-    Counts.get('inventoryCount') || Inventory.find(@getFilters()).count()
+    Counts.get('inventoryCount') || Inventory.find(@getFiltersForClient()).count()
 
 Template.inventoryTable.events
   'click span[class=inventory-table-heading]': (e) ->

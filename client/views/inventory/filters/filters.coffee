@@ -1,3 +1,13 @@
+Template.inventoryFilters.events
+  'keyup input[name=search], click button[name=search]': (e, tpl) ->
+    if e.keyCode is 13 or !e.keyCode
+      Iron.query.set 'search', tpl.$('input[name=search]').val()
+
+  'keyup input[name=mobile-search], click button[name=mobile-search]': (e, tpl) ->
+    if e.keyCode is 13 or !e.keyCode
+      Iron.query.set 'search', tpl.$('input[name=mobile-search]').val()
+
+
 Template.inventoryFilters.helpers
   facetKeys: ->
     ###

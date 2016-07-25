@@ -3,8 +3,27 @@ getFilters = ->
     department: Iron.query.get 'department'
     owner: Iron.query.get 'owner'
     building: Iron.query.get 'building'
+    $text: { $search: Iron.query.get 'search' }
   }
+  
+  # Mongo really doesn't like null filter values
+  for k,v of filters
+    if _.isUndefined(v)
+      delete filters[k]
 
+  if _.isUndefined filters.$text.$search
+    delete filters.$text
+
+  return filters
+
+getClientFilters = ->
+  filters = {
+    department: Iron.query.get 'department'
+    owner: Iron.query.get 'owner'
+    building: Iron.query.get 'building'
+  }
+  
+  # Mongo really doesn't like null filter values
   for k,v of filters
     if _.isUndefined(v)
       delete filters[k]
@@ -29,6 +48,7 @@ Template.inventory.helpers
       subscription: "inventory"
       class: "autotable table table-condensed"
       filters: getFilters
+      clientFilters: getClientFilters
     }
 
 Template.inventory.events

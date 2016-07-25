@@ -568,3 +568,15 @@ blockquote {
   font-size: .8em;
   color: red;
 }
+
+.input-group.input-group-inline {
+  display: inline-table;
+  vertical-align: middle;
+}
+/* should really start using LESS */
+.input-group.input-group-inline .input-group-addon,
+.input-group.input-group-inline .input-group-btn,
+.input-group.input-group-inline .form-control {
+  width: auto !important;
+}
+
