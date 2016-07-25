@@ -2,7 +2,8 @@ getFilters = ->
   filters = {
     department: Iron.query.get 'department'
     owner: Iron.query.get 'owner'
-    building: Iron.query.get 'building'
+    location: Iron.query.get 'location'
+    model: Iron.query.get 'model'
     $text: { $search: Iron.query.get 'search' }
   }
   
@@ -10,6 +11,9 @@ getFilters = ->
   for k,v of filters
     if _.isUndefined(v)
       delete filters[k]
+
+    if v is '(none)'
+      filters[k] = { $exists: false }
 
   if _.isUndefined filters.$text.$search
     delete filters.$text
