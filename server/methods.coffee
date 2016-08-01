@@ -29,5 +29,17 @@ Meteor.methods
   deleteItem: (itemId) ->
     if Roles.userIsInRole @userId, 'admin'
       Inventory.remove(itemId)
-      Changelog.remove { itemtId: itemId }
+      Changelog.remove { itemId: itemId }
       Checkouts.remove { assetId: itemId }
+
+  recordItemDelivery: (assetId, username) ->
+    if Roles.userIsInRole @userId, 'admin'
+      Deliveries.insert {
+        assetId: assetId
+        deliveredByUserId: @userId
+        deliveredTo: username
+        deliveredToUserId: Meteor.users.findOne({username: username})?._id || null
+        timestamp: new Date()
+      }
+
+      Inventory.update assetId, { $set: { delivered: true } }

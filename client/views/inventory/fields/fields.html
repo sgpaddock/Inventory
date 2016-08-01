@@ -32,4 +32,7 @@
 <template name="inventoryActionsField">
   <button type="button" data-modal="editAssetModal" data-toggle="modal" class="btn btn-sm btn-primary">Edit Item</button>
   <button type="button" data-modal="assetHistoryModal" data-toggle="modal" class="btn btn-sm btn-default hidden-xs">View History</button>
+  {{#unless delivered}}
+    <button type="button" data-modal="deliveryModal" data-toggle="modal" class="btn btn-sm btn-success hidden-xs">Record Delivery</button>
+  {{/unless}}
 </template>

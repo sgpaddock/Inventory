@@ -10,6 +10,11 @@
           <div class="modal-body"> 
             <div class="row">
               <div class="col-xs-12">
+                <h2>Deliveries</h2>
+                {{#each deliveries}}
+                  Item delivered to <strong>{{deliveredTo}}</strong> on {{timestampFormatter timestamp}} by <strong>{{usernameFromId deliveredByUserId}}</strong>
+                {{/each}}
+                <h2>Changes</h2>
                 {{#each changelog}}
                   <div class="row">
                     <div class="col-md-12">

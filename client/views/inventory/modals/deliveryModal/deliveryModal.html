@@ -1,0 +1,58 @@
+<template name="deliveryModal">
+  {{#with item}}
+    <div class="modal fade" id="deliveryModal">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Item {{name}}</h4>
+          </div>
+          <div class="modal-body"> 
+            <div class="row">
+              <div class="col-xs-12">
+                {{#autoForm collection="Inventory" id="assetForm" type="update" doc=this}}
+                  {{> afQuickField name='name' disabled=true}}
+                  {{> afQuickField name='propertyTag' disabled=true}}
+                  {{> afQuickField name='serialNo' disabled=true}}
+                  {{> afQuickField name='model' disabled=true}}
+                {{/autoForm}}
+                <form>
+                  <div class="form-group">
+                    <label for="ldap" class="control-label">Username:</label>
+                    <input type="text" class="form-control login-input" name="ldap" value="{{assignedToUsername}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="password" class="control-label">Password:</label>
+                    <input type="password" class="form-control login-input" name="password">
+                  </div>
+                  {{#if success}}
+                    <div class="alert alert-success">Thank you. Your receipt of this item has been recorded.</div>
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                    {{else}}
+                    {{#if warning}}
+                      <div class="alert alert-warning">{{warning}}</div>
+                      <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                      {{else}}
+                      {{#if error}}
+                        <div class="alert alert-danger">{{error}}</div>
+                      {{/if}}
+                      <div class="alert alert-info">
+                        I certify that I have received the University-owned items listed above and will comply
+                        with the College's policies regarding computer equipment:
+                        <a href="http://resources.as.uky.edu/equipment-policy" target="_blank">http://resources.as.uky.edu/equipment-policy</a>
+                      </div>
+                      <button type="button" class="btn btn-primary" data-action="login">Sign In</button>
+                    {{/if}}
+                  {{/if}}
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/with}}
+</template>

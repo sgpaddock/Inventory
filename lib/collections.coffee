@@ -74,6 +74,10 @@ SimpleSchema.messages {
     label: "Available for Checkout?"
     type: Boolean
     defaultValue: false
+  delivered:
+    label: "Delivered to User"
+    type: Boolean
+    defaultValue: false
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema
@@ -117,6 +121,7 @@ SimpleSchema.messages {
     optional: true
   recipientSignatureImageId:
     type: String
+    optional: true
   timestamp:
     type:
       new Date()
