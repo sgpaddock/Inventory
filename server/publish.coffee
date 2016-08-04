@@ -142,3 +142,7 @@ Meteor.publishComposite 'upcomingItems', ->
       }
     ]
   }
+
+Meteor.publish 'models', ->
+  if Roles.userIsInRole @userId, 'admin'
+    Models.find {}, { limit: 100 }

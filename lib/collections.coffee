@@ -239,3 +239,11 @@ Meteor.users.attachSchema new SimpleSchema
     optional: true
     label: "Roles"
     blackbox: true
+
+@Models = new Mongo.Collection 'models'
+@Models.attachSchema new SimpleSchema
+  # Collection storing model names for autocompleting
+  model:
+    type: String
+  lastUse:
+    type: new Date()

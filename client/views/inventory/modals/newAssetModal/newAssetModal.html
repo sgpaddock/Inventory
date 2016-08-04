@@ -9,7 +9,10 @@
         <div class="modal-body">
           <span class="error">{{error}}</span>
           {{> addAssetQuickField name='serialNo'}}
-          {{> addAssetQuickField name='model'}}
+          <div class="form-group">
+            <label for="model" class="control-label">Model <span class="required">*</span></label>
+            {{> inputAutocomplete type="text" name="model" data-required=true data-schema-key="model" class="form-control" settings=modelSettings}}
+          </div>
           {{> addAssetQuickField name='department' options=departments}}
           {{> addAssetQuickField name='propertyTag'}}
           {{> addAssetQuickField name='location'}}

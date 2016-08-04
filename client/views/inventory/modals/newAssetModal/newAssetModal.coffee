@@ -2,6 +2,7 @@ fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'location', 'owner'
 
 Template.newAssetModal.onCreated ->
   @error = new ReactiveVar ""
+  @subscribe 'models'
 
 Template.newAssetModal.events
   'hidden.bs.modal': (e, tpl) ->
@@ -32,6 +33,19 @@ Template.newAssetModal.events
 Template.newAssetModal.helpers
   departments: -> departments
   error: -> Template.instance().error.get()
+  modelSettings: ->
+    {
+      position: 'bottom'
+      limit: 5
+      rules: [
+        token: ''
+        collection: Models
+        field: 'model'
+        template: Template.modelPill
+        matchAll: true
+      ]
+    }
+
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.
