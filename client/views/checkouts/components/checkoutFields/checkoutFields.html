@@ -4,6 +4,18 @@
   {{/with}}
 </template>
 
+<template name="checkedOutToField">
+  {{#with checkout}}
+    <div class="field-area">
+      {{> userPortrait userId=assignedTo class="in-row" }}
+      <div class="inline-edit">
+        {{usernameFromId assignedTo}}
+      </div>
+    </div>
+  {{/with}}
+</template>
+
+
 <template name="checkoutActionsAdminField">
   {{#if checkedOut}}
     <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-modal="checkInModal">Check In</button>

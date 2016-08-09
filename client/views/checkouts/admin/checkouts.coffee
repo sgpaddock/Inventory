@@ -43,6 +43,7 @@ Template.checkoutsAdmin.helpers
   settings: ->
     {
       fields: ['name', 'model',
+        { key: 'checkedOutTo', label: 'Checked Out To', tpl: Template.checkedOutToField, sortable: false }
         { key: 'status', label: 'Status', tpl: Template.checkoutStatusField, sortable: false }
         { key: 'actions', label: 'Actions', tpl: Template.checkoutActionsAdminField, sortable: false }
       ]
