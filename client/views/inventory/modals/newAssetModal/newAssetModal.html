@@ -19,7 +19,7 @@
           <div class="form-group">
             <label for="owner" class="control-label">Owner:</label>
             <div class="input-group">
-              <input type="text" class="form-control" data-schema-key="owner">
+              {{> inputAutocomplete settings=userSettings data-schema-key="owner" class="form-control"}}
               <span class="input-group-btn">
                 <button type="button" class="btn btn-primary" data-action="checkUsername">Check</button>
               </span>
