@@ -7,12 +7,10 @@ SimpleSchema.messages {
   name:
     optional: true
     type: String
-    denyUpdate: true
     label: "Asset Name"
   propertyTag:
     type: String
     optional: true
-    denyUpdate: true
     unique: true
   deviceType:
     type: String
@@ -20,7 +18,6 @@ SimpleSchema.messages {
   serialNo:
     type: String
     label: "Serial Number"
-    denyUpdate: true
   enteredByUserId:
     type: String
     denyUpdate: true
@@ -31,7 +28,6 @@ SimpleSchema.messages {
     optional: true # Will be taken care of by the server.
   model:
     type: String
-    denyUpdate: true
   department:
     type: String
   owner:
