@@ -25,7 +25,12 @@ Template.newAssetModal.events
       if err
         tpl.error.set err
       else
-        $('#newAssetModal').modal('hide')
+        if tpl.$(e.currentTarget).attr('name') is 'close'
+          $('#newAssetModal').modal('hide')
+        else
+          tpl.$('select').val('')
+          tpl.$('input[type=checkbox]').attr('checked', false)
+          tpl.$('input').val('')
 
   'click button[data-action=checkUsername]': (e, tpl) ->
     checkUsername tpl
