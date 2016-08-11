@@ -11,7 +11,7 @@ Template.reserveModalUser.rendered = ->
     todayHighlight: true
     orientation: "top"
     beforeShowDay: (date) ->
-      if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date }})
+      if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date }, 'approval.approved': { $ne: false }})
         return { enabled: false, classes: "datepicker-date-reserved", tooltip: "Reserved" }
 
 Template.reserveModalUser.events
@@ -36,6 +36,7 @@ Template.reserveModalUser.events
       expectedReturn = new Date(tpl.$('input[name=expectedReturn]').val())
       checkout = Checkouts.findOne {
         assetId: tpl.data.docId
+        'approval.approved': { $ne: false }
         'schedule.timeReserved': { $lte: expectedReturn }
         'schedule.expectedReturn': { $gte: timeReserved }
       }
