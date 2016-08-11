@@ -166,6 +166,10 @@ SimpleSchema.messages {
   'approval.approverId':
     optional: true
     type: String
+  'approval.reason':
+    label: "Rejection Reason"
+    optional: true
+    type: String
   'schedule.timeCheckedOut':
     optional: true
     type: new Date()

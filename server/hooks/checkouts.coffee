@@ -1,5 +1,5 @@
 scheduleMail = (mail) ->
-  if mail.date < new Date()
+  if mail.date <= new Date()
     Email.send
       from: Meteor.settings.email.fromEmail
       to: mail.username + "@" + Meteor.settings.email.domain
@@ -20,7 +20,7 @@ scheduleMail = (mail) ->
         SyncedCron.remove id
 
 
-Checkouts.after.insert (userId, doc) ->
+scheduleCheckoutReminders = (userId, doc) ->
   # Schedule reminder emails.
   item = Inventory.findOne(doc.assetId)
   user = Meteor.users.findOne(doc.assignedTo)
@@ -44,3 +44,31 @@ Checkouts.after.insert (userId, doc) ->
     subject: "Your checkout of item #{item.name} is due today"
     html: "Your expected return date for item #{item.name} is today. The item may be dropped off in POT 915, 923, or 951."
     date: moment(doc.schedule.expectedReturn).hours(8).minutes(0).seconds(0).toDate() # Day of expected return, 8am
+
+Checkouts.after.insert (userId, doc) ->
+  if doc.approval?.approved
+    scheduleCheckoutReminders userId, doc
+
+Checkouts.after.update (userId, doc, fieldNames, modifier, options) ->
+  # Check if this is an update approving/rejecting a request. If so, send the appropriate email.
+ 
+  if modifier.$set?.approval?.approved or modifier.$set?['approval.approved']
+    item = Inventory.findOne(doc.assetId)
+    scheduleMail
+      username: Meteor.users.findOne(doc.assignedTo)?.username
+      subject: "Your reservation of #{item.name} has been approved"
+      html: "Your reservation of #{item.name} for #{moment(doc.schedule.timeReserved).format('LL')} has been approved.
+      Please visit POT 915, 923, or 951 to pick up your item on that date when ready."
+      date: new Date()
+    scheduleCheckoutReminders userId, doc
+
+  else if modifier.$set?.approval?.approved is false or modifier.$set?['approval.approved'] is false
+    item = Inventory.findOne(doc.assetId)
+    scheduleMail
+      username: Meteor.users.findOne(doc.assignedTo)?.username
+      subject: "Your reservation of #{item.name} has been rejected"
+      html: "Your reservation of #{item.name} for #{moment(doc.schedule.timeReserved).format('LL')} has been rejected.<br>
+      Reason given: #{doc.approval.reason}"
+      date: new Date()
+
+    

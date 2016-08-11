@@ -93,11 +93,28 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
           FileRegistry.find { _id: { $in: ids } }
       }
 
+      # Checkout events after today
+      # TODO: How do we view checkout history?
       {
         find: (item) ->
-          # Checkout events after today
-          # TODO: How do we view checkout history?
+
+          fields = {}
+          unless Roles.userIsInRole @userId, 'admin'
+            fields = { fields: { assignedTo: 0, 'approver.approverId': 0 } }
+          Checkouts.find {
+            assetId: item._id
+            $or: [
+              { 'schedule.timeReserved': { $gte: new Date() } }
+              { 'schedule.expectedReturn': { $gte: new Date() } }
+            ]
+          }, fields
+      }
+
+      # Secondary publish for non-admin users to be able to see which checkouts are their own
+      {
+        find: (item) ->
           Checkouts.find
+            assignedTo: @userId
             assetId: item._id
             $or: [
               { 'schedule.timeReserved': { $gte: new Date() } }
