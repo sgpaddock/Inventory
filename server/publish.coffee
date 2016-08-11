@@ -8,7 +8,7 @@ Meteor.publishComposite 'inventory', (filter, options) ->
   filter = filter || {}
   unless Roles.userIsInRole @userId, 'admin'
     # Non-admin/DM users can only view their own items.
-    filter.owner = Meteor.users.findOne(@userId).username
+    filter.owner = Meteor.users.findOne(@userId)?.username
 
   [itemSet, facets] = Inventory.findWithFacets filter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
@@ -33,7 +33,7 @@ Meteor.publishComposite 'newInventory', (filter, time) ->
   _.extend filter, { enteredAtTimestamp: { $gt: time } }
 
   unless Roles.userIsInRole @userId, 'admin'
-    filter.owner = Meteor.users.findOne(@userId).username
+    filter.owner = Meteor.users.findOne(@userId)?.username
 
   {
     find: ->
