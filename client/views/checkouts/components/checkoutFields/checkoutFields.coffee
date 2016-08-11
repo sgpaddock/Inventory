@@ -30,6 +30,12 @@ Template.checkoutActionsAdminField.events
     $("##{modal}").modal('show')
 
 Template.checkoutActionsAdminField.helpers
+  awaitingApproval: ->
+    Checkouts.find({
+      assetId: @documentId
+      approval: { $exists: false }
+    }).count()
+
   checkedOut: ->
     Checkouts.findOne({
       assetId: @documentId
