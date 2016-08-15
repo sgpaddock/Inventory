@@ -8,12 +8,22 @@ Meteor.users.allow
   remove: -> false
 
 Inventory.allow
-  insert: -> true
-  update: -> true
+  insert: (userId, doc) ->
+    Roles.userIsInRole userId, 'admin'
+  update: (userId, doc, fields, modifier) ->
+    Roles.userIsInRole userId, 'admin'
   remove: -> false
 
 
 Checkouts.allow
   insert: (userId, doc) -> !(doc.approval) or doc.approval?.approverId is (userId or null)
-  update: (userId, doc, fields, modifier) -> true
+  update: (userId, doc, fields, modifier) ->
+    if !Roles.userIsInRole userId, 'admin'
+      return false
+    if _.intersection(['_id', 'assetId', 'assignedTo'], fields).length
+      return false
+    if modifier.$set?['approval.approverId'] and modifier.$set?['approval.approverId'] isnt userId
+      return false
+
+    true
   remove: -> false
