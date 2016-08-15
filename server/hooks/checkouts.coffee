@@ -36,7 +36,7 @@ scheduleCheckoutReminders = (userId, doc) ->
   scheduleMail
     email: user.mail
     subject: "Your checkout of item #{item.name} is due soon"
-    html: "Your expected return date for item #{item.name} is #{doc.schedule.expectedReturn}. Please have the item ready to return. It may be dropped off in POT 915, 923, or 951."
+    html: "Your expected return date for item #{item.name} is #{moment(doc.schedule.expectedReturn).format('LL')}. Please have the item ready to return. It may be dropped off in POT 915, 923, or 951."
     date: moment(doc.schedule.expectedReturn).subtract(3, 'days').hours(17).minutes(0).seconds(0).toDate() # 3 days before expected return, 5pm
 
   scheduleMail
