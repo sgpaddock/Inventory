@@ -76,7 +76,7 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
 
   [itemSet, facets] = Inventory.findWithFacets inventoryFilter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
-
+  aWeekAgo = moment().subtract(1, 'weeks').toDate()
   {
     find: ->
       Counts.publish this, 'checkoutCount', Inventory.find(inventoryFilter), { noReady: true }
@@ -93,7 +93,7 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
           FileRegistry.find { _id: { $in: ids } }
       }
 
-      # Checkout events after today
+      # Checkout events after a week ago, as well as any item that has been checked out and not returned.
       # TODO: How do we view checkout history?
       {
         find: (item) ->
@@ -104,12 +104,15 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
           Checkouts.find {
             assetId: item._id
             $or: [
-              { 'schedule.timeReserved': { $gte: new Date() } }
-              { 'schedule.expectedReturn': { $gte: new Date() } }
+              { 'schedule.timeReserved': { $gte: aWeekAgo } }
+              { 'schedule.expectedReturn': { $gte: aWeekAgo } }
+              { $and: [
+                { 'schedule.timeReserved': { $exists: true } }
+                { 'schedule.expectedReturn': { $exists: false } }
+              ] }
             ]
           }, fields
       }
-
       # Secondary publish for non-admin users to be able to see which checkouts are their own
       {
         find: (item) ->
@@ -117,8 +120,12 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
             assignedTo: @userId
             assetId: item._id
             $or: [
-              { 'schedule.timeReserved': { $gte: new Date() } }
-              { 'schedule.expectedReturn': { $gte: new Date() } }
+              { 'schedule.timeReserved': { $gte: aWeekAgo } }
+              { 'schedule.expectedReturn': { $gte: aWeekAgo } }
+              { $and: [
+                { 'schedule.timeReserved': { $exists: true } }
+                { 'schedule.expectedReturn': { $exists: false } }
+              ] }
             ]
       }
 
