@@ -50,7 +50,12 @@
                                 <div>
                                 {{#unless currentlyCheckedOut}}
                                   {{#unless schedule.timeCheckedIn}}
-                                    <button type="button" data-action="checkOut" class="btn btn-xs btn-primary checkout-action-btn">Check Out</button>
+                                    {{#if cancellingThisCheckout}}
+                                      <button type="button" data-action="cancelResConfirm" class="btn btn-xs btn-primary checkout-action-btn">Confirm Cancellation</button>
+                                    {{else}}
+                                      <button type="button" data-action="checkOut" class="btn btn-xs btn-primary checkout-action-btn">Check Out</button>
+                                      <button type="button" data-action="cancelRes" class="btn btn-xs btn-danger checkout-action-btn">Cancel Reservation</button>
+                                    {{/if}}
                                   {{/unless}}
                                 {{/unless}}
                                 </div>

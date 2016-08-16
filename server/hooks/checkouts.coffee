@@ -1,4 +1,4 @@
-scheduleMail = (mail) ->
+@scheduleMail = (mail) ->
   if mail.date <= new Date()
     Email.send
       from: Meteor.settings.email.fromEmail
