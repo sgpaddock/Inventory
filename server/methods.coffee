@@ -32,13 +32,13 @@ Meteor.methods
       Changelog.remove { itemtId: itemId }
       Checkouts.remove { assetId: itemId }
 
-  cancelReservation: (resId) ->
+  cancelCheckout: (checkoutId) ->
     if Roles.userIsInRole @userId, 'admin'
-      checkout = Checkouts.findOne(resId)
+      checkout = Checkouts.findOne(checkoutId)
       user = Meteor.users.findOne(checkout.assignedTo)
       item = Inventory.findOne(checkout.assetId)
       console.log "User #{@userId} cancelling reservation: #{JSON.stringify(checkout)} for #{user.username}"
-      Checkouts.remove { _id: resId }
+      Checkouts.remove { _id: checkoutId }
       scheduleMail
         email: user.mail
         subject: "Your checkout of item #{item?.name} has been cancelled."

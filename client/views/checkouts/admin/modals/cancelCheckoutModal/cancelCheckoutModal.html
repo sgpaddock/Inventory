@@ -1,0 +1,45 @@
+<template name="cancelCheckoutModal">
+    <div class="modal fade" id="cancelCheckoutModal">
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Check In Item {{item.name}}</h4>
+          </div>
+          <div class="modal-body">
+            <span class="error">{{error}}</span>
+            <h5>
+              Please confirm your cancellation of this item:
+            </h5>
+            {{#autoForm collection="Inventory" id="assetForm" type="update" doc=item}}
+              {{> afQuickField name='name' disabled=true}}
+              {{> afQuickField name='propertyTag' disabled=true}}
+              {{> afQuickField name='serialNo' disabled=true}}
+              {{> afQuickField name='model' disabled=true}}
+            {{/autoForm}}
+            {{#with checkout}}
+              <div class="form-group">
+                <label for="displayName" class="control-label">Checked Out By:</label>
+                <input type="text" class="form-control" value="{{displayName}}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="timeCheckedOut" class="control-label">Time Reserved:</label>
+                <input type="text" class="form-control" value="{{commonDateFormatter schedule.timeReserved}}" disabled>
+              </div>
+              <div class="form-group">
+                <label for="expectedReturn" class="control-label">Expected Return:</label>
+                <input type="text" class="form-control" value="{{commonDateFormatter schedule.expectedReturn}}" disabled>
+              </div>
+              <br>
+              <div class="form-group">
+                <label class="control-label">Please type 'Cancel' in the field below to confirm cancellation.</label>
+                <input type="text" name="cancel" class="form-control">
+              </div>
+              <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+              <button type="button" data-action="cancel" class="btn btn-danger pull-right">Cancel</button>
+            {{/with}}
+          </div>
+        </div>
+      </div>
+    </div>
+</template>

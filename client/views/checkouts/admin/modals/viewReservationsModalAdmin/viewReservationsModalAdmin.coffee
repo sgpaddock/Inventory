@@ -4,7 +4,6 @@ Template.viewReservationsModalAdmin.helpers
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
   rejectingThisCheckout: -> Template.instance().rejecting.get() is @_id
-  cancellingThisCheckout: -> Template.instance().cancelling.get() is @_id
   currentlyCheckedOut: ->
     Checkouts.findOne({
       assetId: @assetId
@@ -40,10 +39,8 @@ Template.viewReservationsModalAdmin.events
     tpl.rejecting.set @_id
 
   'click button[data-action=cancelRes]': (e, tpl) ->
-    tpl.cancelling.set @_id
-
-  'click button[data-action=cancelResConfirm]': (e, tpl) ->
-    Meteor.call 'cancelReservation', @_id
+    Blaze.renderWithData Template.cancelCheckoutModal, { assetId: @assetId, checkoutId: @_id }, $('body').get(0)
+    $('#cancelCheckoutModal').modal('show')
 
   'click button[data-action=rejectConfirm]': (e, tpl) ->
     Checkouts.update @_id, { $set: {
@@ -59,4 +56,3 @@ Template.viewReservationsModalAdmin.onCreated ->
   @error = new ReactiveVar
   @checkSuccess = new ReactiveVar
   @rejecting = new ReactiveVar null
-  @cancelling = new ReactiveVar null
