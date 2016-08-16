@@ -11,7 +11,7 @@ Template.reserveModalAdmin.rendered = ->
     todayHighlight: true
     orientation: "top" # up is down
     beforeShowDay: (date) ->
-      if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date }, 'approval.approved': { $ne: false }})
+      if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date, }, 'schedule.timeReturned': { $exists: false }, 'approval.approved': { $ne: false }})
         return { enabled: false, classes: "datepicker-date-reserved", tooltip: "Reserved" }
   })
 
@@ -90,6 +90,7 @@ insertCheckout = (e, tpl, userId) ->
     'approval.approved': { $ne: false }
     'schedule.timeReserved': { $lte: expectedReturn }
     'schedule.expectedReturn': { $gte: timeReserved }
+    'schedule.timeReturned': { $exists: false }
   }
   if checkout
     tpl.error.set('This reservation would overlap with another. Please consider a different item or reservation window.')
