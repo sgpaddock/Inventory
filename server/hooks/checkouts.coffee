@@ -48,6 +48,18 @@ scheduleCheckoutReminders = (userId, doc) ->
 Checkouts.after.insert (userId, doc) ->
   if doc.approval?.approved
     scheduleCheckoutReminders userId, doc
+  else
+    users = Roles.getUsersInRole('admin', Roles.GLOBAL_GROUP, { 'notificationSettings.notifyOnNewCheckout': true }).fetch()
+    emails = _.pluck users, 'mail'
+    item = Inventory.findOne(doc.assetId)
+    requester = Meteor.users.findOne(doc.assignedTo)
+    scheduleMail
+      email: emails
+      subject: "New checkout request for item #{item.name}"
+      html: "Requester #{requester.username} requested item #{item.name} for checkout from
+      #{moment(doc.schedule.timeReserved).format('LL')} to #{moment(doc.schedule.expectedReturn).format('LL')}.
+      Review checkout requests at <a href='#{Meteor.absoluteUrl()}checkouts'>#{Meteor.absoluteUrl()}checkouts</a>."
+      date: new Date()
 
 Checkouts.after.update (userId, doc, fieldNames, modifier, options) ->
   # Check if this is an update approving/rejecting a request. If so, send the appropriate email.

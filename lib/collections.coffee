@@ -239,6 +239,12 @@ Meteor.users.attachSchema new SimpleSchema
     optional: true
     label: "Roles"
     blackbox: true
+  notificationSettings:
+    type: Object
+    optional: true
+  'notificationSettings.notifyOnNewCheckout':
+    type: Boolean
+    
 
 @Models = new Mongo.Collection 'models'
 @Models.attachSchema new SimpleSchema
