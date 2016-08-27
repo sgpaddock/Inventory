@@ -1,6 +1,5 @@
 Template.userDashboard.helpers
-  notificationSettings: ->
-    Meteor.user()?.notificationSettings
+  notificationSettings: -> Meteor.user()?.notificationSettings || {}
   saved: -> Template.instance().saved.get()
   user: -> Meteor.user()
   isAdmin: -> Roles.userIsInRole Meteor.userId(), 'admin'
