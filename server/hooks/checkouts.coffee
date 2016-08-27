@@ -49,8 +49,8 @@ Checkouts.after.insert (userId, doc) ->
   if doc.approval?.approved
     scheduleCheckoutReminders userId, doc
   else
-    users = Roles.getUsersInRole('admin', Roles.GLOBAL_GROUP, { 'notificationSettings.notifyOnNewCheckout': true }).fetch()
-    emails = _.pluck users, 'mail'
+    users = Roles.getUsersInRole('admin').fetch()
+    emails = _.pluck _.filter(users, (u) -> u.notificationSettings?.notifyOnNewCheckout), 'mail'
     item = Inventory.findOne(doc.assetId)
     requester = Meteor.users.findOne(doc.assignedTo)
     scheduleMail
