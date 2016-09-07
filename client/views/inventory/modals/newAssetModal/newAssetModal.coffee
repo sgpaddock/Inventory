@@ -77,6 +77,7 @@ Template.addAssetQuickField.helpers
 # Static departments for the dropdown.
 departments = [
   'AAAS'
+  'Advising'
   'Air Force'
   'American Studies'
   'Anthropology'
@@ -100,6 +101,7 @@ departments = [
   'Linguistics'
   'Mathematics'
   'MCLLC'
+  'OPSVAW'
   'Physics and Astronomy'
   'Philosophy'
   'Political Science'
