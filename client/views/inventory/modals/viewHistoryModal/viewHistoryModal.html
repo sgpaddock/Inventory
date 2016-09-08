@@ -10,6 +10,13 @@
           <div class="modal-body"> 
             <div class="row">
               <div class="col-xs-12">
+                {{! First item is the item entry }}
+                <div class="row">
+                  <div class="col-md-12">
+                    {{timestampFormatter enteredAtTimestamp}}:
+                    <strong>{{usernameFromId enteredByUserId}}</strong> entered this item into the database
+                  </div>
+                </div>
                 {{#each changelog}}
                   <div class="row">
                     <div class="col-md-12">
