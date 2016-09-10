@@ -42,6 +42,9 @@ setup = ->
     filters = context.getFilters()
     if filters.$text then delete filters.$text
     return filters
+
+  # Allow passing in a function to clear the result set.
+  context.clearFilters = @data.clearFilters || @data.settings.clearFilters || -> null
   @context = context
 
 Template.inventoryTable.helpers
@@ -112,6 +115,9 @@ Template.inventoryTable.events
 
     newSkip = Math.max skip - pageLimit, 0
     Template.instance().context.skip.set(newSkip)
+
+  'click a[data-action=clearFilters]': (e, tpl) ->
+    tpl.context.clearFilters()
 
 
 Template.inventoryTable.rendered = ->

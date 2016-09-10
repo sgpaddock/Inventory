@@ -1,3 +1,6 @@
+clearFilters = ->
+  Router.go '/inventory'
+
 getFilters = ->
   filters = {
     department: Iron.query.get 'department'
@@ -38,6 +41,7 @@ Template.inventory.helpers
       subscription: "inventory"
       class: "autotable table table-condensed"
       filters: getFilters
+      clearFilters: clearFilters
     }
 
 Template.inventory.events
