@@ -27,7 +27,7 @@ Template.newAssetModal.events
       else
         if tpl.$(e.currentTarget).attr('name') is 'close'
           $('#newAssetModal').modal('hide')
-        else
+        else if tpl.$(e.currentTarget).attr('name') is 'clear'
           tpl.$('select').val('')
           tpl.$('input[type=checkbox]').attr('checked', false)
           tpl.$('input').val('')
