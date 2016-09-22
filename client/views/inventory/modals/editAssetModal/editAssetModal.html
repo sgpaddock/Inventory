@@ -16,7 +16,11 @@
                   {{> afQuickField name='serialNo'}}
                   {{> afQuickField name='model'}}
                   {{> afQuickField name='department' options=departments}}
-                  {{> afQuickField name='location'}}
+                  {{> afQuickField name='roomNumber'}}
+                  <div class="form-group">
+                    <label for="building" class="control-label">Building</label>
+                    {{> inputAutocomplete type="text" name="building" data-required=true data-schema-key="building" class="form-control" settings=buildingSettings value=building}}
+                  </div>
 
                   <!-- Owner w/ LDAP Username Check -->
                   <div class="form-group">

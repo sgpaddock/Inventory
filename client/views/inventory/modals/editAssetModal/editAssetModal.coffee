@@ -1,4 +1,4 @@
-fields = [ 'name', 'propertyTag', 'serialNo', 'model', 'department', 'location', 'owner' ]
+fields = [ 'name', 'propertyTag', 'serialNo', 'model', 'department', 'roomNumber', 'building', 'owner' ]
 Template.editAssetModal.helpers
   item: -> Inventory.findOne(@docId)
   file: -> FileRegistry.findOne(@fileId)
@@ -33,6 +33,7 @@ Template.editAssetModal.events
     checkUsername tpl
 
 Template.editAssetModal.created = ->
+  @subscribe 'buildings'
   @subscribe 'item', @data.docId
 
 checkUsername = (tpl, winCb, failCb) ->

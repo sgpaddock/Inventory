@@ -170,3 +170,6 @@ Meteor.publishComposite 'upcomingItems', ->
 Meteor.publish 'models', ->
   if Roles.userIsInRole @userId, 'admin'
     Models.find {}, { limit: 100 }
+Meteor.publish 'buildings', ->
+  if Roles.userIsInRole @userId, 'admin'
+    Buildings.find {}, { limit: 100 }

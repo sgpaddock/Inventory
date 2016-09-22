@@ -1,8 +1,9 @@
-fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'location', 'owner', 'name' ]
+fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name' ]
 
 Template.newAssetModal.onCreated ->
   @error = new ReactiveVar ""
   @subscribe 'models'
+  @subscribe 'buildings'
 
 Template.newAssetModal.events
   'hidden.bs.modal': (e, tpl) ->

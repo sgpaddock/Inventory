@@ -1,6 +1,9 @@
 <template name="inventory">
   <button type="button" name="newAssetButton" class="btn btn-primary">Add New Asset</button>
   {{> inventoryFilters}}
+  <div class="pull-right">
+    Show <input name="pageLimit" type="number" value="{{pageLimit}}" maxlength=3> items per page
+  </div>
   {{> inventoryTable settings=tableSettings}}
 </template>
 

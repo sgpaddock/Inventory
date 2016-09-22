@@ -39,6 +39,7 @@ SimpleSchema.messages {
   roomNumber:
     type: String
     optional: true
+    label: "Room Number"
   building:
     type: String
     optional: true
@@ -259,6 +260,13 @@ Meteor.users.attachSchema new SimpleSchema
 @Models.attachSchema new SimpleSchema
   # Collection storing model names for autocompleting
   model:
+    type: String
+  lastUse:
+    type: new Date()
+
+@Buildings = new Mongo.Collection 'buildings'
+@Buildings.attachSchema new SimpleSchema
+  building:
     type: String
   lastUse:
     type: new Date()

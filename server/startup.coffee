@@ -5,5 +5,6 @@ Meteor.startup ->
     serialNo: "text"
     model: "text"
     owner: "text"
-    location: "text"
+    roomNumber: "text"
+    building: "text"
     department: "text"

@@ -33,6 +33,7 @@ setup = ->
   # User defined settings
   context.class = @data.class || @data.settings.class || 'autotable table table-condensed'
   context.pageLimit = @data.pageLimit || @data.settings.pageLimit || 20
+  if context.pageLimit < 1 then context.pageLimit = 1
 
   context.skip = new ReactiveVar(0)
   context.getFilters = @data.filters || @data.settings.filters || -> {}

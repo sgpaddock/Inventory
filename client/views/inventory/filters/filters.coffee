@@ -19,7 +19,7 @@ Template.inventoryFilters.helpers
     [
       { key: 'department', label: 'Department' }
       { key: 'owner', label: 'Owner' }
-      { key: 'location', label: 'Location' }
+      { key: 'building', label: 'Building' }
       { key: 'model', label: 'Model' }
     ]
   value: ->
