@@ -1,5 +1,5 @@
 Meteor.startup ->
-  Inventory._ensureIndex
+  Inventory._ensureIndex {
     name: "text"
     propertyTag: "text"
     serialNo: "text"
@@ -8,3 +8,4 @@ Meteor.startup ->
     roomNumber: "text"
     building: "text"
     department: "text"
+  }, { name: "invTextIndex" }
