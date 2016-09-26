@@ -6,9 +6,9 @@ Meteor.users.allow
 
 Inventory.allow
   insert: (userId, doc) ->
-    Roles.userIsInRole userId, 'admin'
+    Roles.userIsInRole(userId, 'admin') and not _.contains(fields, 'notes')
   update: (userId, doc, fields, modifier) ->
-    Roles.userIsInRole userId, 'admin'
+    Roles.userIsInRole(userId, 'admin') and not _.contains(fields, 'notes')
   remove: -> false
 
 
