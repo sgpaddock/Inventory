@@ -91,8 +91,10 @@ SimpleSchema.messages {
       afFieldInput:
         type: 'textarea'
         rows: 3
-  'notes.$.enteredByUserId'
+  'notes.$.enteredByUserId':
     type: String
+  'notes.$.enteredAtTimestamp':
+    type: new Date()
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema

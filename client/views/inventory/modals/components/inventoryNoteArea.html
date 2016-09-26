@@ -1,0 +1,32 @@
+<template name="inventoryNoteArea">
+  <div class="panel panel-primary">
+    <div class="panel-heading">Notes</div>
+    <div class="panel-body">
+      {{#each notes}}
+        <div class="row">
+          <div class="col-xs-4 col-md-2">
+            <label class="control-label pull-right">
+              {{> userPortrait userId=enteredByUserId}}
+              <small style="font-size: 0.7em; font-weight: lighter;">
+                {{>timeFromNow date=enteredAtTimestamp}}
+              </small>
+            </label>
+          </div>
+          <div class="col-xs-8 col-md-10">
+            <div class="well well-sm note-well" style="text-align: left;">
+              {{#each noteParagraphs}}
+                <p>{{linkify this}}</p>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      {{/each}}
+      <div class="form-group">
+        <textarea class="form-control" rows=3 placeholder="Enter a note..."></textarea>
+        {{#if _id}}
+          <button type="button" class="btn btn-sm btn-default pull-right">Add Note</button>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</template>

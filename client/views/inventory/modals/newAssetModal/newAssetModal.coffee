@@ -27,6 +27,8 @@ Template.newAssetModal.events
       if err
         tpl.error.set err
       else
+        if tpl.$('textarea').val()
+          Meteor.call 'addInventoryNote', res, tpl.$('textarea').val()
         if tpl.$(e.currentTarget).attr('name') is 'close'
           $('#newAssetModal').modal('hide')
         else if tpl.$(e.currentTarget).attr('name') is 'clear'

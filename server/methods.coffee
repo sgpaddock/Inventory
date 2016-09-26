@@ -45,3 +45,13 @@ Meteor.methods
         html: "Your checkout of item #{item?.name} for #{moment(checkout.schedule.timeReserved).format('LL')} has been cancelled.
         If you feel this is in error, please submit a help request."
         date: new Date()
+
+  addInventoryNote: (inventoryId, message) ->
+    if Roles.userIsInRole @userId, 'admin'
+      Inventory.update inventoryId, {
+        $addToSet: { notes: {
+          message: message
+          enteredByUserId: @userId
+          enteredAtTimestamp: new Date()
+        } }
+      }
