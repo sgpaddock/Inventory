@@ -31,6 +31,7 @@
           </div>
           {{> addAssetQuickField name='name'}}
           {{> addAssetQuickField name='checkout'}}
+          {{> addAssetQuickField name='enteredIntoEbars'}}
         </div>
         <div class="modal-footer">
           <button type="button" data-action="submit" name="clear" class="btn btn-primary pull-left">Add Item and Clear</button>
@@ -44,12 +45,17 @@
 
 <template name="addAssetQuickField">
   <div class="form-group">
-    <label for="{{name}}" class="control-label">
-      {{label}} {{#unless isBoolean}}{{#if required}} <span class="required">*</span>{{/if}}{{/unless}}
-    </label>
     {{#if isBoolean}}
-      <input type="checkbox" name="{{name}}" data-schema-key="{{name}}">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="{{name}}" data-schema-key="{{name}}">
+          {{label}}
+        </label>
+      </div>
       {{else}}
+      <label for="{{name}}" class="control-label">
+        {{label}}{{#if required}}<span class="required">*</span>{{/if}}
+      </label>
       {{#if options}}
         <select name="{{name}}" data-required="{{required}}" data-schema-key="{{name}}" class="form-control">
           <option selected></option>

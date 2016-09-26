@@ -70,9 +70,10 @@ SimpleSchema.messages {
     ]
   'attachments.$.fileId':
     type: String
-  notes:
-    type: String
-    optional: true
+  enteredIntoEbars:
+    label: "Entered into Ebars?"
+    type: Boolean
+    defaultValue: false
   barcode:
     type: String
     optional: true
@@ -80,6 +81,18 @@ SimpleSchema.messages {
     label: "Available for Checkout?"
     type: Boolean
     defaultValue: false
+
+  notes:
+    type: [Object]
+    optional: true
+  'notes.$.message':
+    type: String
+    autoform:
+      afFieldInput:
+        type: 'textarea'
+        rows: 3
+  'notes.$.enteredByUserId'
+    type: String
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema

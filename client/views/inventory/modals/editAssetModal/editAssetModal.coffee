@@ -18,6 +18,7 @@ Template.editAssetModal.events
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
+    obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
     Inventory.update tpl.data.docId, { $set: obj }
     $('#editAssetModal').modal('hide')
 

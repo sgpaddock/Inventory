@@ -22,6 +22,7 @@ Template.newAssetModal.events
       obj[f] = $el.val()
 
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
+    obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
     Inventory.insert obj, (err, res) ->
       if err
         tpl.error.set err
@@ -71,9 +72,9 @@ checkUsername = (tpl, winCb, failCb) ->
         if failCb then failCb()
 
 Template.addAssetQuickField.helpers
-  isBoolean: -> Inventory.simpleSchema().schema(@name).type.name is "Boolean"
+  isBoolean: -> Inventory.simpleSchema().schema(@name)?.type.name is "Boolean"
   label: -> Inventory.simpleSchema().label(@name)
-  required: -> !Inventory.simpleSchema().schema(@name).optional?
+  required: -> !Inventory.simpleSchema().schema(@name)?.optional?
 
 # Static departments for the dropdown.
 departments = [
