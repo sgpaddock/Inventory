@@ -80,11 +80,7 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
   {
     find: ->
       Counts.publish this, 'checkoutCount', Inventory.find(inventoryFilter), { noReady: true }
-      Inventory.find
-        $or: [
-          { _id: { $in: itemSet } }
-          { checkout: true } # In case an item is marked available for checkout after render
-        ]
+      Inventory.find { _id: { $in: itemSet } }
     children: [
 
       {
