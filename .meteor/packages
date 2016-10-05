@@ -44,3 +44,4 @@ reactive-var
 rajit:bootstrap3-datepicker
 percolate:synced-cron
 http
+percolate:migrations

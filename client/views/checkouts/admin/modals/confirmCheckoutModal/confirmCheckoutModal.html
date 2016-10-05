@@ -7,9 +7,13 @@
           <h4 class="modal-title">Check Out Item {{name}}</h4>
         </div>
         <div class="modal-body">
-          <h5>
-            Please sign in to confirm your receipt of the item. Completing this process constitutes acceptance of the Hive Checkout Terms.
-          </h5>
+          <strong>Please review the terms and sign in to confirm your receipt of the item.</strong>
+          <div>
+            <p>This device is the property of the University of Kentucky College of Arts & Sciences HIVE, and is issued to employees for the purpose of conducting school business.
+              It is intended only for the use of the school employee to whom it is assigned.</p>
+            <p>The device may be taken home or to other locations after school hours by the employee. However, the employee is responsible, at all times, for the care
+              and appropriate use of the device and for replacing any equipment that is damaged during the checkout period.</p>
+          </div>
           {{#if error}}
             <div class="alert alert-danger">{{error}}</div>
           {{/if}}
@@ -20,6 +24,12 @@
             <div class="alert alert-success">Your reservation is confirmed.</div>
           {{/if}}
           <form>
+            <div class="form-group">
+              <label class="cursor-pointer">
+                <input type="checkbox" name="agreed" class="right-padding">
+                <strong> I certify that I have received the University-owned items listed and will comply with the College's policies regarding computer equipment.</strong>
+              </label>
+            </div>
             <div class="form-group">
               <label for="ldap" class="control-label">Username:</label>
               <input type="text" class="form-control login-input" name="ldap" value="{{assignedToUsername}}">

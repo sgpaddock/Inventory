@@ -30,7 +30,7 @@ inventoryFilters = ->
 Template.checkoutsUser.helpers
   settings: ->
     {
-      fields: ['name', 'modelNo', 'deviceType', 'manufacturer',
+      fields: ['name', 'model',
         { key: 'available', label: 'Status', tpl: Template.checkoutStatusField, sortable: false }
         { key: 'actions', label: 'Actions', tpl: Template.checkoutActionsUserField, sortable: false }
       ]

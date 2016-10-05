@@ -8,7 +8,7 @@ Meteor.publishComposite 'inventory', (filter, options) ->
   filter = filter || {}
   unless Roles.userIsInRole @userId, 'admin'
     # Non-admin/DM users can only view their own items.
-    filter.owner = Meteor.users.findOne(@userId).username
+    filter.owner = Meteor.users.findOne(@userId)?.username
 
   [itemSet, facets] = Inventory.findWithFacets filter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
@@ -33,7 +33,7 @@ Meteor.publishComposite 'newInventory', (filter, time) ->
   _.extend filter, { enteredAtTimestamp: { $gt: time } }
 
   unless Roles.userIsInRole @userId, 'admin'
-    filter.owner = Meteor.users.findOne(@userId).username
+    filter.owner = Meteor.users.findOne(@userId)?.username
 
   {
     find: ->
@@ -76,15 +76,11 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
 
   [itemSet, facets] = Inventory.findWithFacets inventoryFilter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
-
+  aWeekAgo = moment().subtract(1, 'weeks').toDate()
   {
     find: ->
       Counts.publish this, 'checkoutCount', Inventory.find(inventoryFilter), { noReady: true }
-      Inventory.find
-        $or: [
-          { _id: { $in: itemSet } }
-          { checkout: true } # In case an item is marked available for checkout after render
-        ]
+      Inventory.find { _id: { $in: itemSet } }
     children: [
 
       {
@@ -92,15 +88,40 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
           ids = _.pluck item.attachments, 'fileId' # not reactive
           FileRegistry.find { _id: { $in: ids } }
       }
+
+      # Checkout events after a week ago, as well as any item that has been checked out and not returned.
+      # TODO: How do we view checkout history?
       {
         find: (item) ->
-          # Checkout events after today
-          # TODO: How do we view checkout history?
-          Checkouts.find
+
+          fields = {}
+          unless Roles.userIsInRole @userId, 'admin'
+            fields = { fields: { assignedTo: 0, 'approver.approverId': 0 } }
+          Checkouts.find {
             assetId: item._id
             $or: [
-              { 'schedule.timeReserved': { $gte: new Date() } }
-              { 'schedule.expectedReturn': { $gte: new Date() } }
+              { 'schedule.timeReserved': { $gte: aWeekAgo } }
+              { 'schedule.expectedReturn': { $gte: aWeekAgo } }
+              { $and: [
+                { 'schedule.timeReserved': { $exists: true } }
+                { 'schedule.expectedReturn': { $exists: false } }
+              ] }
+            ]
+          }, fields
+      }
+      # Secondary publish for non-admin users to be able to see which checkouts are their own
+      {
+        find: (item) ->
+          Checkouts.find
+            assignedTo: @userId
+            assetId: item._id
+            $or: [
+              { 'schedule.timeReserved': { $gte: aWeekAgo } }
+              { 'schedule.expectedReturn': { $gte: aWeekAgo } }
+              { $and: [
+                { 'schedule.timeReserved': { $exists: true } }
+                { 'schedule.expectedReturn': { $exists: false } }
+              ] }
             ]
       }
 
@@ -141,3 +162,10 @@ Meteor.publishComposite 'upcomingItems', ->
       }
     ]
   }
+
+Meteor.publish 'models', ->
+  if Roles.userIsInRole @userId, 'admin'
+    Models.find {}, { limit: 100 }
+Meteor.publish 'buildings', ->
+  if Roles.userIsInRole @userId, 'admin'
+    Buildings.find {}, { limit: 100 }

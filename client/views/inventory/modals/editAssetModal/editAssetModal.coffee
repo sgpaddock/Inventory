@@ -1,4 +1,4 @@
-fields = [ 'name', 'propertyTag', 'serialNo', 'model', 'department', 'location', 'owner' ]
+fields = [ 'name', 'propertyTag', 'serialNo', 'model', 'department', 'roomNumber', 'building', 'owner' ]
 Template.editAssetModal.helpers
   item: -> Inventory.findOne(@docId)
   file: -> FileRegistry.findOne(@fileId)
@@ -18,6 +18,7 @@ Template.editAssetModal.events
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
+    obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
     Inventory.update tpl.data.docId, { $set: obj }
     $('#editAssetModal').modal('hide')
 
@@ -33,6 +34,7 @@ Template.editAssetModal.events
     checkUsername tpl
 
 Template.editAssetModal.created = ->
+  @subscribe 'buildings'
   @subscribe 'item', @data.docId
 
 checkUsername = (tpl, winCb, failCb) ->
@@ -53,6 +55,7 @@ checkUsername = (tpl, winCb, failCb) ->
 
 departments = [
   'AAAS'
+  'Advising'
   'Air Force'
   'American Studies'
   'Anthropology'
@@ -76,6 +79,7 @@ departments = [
   'Linguistics'
   'Mathematics'
   'MCLLC'
+  'OPSVAW'
   'Physics and Astronomy'
   'Philosophy'
   'Political Science'

@@ -37,6 +37,9 @@
       </thead>
       {{#if ready}}
         <tbody>
+          {{#unless records.count}}
+            No records found matching your filters. <a data-action="clearFilters">Clear your filters?</a>
+          {{/unless}}
           {{#each records}}
             <tr class="inventory-row {{rowClass}}" data-doc="{{_id}}">
               {{#each ../fields}}

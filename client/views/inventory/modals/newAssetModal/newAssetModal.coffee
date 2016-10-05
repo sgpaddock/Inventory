@@ -1,7 +1,9 @@
-fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'location', 'owner', 'name' ]
+fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name' ]
 
 Template.newAssetModal.onCreated ->
   @error = new ReactiveVar ""
+  @subscribe 'models'
+  @subscribe 'buildings'
 
 Template.newAssetModal.events
   'hidden.bs.modal': (e, tpl) ->
@@ -20,11 +22,19 @@ Template.newAssetModal.events
       obj[f] = $el.val()
 
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
+    obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
     Inventory.insert obj, (err, res) ->
       if err
         tpl.error.set err
       else
-        $('#newAssetModal').modal('hide')
+        if tpl.$('textarea').val()
+          Meteor.call 'addInventoryNote', res, tpl.$('textarea').val()
+        if tpl.$(e.currentTarget).attr('name') is 'close'
+          $('#newAssetModal').modal('hide')
+        else if tpl.$(e.currentTarget).attr('name') is 'clear'
+          tpl.$('select').val('')
+          tpl.$('input[type=checkbox]').attr('checked', false)
+          tpl.$('input').val('')
 
   'click button[data-action=checkUsername]': (e, tpl) ->
     checkUsername tpl
@@ -32,6 +42,19 @@ Template.newAssetModal.events
 Template.newAssetModal.helpers
   departments: -> departments
   error: -> Template.instance().error.get()
+  modelSettings: ->
+    {
+      position: 'bottom'
+      limit: 5
+      rules: [
+        token: ''
+        collection: Models
+        field: 'model'
+        template: Template.modelPill
+        matchAll: true
+      ]
+    }
+
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.
@@ -51,13 +74,14 @@ checkUsername = (tpl, winCb, failCb) ->
         if failCb then failCb()
 
 Template.addAssetQuickField.helpers
-  isBoolean: -> Inventory.simpleSchema().schema(@name).type.name is "Boolean"
+  isBoolean: -> Inventory.simpleSchema().schema(@name)?.type.name is "Boolean"
   label: -> Inventory.simpleSchema().label(@name)
-  required: -> !Inventory.simpleSchema().schema(@name).optional?
+  required: -> !Inventory.simpleSchema().schema(@name)?.optional?
 
 # Static departments for the dropdown.
 departments = [
   'AAAS'
+  'Advising'
   'Air Force'
   'American Studies'
   'Anthropology'
@@ -81,6 +105,7 @@ departments = [
   'Linguistics'
   'Mathematics'
   'MCLLC'
+  'OPSVAW'
   'Physics and Astronomy'
   'Philosophy'
   'Political Science'

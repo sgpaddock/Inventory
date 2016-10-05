@@ -1,7 +1,26 @@
 <template name="userDashboard">
-<div class="col-md-8 col-md-offset-2">
-  <h4>Preferences</h4>
-  <hr>
-</div>
+  <div class="col-md-8 col-md-offset-2">
+    <h4>Preferences</h4>
+    <hr>
+    {{#if isAdmin}}
+      {{#with notificationSettings}}
+        {{>settingsCheckbox name="notifyOnNewCheckout" option="Email me when there is a new checkout to be approved" setting=notifyOnNewCheckout}}
+      {{/with}}
+    {{/if}}
+    <div id="saved-message" class="pull-right">
+      {{#if saved}}
+        <span class="saved-preferences">Preferences saved. </span>
+      {{/if}}
+      <button type="button" class="btn btn-primary pull-right" data-action="submit">Save</button>
+    </div>
+  </div>
+</template>
 
+
+<template name="settingsCheckbox">
+  <div class="checkbox">
+    <label><input type="checkbox" value="" name="{{name}}" {{checked}}>
+      {{option}}
+    </label>
+  </div>
 </template>

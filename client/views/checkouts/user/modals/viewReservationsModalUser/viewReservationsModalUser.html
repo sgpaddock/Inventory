@@ -22,6 +22,7 @@
                     <tr>
                       <td>Reserved From</td>
                       <td>Expected Return</td>
+                      <td>Assigned To</td>
                       <td>Status</td>
                     </tr>
                   </thead>
@@ -30,9 +31,11 @@
                       <tr>
                         <td>{{numeralDateFormatter schedule.timeReserved}}</td>
                         <td>{{numeralDateFormatter schedule.expectedReturn}}</td>
+                        <td>{{> userPortrait userId=assignedTo class="in-row"}} {{usernameFromId assignedTo}}</td>
                         <td>
                           {{#if schedule.timeCheckedOut}}
                             {{#if schedule.timeReturned}}
+                              {{!-- If there's a time checked out and it's been returned, it's checked in. Else, it's still checked out. --}}
                               <span class="available">
                                 Checked In
                               </span>
@@ -41,12 +44,17 @@
                                 Checked Out
                               </span>
                             {{/if}}
+                          {{else}}
+                            {{!-- if not checked out or checked in, we look at approval states --}}
+                            {{#unless approval}}
+                              <span>Awaiting Approval</span>
                             {{else}}
-                            {{#if approval.approved}}
-                              <span class="unavailable">Reserved</span>
+                              {{#if approval.approved}}
+                                <span class="available">Reserved</span>
                               {{else}}
-                              <span class="unavailable">Awaiting Approval</span>
-                            {{/if}}
+                                <span class="unavailable">Rejected</span>
+                              {{/if}}
+                            {{/unless}}
                           {{/if}}
                         </td>
                       </tr>

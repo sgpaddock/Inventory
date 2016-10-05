@@ -1,8 +1,11 @@
+clearFilters = ->
+  Router.go '/inventory'
+
 getFilters = ->
   filters = {
     department: Iron.query.get 'department'
     owner: Iron.query.get 'owner'
-    location: Iron.query.get 'location'
+    building: Iron.query.get 'building'
     model: Iron.query.get 'model'
     $text: { $search: Iron.query.get 'search' }
   }
@@ -21,6 +24,7 @@ getFilters = ->
   return filters
 
 Template.inventory.helpers
+  pageLimit: -> Template.instance().pageLimit.get()
   tableSettings: ->
     fields =  [
       'propertyTag',
@@ -28,7 +32,8 @@ Template.inventory.helpers
       'model',
       { key: 'department', class: 'hidden-xs' }
       { key: 'owner', tpl: Template.ownerField },
-      'location',
+      'roomNumber'
+      'building'
       { key: 'attachments', tpl: Template.attachmentField, sortable: false, class: 'hidden-xs' }
     ]
     if Roles.userIsInRole Meteor.userId(), 'admin'
@@ -38,6 +43,8 @@ Template.inventory.helpers
       subscription: "inventory"
       class: "autotable table table-condensed"
       filters: getFilters
+      clearFilters: clearFilters
+      pageLimit: Template.instance().pageLimit.get()
     }
 
 Template.inventory.events
@@ -45,6 +52,12 @@ Template.inventory.events
     Blaze.render Template.newAssetModal, $('body').get(0)
     $('#newAssetModal').modal('show')
 
+  'change input[name=pageLimit]': (e, tpl) ->
+    tpl.pageLimit.set Number tpl.$('input[name=pageLimit]').val()
+
+
+Template.inventory.onCreated ->
+  @pageLimit = new ReactiveVar(20)
 Template.inventory.rendered = ->
   @autorun ->
     # Render attachment modal on query parameter change.

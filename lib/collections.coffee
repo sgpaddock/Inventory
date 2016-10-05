@@ -7,12 +7,10 @@ SimpleSchema.messages {
   name:
     optional: true
     type: String
-    denyUpdate: true
     label: "Asset Name"
   propertyTag:
     type: String
     optional: true
-    denyUpdate: true
     unique: true
   deviceType:
     type: String
@@ -20,7 +18,6 @@ SimpleSchema.messages {
   serialNo:
     type: String
     label: "Serial Number"
-    denyUpdate: true
   enteredByUserId:
     type: String
     denyUpdate: true
@@ -31,7 +28,6 @@ SimpleSchema.messages {
     optional: true # Will be taken care of by the server.
   model:
     type: String
-    denyUpdate: true
   department:
     type: String
   owner:
@@ -39,6 +35,16 @@ SimpleSchema.messages {
     optional: true
     custom: ->
       unless @isSet or @field('location')?.isSet
+        "locationOrOwnerRequired"
+  roomNumber:
+    type: String
+    optional: true
+    label: "Room Number"
+  building:
+    type: String
+    optional: true
+    custom: ->
+      unless @isSet or @field('owner')?.isSet
         "locationOrOwnerRequired"
   location:
     type: String
@@ -64,9 +70,10 @@ SimpleSchema.messages {
     ]
   'attachments.$.fileId':
     type: String
-  notes:
-    type: String
-    optional: true
+  enteredIntoEbars:
+    label: "Entered into Ebars?"
+    type: Boolean
+    defaultValue: false
   barcode:
     type: String
     optional: true
@@ -78,6 +85,20 @@ SimpleSchema.messages {
     label: "Delivered to User"
     type: Boolean
     defaultValue: false
+
+  notes:
+    type: [Object]
+    optional: true
+  'notes.$.message':
+    type: String
+    autoform:
+      afFieldInput:
+        type: 'textarea'
+        rows: 3
+  'notes.$.enteredByUserId':
+    type: String
+  'notes.$.enteredAtTimestamp':
+    type: new Date()
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema
@@ -175,6 +196,10 @@ SimpleSchema.messages {
   'approval.approverId':
     optional: true
     type: String
+  'approval.reason':
+    label: "Rejection Reason"
+    optional: true
+    type: String
   'schedule.timeCheckedOut':
     optional: true
     type: new Date()
@@ -244,3 +269,24 @@ Meteor.users.attachSchema new SimpleSchema
     optional: true
     label: "Roles"
     blackbox: true
+  notificationSettings:
+    type: Object
+    optional: true
+  'notificationSettings.notifyOnNewCheckout':
+    type: Boolean
+    
+
+@Models = new Mongo.Collection 'models'
+@Models.attachSchema new SimpleSchema
+  # Collection storing model names for autocompleting
+  model:
+    type: String
+  lastUse:
+    type: new Date()
+
+@Buildings = new Mongo.Collection 'buildings'
+@Buildings.attachSchema new SimpleSchema
+  building:
+    type: String
+  lastUse:
+    type: new Date()

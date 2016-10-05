@@ -1,6 +1,8 @@
 Inventory.before.insert (userId, doc) ->
   doc.enteredAtTimestamp = new Date()
   doc.enteredByUserId = userId
+  Buildings.upsert { building: doc.building }, { $set: { lastUse: new Date() } }
+  Models.upsert { model: doc.model }, { $set: { lastUse: new Date() } }
 
 Inventory.before.update (userId, doc, fieldNames, modifier, options) ->
   _.each fieldNames, (fn) ->

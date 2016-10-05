@@ -33,6 +33,7 @@ setup = ->
   # User defined settings
   context.class = @data.class || @data.settings.class || 'autotable table table-condensed'
   context.pageLimit = @data.pageLimit || @data.settings.pageLimit || 20
+  if context.pageLimit < 1 then context.pageLimit = 1
 
   context.skip = new ReactiveVar(0)
   context.getFilters = @data.filters || @data.settings.filters || -> {}
@@ -42,6 +43,9 @@ setup = ->
     filters = context.getFilters()
     if filters.$text then delete filters.$text
     return filters
+
+  # Allow passing in a function to clear the result set.
+  context.clearFilters = @data.clearFilters || @data.settings.clearFilters || -> null
   @context = context
 
 Template.inventoryTable.helpers
@@ -112,6 +116,9 @@ Template.inventoryTable.events
 
     newSkip = Math.max skip - pageLimit, 0
     Template.instance().context.skip.set(newSkip)
+
+  'click a[data-action=clearFilters]': (e, tpl) ->
+    tpl.context.clearFilters()
 
 
 Template.inventoryTable.rendered = ->

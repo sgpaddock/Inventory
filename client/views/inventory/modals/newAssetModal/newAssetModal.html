@@ -8,15 +8,22 @@
         </div>
         <div class="modal-body">
           <span class="error">{{error}}</span>
-          {{> addAssetQuickField name='serialNo'}}
-          {{> addAssetQuickField name='model'}}
-          {{> addAssetQuickField name='department' options=departments}}
           {{> addAssetQuickField name='propertyTag'}}
-          {{> addAssetQuickField name='location'}}
+          {{> addAssetQuickField name='serialNo'}}
+          <div class="form-group">
+            <label for="model" class="control-label">Model <span class="required">*</span></label>
+            {{> inputAutocomplete type="text" name="model" data-required=true data-schema-key="model" class="form-control" settings=modelSettings}}
+          </div>
+          {{> addAssetQuickField name='department' options=departments}}
+          {{> addAssetQuickField name='roomNumber'}}
+          <div class="form-group">
+            <label for="building" class="control-label">Building <span class="required">*</span></label>
+            {{> inputAutocomplete type="text" name="building" data-required=true data-schema-key="building" class="form-control" settings=buildingSettings}}
+          </div>
           <div class="form-group">
             <label for="owner" class="control-label">Owner:</label>
             <div class="input-group">
-              <input type="text" class="form-control" data-schema-key="owner">
+              {{> inputAutocomplete settings=userSettings data-schema-key="owner" class="form-control"}}
               <span class="input-group-btn">
                 <button type="button" class="btn btn-primary" data-action="checkUsername">Check</button>
               </span>
@@ -24,9 +31,13 @@
           </div>
           {{> addAssetQuickField name='name'}}
           {{> addAssetQuickField name='checkout'}}
+          {{> addAssetQuickField name='enteredIntoEbars'}}
+          {{> inventoryNoteArea}}
         </div>
         <div class="modal-footer">
-          <button type="button" data-action="submit" class="btn btn-primary">Add Item</button>
+          <button type="button" data-action="submit" name="clear" class="btn btn-primary pull-left">Add Item and Clear</button>
+          <button type="button" data-action="submit" name="addWithoutClear" class="btn btn-primary pull-left">Add Item Without Clear</button>
+          <button type="button" data-action="submit" name="close" class="btn btn-primary">Add Item and Close</button>
         </div>
       </div>
     </div>
@@ -35,12 +46,17 @@
 
 <template name="addAssetQuickField">
   <div class="form-group">
-    <label for="{{name}}" class="control-label">
-      {{label}} {{#unless isBoolean}}{{#if required}} <span class="required">*</span>{{/if}}{{/unless}}
-    </label>
     {{#if isBoolean}}
-      <input type="checkbox" name="{{name}}" data-schema-key="{{name}}">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="{{name}}" data-schema-key="{{name}}">
+          {{label}}
+        </label>
+      </div>
       {{else}}
+      <label for="{{name}}" class="control-label">
+        {{label}}{{#if required}}<span class="required">*</span>{{/if}}
+      </label>
       {{#if options}}
         <select name="{{name}}" data-required="{{required}}" data-schema-key="{{name}}" class="form-control">
           <option selected></option>

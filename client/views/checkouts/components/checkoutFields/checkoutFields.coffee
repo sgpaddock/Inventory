@@ -1,3 +1,11 @@
+Template.checkedOutToField.helpers
+  checkout: ->
+    Checkouts.findOne {
+      assetId: @documentId
+      'schedule.timeCheckedOut': { $exists: true }
+      'schedule.timeReturned': { $exists: false }
+    }
+
 Template.checkoutStatusField.helpers
   status: ->
     if Checkouts.findOne { assetId: @documentId, 'schedule.timeCheckedOut': { $exists: true }, 'schedule.timeReturned': { $exists: false } }
@@ -22,6 +30,12 @@ Template.checkoutActionsAdminField.events
     $("##{modal}").modal('show')
 
 Template.checkoutActionsAdminField.helpers
+  awaitingApproval: ->
+    Checkouts.find({
+      assetId: @documentId
+      approval: { $exists: false }
+    }).count()
+
   checkedOut: ->
     Checkouts.findOne({
       assetId: @documentId

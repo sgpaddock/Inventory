@@ -43,3 +43,27 @@ Meteor.methods
       }
 
       Inventory.update assetId, { $set: { delivered: true } }
+      
+  cancelCheckout: (checkoutId) ->
+    if Roles.userIsInRole @userId, 'admin'
+      checkout = Checkouts.findOne(checkoutId)
+      user = Meteor.users.findOne(checkout.assignedTo)
+      item = Inventory.findOne(checkout.assetId)
+      console.log "User #{@userId} cancelling reservation: #{JSON.stringify(checkout)} for #{user.username}"
+      Checkouts.remove { _id: checkoutId }
+      scheduleMail
+        email: user.mail
+        subject: "Your checkout of item #{item?.name} has been cancelled."
+        html: "Your checkout of item #{item?.name} for #{moment(checkout.schedule.timeReserved).format('LL')} has been cancelled.
+        If you feel this is in error, please submit a help request."
+        date: new Date()
+
+  addInventoryNote: (inventoryId, message) ->
+    if Roles.userIsInRole @userId, 'admin'
+      Inventory.update inventoryId, {
+        $addToSet: { notes: {
+          message: message
+          enteredByUserId: @userId
+          enteredAtTimestamp: new Date()
+        } }
+      }

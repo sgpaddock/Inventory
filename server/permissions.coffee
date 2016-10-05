@@ -1,19 +1,26 @@
 Meteor.users.allow
   insert: -> false
   update: (userId, doc, fields, modifier) ->
-    if doc._id is userId and _.intersection(['_id', 'department', 'displayName', 'employeeNumber', 'givenName', 'memberOf', 'services', 'status', 'title', 'username', 'roles'], fields).length is 0
-      return true
-    else
-      return false
+    doc._id is userId and _.intersection(['_id', 'department', 'displayName', 'employeeNumber', 'givenName', 'memberOf', 'services', 'status', 'title', 'username', 'roles'], fields).length is 0
   remove: -> false
 
 Inventory.allow
-  insert: -> true
-  update: -> true
+  insert: (userId, doc) ->
+    Roles.userIsInRole(userId, 'admin')
+  update: (userId, doc, fields, modifier) ->
+    Roles.userIsInRole(userId, 'admin') and not _.contains(fields, 'notes')
   remove: -> false
 
 
 Checkouts.allow
   insert: (userId, doc) -> !(doc.approval) or doc.approval?.approverId is (userId or null)
-  update: (userId, doc, fields, modifier) -> true
+  update: (userId, doc, fields, modifier) ->
+    if !Roles.userIsInRole userId, 'admin'
+      return false
+    if _.intersection(['_id', 'assetId', 'assignedTo'], fields).length
+      return false
+    if modifier.$set?['approval.approverId'] and modifier.$set?['approval.approverId'] isnt userId
+      return false
+
+    true
   remove: -> false

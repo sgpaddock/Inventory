@@ -19,25 +19,30 @@ Template.confirmCheckoutModal.events
       $(document.body).addClass('modal-open')
 
   'click button[data-action=login]': (e, tpl) ->
-    Meteor.call 'checkPassword',
-      tpl.$('input[name=ldap]').val(),
-      tpl.$('input[name=password]').val(),
-      (err, res) ->
-        if res
+    if tpl.$('input[name=agreed]').is(':checked')
+      tpl.error.set null
+      Meteor.call 'checkPassword',
+        tpl.$('input[name=ldap]').val(),
+        tpl.$('input[name=password]').val(),
+        (err, res) ->
+          if res
 
-          if tpl.$('input[name=ldap]').val() isnt Meteor.users.findOne(tpl.data.assignedTo)?.username
-            tpl.warning.set "User checking out is not the user this item was originally assigned to.
-             User #{tpl.$('input[name=ldap]').val()} will now be responsible for this item."
+            if tpl.$('input[name=ldap]').val() isnt Meteor.users.findOne(tpl.data.assignedTo)?.username
+              tpl.warning.set "User checking out is not the user this item was originally assigned to.
+               User #{tpl.$('input[name=ldap]').val()} will now be responsible for this item."
+            else
+              tpl.success.set(true)
+
+            Checkouts.update tpl.data._id, { $set:
+              'schedule.assignedTo': res
+              'schedule.timeCheckedOut': new Date()
+              'schedule.checkedOutBy': Meteor.userId()
+            }
           else
-            tpl.success.set(true)
+            tpl.error.set('Invalid credentials. Please try again.')
+    else
+      tpl.error.set "Please read and agree to the Hive Checkout Terms."
 
-          Checkouts.update tpl.data._id, { $set:
-            'schedule.assignedTo': res
-            'schedule.timeCheckedOut': new Date()
-            'schedule.checkedOutBy': Meteor.userId()
-          }
-        else
-          tpl.error.set('Invalid credentials. Please try again.')
 
   'keyup input': (e, tpl) ->
     if e.keyCode is 13

@@ -48,18 +48,24 @@
                               {{#if approval.approved}}
                                 <div>Approved by {{usernameFromId approval.approverId}}</div>
                                 <div>
-                                {{#unless currentlyCheckedOut}}
-                                  {{#unless schedule.timeCheckedIn}}
-                                    <button type="button" data-action="checkOut" class="btn btn-xs btn-primary checkout-action-btn">Check Out</button>
+                                  <button type="button" data-action="cancelRes" class="btn btn-xs btn-danger checkout-action-btn">Cancel</button>
+                                  {{#unless currentlyCheckedOut}}
+                                    {{#unless schedule.timeCheckedIn}}
+                                        <button type="button" data-action="checkOut" class="btn btn-xs btn-primary checkout-action-btn">Check Out</button>
+                                    {{/unless}}
                                   {{/unless}}
-                                {{/unless}}
                                 </div>
                                 {{else}}
                                 {{#if approval.approverId}}
                                   Rejected by {{usernameFromId approval.approverId}}
                                   {{else}}
-                                  <button type="button" data-action="approve" class="btn btn-xs btn-success checkout-action-btn">Approve</button>
-                                  <button type="button" data-action="reject" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
+                                  {{#if rejectingThisCheckout}}
+                                    <input type="text" name="reason" placeholder="Enter reason for rejection">
+                                    <button type="button" data-action="rejectConfirm" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
+                                  {{else}}
+                                    <button type="button" data-action="approve" class="btn btn-xs btn-success checkout-action-btn">Approve</button>
+                                    <button type="button" data-action="reject" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
+                                  {{/if}}
                                 {{/if}}
                               {{/if}}
                             {{/if}}

@@ -4,12 +4,29 @@
   {{/with}}
 </template>
 
+<template name="checkedOutToField">
+  {{#with checkout}}
+    <div class="field-area">
+      {{> userPortrait userId=assignedTo class="in-row" }}
+      <div class="inline-edit">
+        {{usernameFromId assignedTo}}
+      </div>
+    </div>
+  {{/with}}
+</template>
+
+
 <template name="checkoutActionsAdminField">
   {{#if checkedOut}}
     <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-modal="checkInModal">Check In</button>
   {{/if}}
   <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-modal="reserveModalAdmin">Create Reservation</button>
-  <button type="button" class="btn btn-sm" data-toggle="modal" data-modal="viewReservationsModalAdmin">View Reservations</button>
+  <button type="button" class="btn btn-sm" data-toggle="modal" data-modal="viewReservationsModalAdmin">
+    View Reservations
+    {{#if awaitingApproval}}
+      ({{awaitingApproval}} awaiting approval)
+    {{/if}}
+  </button>
 </template>
 
 <template name="checkoutActionsUserField">
