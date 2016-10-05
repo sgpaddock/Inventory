@@ -26,7 +26,11 @@
                         <strong>{{oldValue}}</strong> to <strong>{{newValue}}</strong>
                       {{/if}}
                       {{#if typeIs 'attachment'}}
-                        added attachment <strong>{{filename}}</strong>
+                        {{#if oldValue}}
+                          removed attachment <strong>{{oldValue}}</strong>
+                          {{else}}
+                          added attachment <strong>{{newValue}}</strong>
+                        {{/if}}
                       {{/if}}
                     </div>
                   </div>

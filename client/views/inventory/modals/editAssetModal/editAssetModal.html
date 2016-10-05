@@ -41,6 +41,7 @@
                       {{#each attachments}}
                         <div class="attachment">
                           <div class="attachment-link">
+                            <a data-action="removeAttachment"><span class="glyphicon glyphicon-remove unavailable"></span></a>
                             {{#if file.thumbnail}}
                               <img class="img-thumbnail" style="max-width: 64px; max-height:24px;" src="/file/{{file.thumbnail}}" />
                             {{/if}}

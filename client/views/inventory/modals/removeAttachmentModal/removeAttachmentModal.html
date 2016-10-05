@@ -1,0 +1,18 @@
+<template name="removeAttachmentModal">
+  <div class="modal fade" id="removeAttachmentModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Remove Attachment</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to remove attachment <strong>{{attachment.filename}}</strong>? This action cannot be undone.
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger pull-right" data-action="removeAttachment">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
