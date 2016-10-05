@@ -54,11 +54,11 @@
                   {{> afQuickField name='enteredIntoEbars'}}
                   {{#if delivered}}
                     <div class="form-group">
-                      <button class="btn btn-danger" data-action="setAsNotDelivered">Set as Not Delivered</button>
+                      <button class="btn btn-danger" data-action="setAsNotDelivered">Prompt for New Pickup Receipt</button>
                     </div>
                     {{else}}
                     <div class="form-group">
-                      <button class="btn btn-primary" data-action="deliverWithoutUser">Mark as Delivered without a User</button>
+                      <button class="btn btn-primary" data-action="deliverWithoutUser">Mark as Picked Up without a User</button>
                     </div>
                   {{/if}}
                   {{> inventoryNoteArea}}
