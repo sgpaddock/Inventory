@@ -82,7 +82,7 @@ SimpleSchema.messages {
     type: Boolean
     defaultValue: false
   delivered:
-    label: "Delivered to User"
+    label: "Delivered to User?"
     type: Boolean
     defaultValue: false
 
@@ -136,6 +136,7 @@ SimpleSchema.messages {
   deliveredByUserId:
     type: String
   deliveredTo:
+    optional: true
     type: String
   deliveredToUserId:
     type: String

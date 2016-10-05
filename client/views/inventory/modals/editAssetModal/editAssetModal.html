@@ -52,6 +52,15 @@
                   </div>
                   {{> afQuickField name='checkout'}}
                   {{> afQuickField name='enteredIntoEbars'}}
+                  {{#if delivered}}
+                    <div class="form-group">
+                      <button class="btn btn-danger" data-action="setAsNotDelivered">Set as Not Delivered</button>
+                    </div>
+                    {{else}}
+                    <div class="form-group">
+                      <button class="btn btn-primary" data-action="deliverWithoutUser">Mark as Delivered without a User</button>
+                    </div>
+                  {{/if}}
                   {{> inventoryNoteArea}}
                 {{/autoForm}}
                 <button type="button" data-action="delete" class="btn btn-danger pull-left">Delete Asset</button>

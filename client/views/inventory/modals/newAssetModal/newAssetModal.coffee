@@ -1,4 +1,5 @@
 fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name' ]
+boolFields = [ 'checkout', 'enteredIntoEbars', 'delivered' ]
 
 Template.newAssetModal.onCreated ->
   @error = new ReactiveVar ""
@@ -21,8 +22,8 @@ Template.newAssetModal.events
 
       obj[f] = $el.val()
 
-    obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
-    obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
+    _.each boolFields, (f) ->
+      obj[f] = tpl.$("[data-schema-key=#{f}]").is(':checked')
     Inventory.insert obj, (err, res) ->
       if err
         tpl.error.set err

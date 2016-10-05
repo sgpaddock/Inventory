@@ -33,6 +33,11 @@ Template.editAssetModal.events
   'click button[data-action=checkUsername]': (e, tpl) ->
     checkUsername tpl
 
+  'click button[data-action=setAsNotDelivered]': (e, tpl) ->
+    Meteor.call 'setAsNotDelivered', tpl.data.docId
+  'click button[data-action=deliverWithoutUser]': (e, tpl) ->
+    Meteor.call 'recordItemDeliveryWithoutUser', tpl.data.docId
+
 Template.editAssetModal.created = ->
   @subscribe 'buildings'
   @subscribe 'item', @data.docId
