@@ -27,6 +27,7 @@ Template.inventory.helpers
   pageLimit: -> Template.instance().pageLimit.get()
   tableSettings: ->
     fields =  [
+      { key: 'badges', label: " ", tpl: Template.inventoryBadges, sortable: false, class: 'hidden-xs' }
       'propertyTag',
       { key: 'serialNo', class: 'hidden-xs' }
       'model',

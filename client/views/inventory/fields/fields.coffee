@@ -1,3 +1,7 @@
+Template.inventoryBadges.helpers
+  item: -> Inventory.findOne(@documentId)
+  noteCount: -> if @notes?.length then @notes.length # just to prevent 0-count badges from showing
+
 Template.attachmentField.helpers
   file: ->
     FileRegistry.findOne(@fileId)

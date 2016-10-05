@@ -1,3 +1,15 @@
+<template name="inventoryBadges">
+  {{#with item}}
+    <span class="badge" title="{{noteCount}} notes">{{noteCount}}</span>
+    {{#if enteredIntoEbars}}
+      <span title="Entered into eBars" class="glyphicon glyphicon-barcode"></span>
+    {{/if}}
+    {{#if checkout}}
+      <span title="Available for Checkout" class="glyphicon glyphicon-export"></span>
+    {{/if}}
+  {{/with}}
+</template>
+
 <template name="ownerField">
   <div class="field-area">
     {{> userPortrait username=value class="in-row" }}
