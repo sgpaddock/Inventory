@@ -29,8 +29,54 @@ Meteor.methods
   deleteItem: (itemId) ->
     if Roles.userIsInRole @userId, 'admin'
       Inventory.remove(itemId)
-      Changelog.remove { itemtId: itemId }
+      Changelog.remove { itemId: itemId }
       Checkouts.remove { assetId: itemId }
+
+  recordItemDelivery: (assetId, username) ->
+    if Roles.userIsInRole @userId, 'admin'
+      Deliveries.insert {
+        assetId: assetId
+        deliveredByUserId: @userId
+        deliveredTo: username
+        deliveredToUserId: Meteor.users.findOne({username: username})?._id || null
+        timestamp: new Date()
+      }
+
+      Inventory.update assetId, { $set: { delivered: true } }
+
+  recordItemDeliveryWithoutUser: (assetId) ->
+    # Recording item as delivered without an actual user for bulk operations
+    if Roles.userIsInRole @userId, 'admin'
+      Deliveries.insert {
+        assetId: assetId
+        deliveredByUserId: @userId
+        timestamp: new Date()
+      }
+
+      Inventory.update assetId, { $set: { delivered: true } }
+      Changelog.insert
+        itemId: assetId
+        field: 'delivered'
+        type: 'field'
+        oldValue: 'false'
+        newValue: 'true'
+        timestamp: new Date()
+        userId: @userId
+        username: Meteor.users.findOne(@userId)?.username
+
+  setAsNotDelivered: (assetId) ->
+    # Mark an item as undelivered, so a new delivery can be recorded. Record a changelog event for the update
+    if Roles.userIsInRole @userId, 'admin'
+      Inventory.update assetId, { $set: { delivered: false } }
+      Changelog.insert
+        itemId: assetId
+        field: 'delivered'
+        type: 'field'
+        oldValue: 'true'
+        newValue: 'false'
+        timestamp: new Date()
+        userId: @userId
+        username: Meteor.users.findOne(@userId)?.username
 
   cancelCheckout: (checkoutId) ->
     if Roles.userIsInRole @userId, 'admin'

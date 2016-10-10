@@ -81,6 +81,10 @@ SimpleSchema.messages {
     label: "Available for Checkout?"
     type: Boolean
     defaultValue: false
+  delivered:
+    label: "Delivered to User?"
+    type: Boolean
+    defaultValue: false
 
   notes:
     type: [Object]
@@ -132,12 +136,14 @@ SimpleSchema.messages {
   deliveredByUserId:
     type: String
   deliveredTo:
+    optional: true
     type: String
   deliveredToUserId:
     type: String
     optional: true
   recipientSignatureImageId:
     type: String
+    optional: true
   timestamp:
     type:
       new Date()

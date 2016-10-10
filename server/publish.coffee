@@ -135,7 +135,7 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
 
 Meteor.publish 'item', (itemId) ->
   if Roles.userIsInRole @userId, 'admin'
-    [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }) ]
+    [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }), Deliveries.find({assetId: itemId}) ]
   else if Inventory.findOne(itemId).owner is Meteor.users.findOne(@userId).username
     Inventory.find { _id: itemId }
 

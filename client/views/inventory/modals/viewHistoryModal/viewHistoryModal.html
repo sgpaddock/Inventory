@@ -10,6 +10,19 @@
           <div class="modal-body"> 
             <div class="row">
               <div class="col-xs-12">
+                <h2>Deliveries</h2>
+                {{#each deliveries}}
+                  <div class="row">
+                    <div class="col-xs-12">
+                      {{#if deliveredTo}}
+                        Item delivered to <strong>{{deliveredTo}}</strong> on {{timestampFormatter timestamp}} by <strong>{{usernameFromId deliveredByUserId}}</strong>
+                        {{else}}
+                        Item delivery recorded on {{timestampFormatter timestamp}} by <strong>{{usernameFromId deliveredByUserId}}</strong> with no assigned user
+                      {{/if}}
+                    </div>
+                  </div>
+                {{/each}}
+                <h2>Changes</h2>
                 {{! First item is the item entry }}
                 <div class="row">
                   <div class="col-md-12">
