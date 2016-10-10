@@ -5,6 +5,18 @@ Template.editAssetModal.helpers
   departments: -> _.map departments, (v) -> { label: v, value: v }
 
 Template.editAssetModal.events
+  'show.bs.modal': (e, tpl) ->
+    zIndex = 1040 + ( 10 * $('.modal:visible').length)
+    $(e.target).css('z-index', zIndex)
+    setTimeout ->
+      $('.modal-backdrop').not('.modal-stack').css('z-index',  zIndex-1).addClass('modal-stack')
+    , 10
+
+  'hidden.bs.modal': (e, tpl) ->
+    Blaze.remove tpl.view
+    if $('.modal:visible').length
+      $(document.body).addClass('modal-open')
+
   'click button[data-action=attachFile]': (e, tpl) ->
      Media.pickLocalFile (fileId) =>
        Inventory.update @_id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
