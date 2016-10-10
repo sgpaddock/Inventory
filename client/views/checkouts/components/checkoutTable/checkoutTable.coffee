@@ -130,6 +130,6 @@ Template.checkoutTable.rendered = ->
     # see https://github.com/meteor/meteor/issues/1173
     # Auto-set ready after 4 seconds for safety.
     setTimeout ->
-      context.ready.set(true),
+      context.ready.set(true)
     , 4000
 
