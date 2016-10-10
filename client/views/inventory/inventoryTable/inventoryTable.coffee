@@ -137,5 +137,12 @@ Template.inventoryTable.rendered = ->
         context.ready.set(true)
       onStop: ->
         context.ready.set(false)
+    
+    # Subscription onReady callbacks sometimes don't fire on re-sub inside autorun
+    # see https://github.com/meteor/meteor/issues/1173
+    # Auto-set ready after 4 seconds for safety.
+    setTimeout ->
+      context.ready.set(true),
+    , 4000
 
     Meteor.subscribe 'newInventory', context.getFilters(), new Date()

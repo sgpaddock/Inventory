@@ -125,3 +125,11 @@ Template.checkoutTable.rendered = ->
       context.inventoryFilters(),
       { limit: limit, skip: skip, sort: sort },
       onReady: -> context.ready.set(true)
+
+    # Subscription onReady callbacks sometimes don't fire on re-sub inside autorun
+    # see https://github.com/meteor/meteor/issues/1173
+    # Auto-set ready after 4 seconds for safety.
+    setTimeout ->
+      context.ready.set(true),
+    , 4000
+
