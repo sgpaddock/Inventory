@@ -24,6 +24,7 @@ getFilters = ->
   return filters
 
 Template.inventory.helpers
+  admin: -> Roles.userIsInRole Meteor.userId(), 'admin'
   pageLimit: -> Template.instance().pageLimit.get()
   tableSettings: ->
     fields =  [
