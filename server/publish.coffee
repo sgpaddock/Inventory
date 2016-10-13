@@ -6,7 +6,10 @@ Meteor.publish 'allUserData', ->
 
 Meteor.publishComposite 'inventory', (filter, options) ->
   filter = filter || {}
-  unless Roles.userIsInRole @userId, 'admin'
+  dm = Roles.getGroupsForUser(@userId, 'departmentManager')
+  if dm.length
+    filter.department = dm[0]
+  else unless Roles.userIsInRole @userId, 'admin'
     # Non-admin/DM users can only view their own items.
     filter.owner = Meteor.users.findOne(@userId)?.username
 
@@ -32,7 +35,10 @@ Meteor.publishComposite 'newInventory', (filter, time) ->
   if not filter then filter = {}
   _.extend filter, { enteredAtTimestamp: { $gt: time } }
 
-  unless Roles.userIsInRole @userId, 'admin'
+  dm = Roles.getGroupsForUser(@userId, 'departmentManager')
+  if dm.length
+    filter.department = dm[0]
+  else unless Roles.userIsInRole @userId, 'admin'
     filter.owner = Meteor.users.findOne(@userId)?.username
 
   {
@@ -51,7 +57,10 @@ Meteor.publishComposite 'newInventory', (filter, time) ->
 Meteor.publishComposite 'inventorySet', (set) ->
   if not set then set = []
   filter = { _id: { $in: set } }
-  unless Roles.userIsInRole @userId, 'admin'
+  dm = Roles.getGroupsForUser(@userId, 'departmentManager')
+  if dm.length
+    filter.department = dm[0]
+  else unless Roles.userIsInRole @userId, 'admin'
     filter.owner = Meteor.users.findOne(@userId).username
   {
     find: ->
