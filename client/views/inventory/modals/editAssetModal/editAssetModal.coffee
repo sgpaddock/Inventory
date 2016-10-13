@@ -34,8 +34,11 @@ Template.editAssetModal.events
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
     obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
-    Inventory.update tpl.data.docId, { $set: obj }
-    $('#editAssetModal').modal('hide')
+    Inventory.update tpl.data.docId, { $set: obj }, (err, success) ->
+      if (err)
+        Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys
+      else
+        $('#editAssetModal').modal('hide')
 
   'click button[data-action=delete]': (e, tpl) ->
     Blaze.renderWithData Template.confirmDeleteModal, this, $('body').get(0)

@@ -1,5 +1,6 @@
 SimpleSchema.messages {
   locationOrOwnerRequired: "Either Owner or Location must be present."
+  currentlyCheckedOut: "This item is currently checked out."
 }
 
 @Inventory = new Mongo.Collection 'inventory'
@@ -81,6 +82,10 @@ SimpleSchema.messages {
     label: "Available for Checkout?"
     type: Boolean
     defaultValue: false
+    custom: ->
+      if @value == false
+        if Checkouts.findOne({assetId: @docId, 'schedule.timeCheckedOut': {$exists: true}, 'schedule.timeReturned': {$exists: false}})
+          "currentlyCheckedOut"
   delivered:
     label: "Delivered to User?"
     type: Boolean
