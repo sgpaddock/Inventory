@@ -7,5 +7,6 @@
     Show <input name="pageLimit" type="number" value="{{pageLimit}}" maxlength=3> items per page
   </div>
   {{> inventoryTable settings=tableSettings}}
+  <a href="{{exportUrl}}" target="_blank"><button class="btn btn-primary">Export</button></a>
 </template>
 

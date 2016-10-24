@@ -24,6 +24,7 @@ getFilters = ->
   return filters
 
 Template.inventory.helpers
+  exportUrl: -> Router.current().originalUrl.replace('inventory', 'export')
   admin: -> Roles.userIsInRole Meteor.userId(), 'admin'
   pageLimit: -> Template.instance().pageLimit.get()
   tableSettings: ->

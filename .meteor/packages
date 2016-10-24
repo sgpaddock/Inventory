@@ -47,3 +47,5 @@ percolate:migrations
 standard-minifier-css
 standard-minifier-js
 shell-server
+hive:export-csv
+chuangbo:cookie

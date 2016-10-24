@@ -40,42 +40,6 @@ Router.map ->
   @route 'userDashboard',
     path: '/my/dashboard'
 
-  @route 'apiSubmit',
-    path: '/api/1.0/submit'
-    where: 'server'
-    action: ->
-      # TODO: check X-Auth-Token header
-      unless @request.headers['x-forwarded-for'] in Meteor.settings?.remoteWhitelist
-        console.log 'API submit request from '+@request.headers['x-forwarded-for']+' not in API whitelist'
-        throw new Meteor.Error 403,
-          'Access denied.  Submit from a whitelisted IP address or use an API token.'
-
-      console.log @request.body
-      requiredParams = ['username', 'email', 'description', 'queueName']
-      for k in requiredParams
-        if not @request.body[k]? then throw new Meteor.Error 412, "Missing required parameter #{k} in request."
-
-      Meteor.call 'checkUsername', @request.body.username
-
-      ###
-      Tickets.insert
-        title: @request.body.subject_line
-        body: @request.body.description
-        authorName: @request.body.username
-        authorId: Meteor.users.findOne({username: @request.body.username})._id
-        submissionData:
-          method: 'Form'
-          ipAddress: @request.body.ip_address
-          hostname: @request.body.hostname? @request.body.ip_address
-        submittedTimestamp: Date.now()
-        queueName: @request.body.queueName || 'Triage'
-        tags: @request.body.tags?.split(';\n') || []
-        formFields: formFields
-        attachmentIds: _.pluck(@request.files, '_id')
-        ###
-
-      @response.end 'Submission successful.'
-
   @route 'serveFile',
     path: '/file/:filename'
     where: 'server'
@@ -86,3 +50,49 @@ Router.map ->
     where: 'server'
     action: FileRegistry.serveFile
       disposition: 'attachment'
+
+  @route 'export',
+    path: '/export'
+    where: 'server'
+    action: ->
+      cookies = {}
+      _.each @request.headers?.cookie?.split(';'), (c) ->
+        [cookie, value] = c.trim().split('=', 2)
+        cookies[cookie] = value
+      token = cookies['meteor_login_token']
+
+      unless token? and Roles.userIsInRole Meteor.users.findOne(
+        "services.resume.loginTokens.hashedToken": Accounts._hashLoginToken(token)
+      )?._id, 'admin'
+        @response.statusCode = 403
+        @response.end 'Access denied.'
+        return
+
+      else
+        filter = @params.query
+        if filter.search
+          filter.$text = { $search: filter.search }
+          delete filter.search
+
+        # Mongo really doesn't like null filter values
+        for k,v of filter
+          if _.isUndefined(v)
+            delete filter[k]
+          if v is '(none)'
+            filter[k] = { $exists: false }
+
+        writeCSV.call @,
+          Inventory,
+          filter,
+          [
+            'propertyTag'
+            'serialNo'
+            'owner'
+            'department'
+            'model'
+            'roomNumber'
+            'building'
+            'name'
+          ],
+          'inventory',
+          @response

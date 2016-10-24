@@ -20,6 +20,7 @@ caching-compiler@1.1.7_1
 caching-html-compiler@1.0.7
 callback-hook@1.0.9
 check@1.2.3
+chuangbo:cookie@1.1.0
 coffeescript@1.2.4_2
 cottz:iron-query@1.2.5
 dandv:caret-position@2.1.1
@@ -38,6 +39,7 @@ email@1.1.17_1
 fastclick@1.0.12
 geojson-utils@1.0.9
 hive:accounts-ldap@0.4.1
+hive:export-csv@1.0.2
 hive:facets@0.1.4
 hive:file-registry@0.9.15
 hive:workers@2.0.5
