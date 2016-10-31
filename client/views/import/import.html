@@ -1,0 +1,56 @@
+<template name="import">
+  <fieldset>
+    <legend>Choose CSV to import</legend>
+    <label>Please make sure your CSV matches <a href="template.csv">this template.</a> Files with extra columns or non-matching headings will fail to import.
+    If an item exists with a matching property tag, it will be updated to match the imported item.</label>
+    <input type="file" id="fileUpload" accept=".csv">
+  </fieldset>
+  {{#if failures}}
+    <div class="alert alert-danger">The following items failed to import:</div>
+    <table class="table table-condensed table-bordered">
+      <thead>
+        <tr>
+          {{#each keys}}
+            <th>{{this}}</th>
+          {{/each}}
+        </tr>
+      </thead>
+      <tbody>
+        {{#each failures}}
+          <tr>
+            {{#each arrayify this}}
+              <td>{{value}}</td>
+            {{/each}}
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    {{#if complete}}
+      <div class="alert alert-success">All items imported successfully.</div>
+    {{/if}}
+  {{/if}}
+  {{#if assets}}
+    <div>
+      <button type="button" class="btn btn-primary pull-right" data-action="importItems">Import these items</button>
+      <table class="table table-condensed table-bordered">
+        <thead>
+          <tr>
+            {{#each keys}}
+              <th>{{this}}</th>
+            {{/each}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#each assets}}
+            <tr>
+              {{#each arrayify this}}
+                <td>{{value}}</td>
+              {{/each}}
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{/if}}
+</template>

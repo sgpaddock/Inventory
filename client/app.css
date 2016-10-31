@@ -241,6 +241,12 @@ a {
 }
 }
 
+.navbar-default .navbar-nav .navbar-btn {
+  background-color: #269793;
+  color: white;
+  border-color: #0C7D79;
+}
+
 /***************************** QUEUE/TICKETROW/SIDEBAR *****************************/
 
 .hidden-row {
@@ -579,4 +585,5 @@ blockquote {
 .input-group.input-group-inline .form-control {
   width: auto !important;
 }
+
 

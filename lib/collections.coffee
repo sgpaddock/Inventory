@@ -35,7 +35,7 @@ SimpleSchema.messages {
     type: String
     optional: true
     custom: ->
-      unless @isSet or @field('location')?.isSet
+      unless @isSet or @field('building')?.isSet
         "locationOrOwnerRequired"
   roomNumber:
     type: String

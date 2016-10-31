@@ -101,3 +101,18 @@ Meteor.methods
           enteredAtTimestamp: new Date()
         } }
       }
+
+  importInventory: (items) ->
+    if Roles.userIsInRole @userId, 'admin'
+      failures = []
+      console.log "#{@userId} importing #{items.length} items"
+      _.each items, (i) ->
+        Inventory.upsert { propertyTag: i.propertyTag }, {
+          $set: i
+          $setOnInsert: { enteredIntoEbars: false, checkout: false, delivered: false }
+        }, (err, res) ->
+          if err
+            console.log err.message
+            failures.push(i)
+      console.log "#{failures.length} items failed to import"
+      return failures
