@@ -39,7 +39,7 @@ email@1.1.17_1
 fastclick@1.0.12
 geojson-utils@1.0.9
 hive:accounts-ldap@0.4.1
-hive:export-csv@1.0.2
+hive:export-csv@1.1.0
 hive:facets@0.1.4
 hive:file-registry@0.9.15
 hive:workers@2.0.5
