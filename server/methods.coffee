@@ -32,17 +32,22 @@ Meteor.methods
       Changelog.remove { itemId: itemId }
       Checkouts.remove { assetId: itemId }
 
-  recordItemDelivery: (assetId, username) ->
+  recordItemDelivery: (username, password, assetId) ->
     if Roles.userIsInRole @userId, 'admin'
-      Deliveries.insert {
-        assetId: assetId
-        deliveredByUserId: @userId
-        deliveredTo: username
-        deliveredToUserId: Meteor.users.findOne({username: username})?._id || null
-        timestamp: new Date()
-      }
+      client = LDAP.createClient Meteor.settings.ldap.serverUrl
+      LDAP.bind client, username, password
+      if LDAP.search(client, username)?
+        Deliveries.insert {
+          assetId: assetId
+          deliveredByUserId: @userId
+          deliveredTo: username
+          deliveredToUserId: Meteor.users.findOne({username: username})?._id || null
+          timestamp: new Date()
+        }
 
-      Inventory.update assetId, { $set: { delivered: true } }
+        Inventory.update assetId, { $set: { delivered: true } }
+      else
+        throw new Meteor.Error('Invalid credentials.')
 
   recordItemDeliveryWithoutUser: (assetId) ->
     # Recording item as delivered without an actual user for bulk operations

@@ -52,8 +52,8 @@ Template.editAssetModal.events
     checkUsername tpl
 
   'click button[data-action=recordNewDelivery]': (e, tpl) ->
-    Blaze.renderWithData Template.deliveryModal, { docId: tpl.data.docId }, $('body').get(0)
-    $('#deliveryModal').modal('show')
+    Blaze.renderWithData Template.pickupModal, { docId: tpl.data.docId }, $('body').get(0)
+    $('#pickupModal').modal('show')
 
   'click button[data-action=deliverWithoutUser]': (e, tpl) ->
     Meteor.call 'recordItemDeliveryWithoutUser', tpl.data.docId

@@ -1,10 +1,10 @@
-Template.deliveryModal.helpers
+Template.pickupModal.helpers
   item: -> Inventory.findOne(@docId)
   success: -> Template.instance().success.get()
   error: -> Template.instance().error.get()
   warning: -> Template.instance().warning.get()
 
-Template.deliveryModal.events
+Template.pickupModal.events
   'show.bs.modal': (e, tpl) ->
     zIndex = 1040 + ( 10 * $('.modal:visible').length)
     $(e.target).css('z-index', zIndex)
@@ -21,23 +21,20 @@ Template.deliveryModal.events
     if e.keyCode is 13 or !e.keyCode
       item = @
       username = tpl.$('input[name=ldap]').val()
-      Meteor.call 'checkPassword',
-        username
+      Meteor.call 'recordItemDelivery',
+        username,
         tpl.$('input[name=password]').val(),
+        item._id
         (err, res) ->
-          if res
-            if username isnt item.owner
-              tpl.warning.set "User checking out is not the user this item was originally assigned to.
-               The delivery has been recorded for user #{username}."
-            else
-              tpl.success.set(true)
-
-            Meteor.call 'recordItemDelivery', item._id, username
-
-          else
+          if err
             tpl.error.set('Invalid credentials. Please try again.')
+          else if username isnt item.owner
+            tpl.warning.set "User checking out is not the user this item was originally assigned to.
+             The delivery has been recorded for user #{username}."
+          else
+            tpl.success.set(true)
 
-Template.deliveryModal.onCreated ->
+Template.pickupModal.onCreated ->
   @error = new ReactiveVar()
   @success = new ReactiveVar(false)
   @warning = new ReactiveVar()
