@@ -2,6 +2,15 @@ Template.inventoryBadges.helpers
   item: -> Inventory.findOne(@documentId)
   noteCount: -> if @notes?.length then @notes.length # just to prevent 0-count badges from showing
 
+Template.inventoryBadges.events
+  'change input': (e, tpl) ->
+    items = Session.get('selected') || []
+    if tpl.$('input').is(':checked')
+      items.push @_id
+    else
+      items = _.without items, @_id
+    Session.set 'selected', _.uniq(items)
+
 Template.attachmentField.helpers
   file: ->
     FileRegistry.findOne(@fileId)
@@ -22,8 +31,6 @@ Template.attachmentField.events
     id = @documentId
     Media.capturePhoto (fileId) ->
       Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
-
-
 
 Template.inventoryActionsField.helpers
   isAdmin: -> Roles.userIsInRole Meteor.userId(), 'admin'

@@ -29,7 +29,7 @@ Template.inventory.helpers
   pageLimit: -> Template.instance().pageLimit.get()
   tableSettings: ->
     fields =  [
-      { key: 'badges', label: " ", tpl: Template.inventoryBadges, sortable: false, class: 'hidden-xs' }
+      { key: 'badges', label: Spacebars.SafeString("<input type='checkbox' name='selectAll'>"), tpl: Template.inventoryBadges, sortable: false, class: 'hidden-xs' }
       'propertyTag',
       { key: 'serialNo', class: 'hidden-xs' }
       'model',
@@ -51,12 +51,11 @@ Template.inventory.helpers
     }
 
 Template.inventory.events
-  'click button[name=newAssetButton]': (e, tpl) ->
-    Blaze.render Template.newAssetModal, $('body').get(0)
-    $('#newAssetModal').modal('show')
-
   'change input[name=pageLimit]': (e, tpl) ->
     tpl.pageLimit.set Number tpl.$('input[name=pageLimit]').val()
+  'change input[name=selectAll]': (e, tpl) ->
+    $('input[type=checkbox]').prop 'checked', tpl.$(e.target).is(':checked')
+    $('input[name=selectRow]').trigger('change')
 
 
 Template.inventory.onCreated ->
