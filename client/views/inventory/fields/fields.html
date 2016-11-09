@@ -1,5 +1,6 @@
 <template name="inventoryBadges">
   {{#with item}}
+    <input type="checkbox" name="selectRow">
     <span class="badge" title="{{noteCount}} notes">{{noteCount}}</span>
     {{#if enteredIntoEbars}}
       <span title="Entered into eBars" class="glyphicon glyphicon-barcode"></span>
