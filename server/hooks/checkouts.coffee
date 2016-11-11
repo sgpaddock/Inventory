@@ -1,23 +1,24 @@
 @scheduleMail = (mail) ->
-  if mail.date <= new Date()
-    Email.send
-      from: Meteor.settings.email.fromEmail
-      to: mail.email
-      subject: mail.subject
-      html: mail.html
-  else
-    id = Random.id()
-    SyncedCron.add
-      name: id
-      schedule: (parser) ->
-        parser.recur().on(mail.date).fullDate()
-      job: ->
-        Email.send
-          from: Meteor.settings.email.fromEmail
-          to: mail.email
-          subject: mail.subject
-          html: mail.html
-        SyncedCron.remove id
+  unless mail.checkoutId and Checkouts.findOne(mail.checkoutId)?.schedule?.timeReturned
+    if mail.date <= new Date()
+      Email.send
+        from: Meteor.settings.email.fromEmail
+        to: mail.email
+        subject: mail.subject
+        html: mail.html
+    else
+      id = Random.id()
+      SyncedCron.add
+        name: id
+        schedule: (parser) ->
+          parser.recur().on(mail.date).fullDate()
+        job: ->
+          Email.send
+            from: Meteor.settings.email.fromEmail
+            to: mail.email
+            subject: mail.subject
+            html: mail.html
+          SyncedCron.remove id
 
 
 scheduleCheckoutReminders = (userId, doc) ->
@@ -27,6 +28,7 @@ scheduleCheckoutReminders = (userId, doc) ->
   name = item.name || item.model # Name is preferred, but not required, so model as fallback
 
   scheduleMail
+    checkoutId: doc._id
     email: user.mail
     subject: "REMINDER: Your checkout of item #{name} for #{moment(doc.schedule.timeReserved).format('LL')}"
     html: "This email is to remind you of your request for checkout item #{name} for dates
@@ -35,12 +37,14 @@ scheduleCheckoutReminders = (userId, doc) ->
     date: moment(doc.schedule.timeReserved).subtract(1, 'days').hours(17).minutes(0).seconds(0).toDate() # 1 day before time served, 5pm
 
   scheduleMail
+    checkoutId: doc._id
     email: user.mail
     subject: "Your checkout of item #{name} is due soon"
     html: "Your expected return date for item #{name} is #{moment(doc.schedule.expectedReturn).format('LL')}. Please have the item ready to return. It may be dropped off in POT 915, 923, or 951."
     date: moment(doc.schedule.expectedReturn).subtract(3, 'days').hours(17).minutes(0).seconds(0).toDate() # 3 days before expected return, 5pm
 
   scheduleMail
+    checkoutId: doc._id
     email: user.mail
     subject: "Your checkout of item #{name} is due today"
     html: "Your expected return date for item #{name} is today. The item may be dropped off in POT 915, 923, or 951."
