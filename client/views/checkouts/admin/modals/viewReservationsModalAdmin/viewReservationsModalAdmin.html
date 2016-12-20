@@ -40,7 +40,11 @@
                                 </span>
                                 {{else}}
                                 <span class="unavailable">
-                                  Checked Out
+                                  {{#if overdue}}
+                                    Overdue
+                                  {{else}}
+                                    Checked Out
+                                  {{/if}}
                                 </span>
                                 <button type="button" data-action="checkIn" class="btn btn-xs btn-primary checkout-action-btn">Check In</button>
                               {{/if}}

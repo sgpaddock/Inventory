@@ -1,6 +1,9 @@
 Template.viewReservationsModalAdmin.helpers
   item: -> Inventory.findOne { _id: @docId }
   checkout: -> Checkouts.find { assetId: @_id }, { sort: { 'schedule.timeReserved': 1 } }
+  overdue: ->
+    today = moment().hours(0).minutes(0).seconds(0).toDate()
+    @schedule?.expectedReturn < today and (not @schedule.timeReturned?) and @schedule.timeCheckedOut?
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
   rejectingThisCheckout: -> Template.instance().rejecting.get() is @_id

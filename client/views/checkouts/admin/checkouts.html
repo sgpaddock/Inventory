@@ -1,5 +1,6 @@
 <template name="checkoutsAdmin">
   {{> checkoutFilters}}
   <a href="/checkouts/upcoming"><button class="btn btn-sm btn-success">Upcoming Action Items ({{upcomingItemsCount}})</button></a>
+  <a href="/checkouts/overdue"><button class="btn btn-sm btn-warning">Overdue Items ({{overdueItemsCount}})</button></a>
   {{> checkoutTable settings=settings}}
 </template>

@@ -86,6 +86,7 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
   [itemSet, facets] = Inventory.findWithFacets inventoryFilter, options
   itemSet = _.pluck itemSet.fetch(), '_id'
   aWeekAgo = moment().subtract(1, 'weeks').toDate()
+  today = moment().hours(0).minutes(0).seconds(0).toDate()
   {
     find: ->
       Counts.publish this, 'checkoutCount', Inventory.find(inventoryFilter), { noReady: true }
@@ -115,6 +116,11 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
                 { 'schedule.timeReserved': { $exists: true } }
                 { 'schedule.expectedReturn': { $exists: false } }
               ] }
+              { $and: [
+                { 'schedule.timeCheckedOut': { $exists: true } }
+                { 'schedule.timeReturned': { $exists: false } }
+                { 'schedule.expectedReturn': { $lt: today } }
+              ] }
             ]
           }, fields
       }
@@ -130,6 +136,11 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
               { $and: [
                 { 'schedule.timeReserved': { $exists: true } }
                 { 'schedule.expectedReturn': { $exists: false } }
+              ] }
+              { $and: [
+                { 'schedule.timeCheckedOut': { $exists: true } }
+                { 'schedule.timeReturned': { $exists: false } }
+                { 'schedule.expectedReturn': { $lt: today } }
               ] }
             ]
       }
@@ -171,6 +182,22 @@ Meteor.publishComposite 'upcomingItems', ->
       }
     ]
   }
+
+Meteor.publishComposite 'overdueItems', ->
+  # Publish checkouts that are overdue
+  today = moment().hours(0).minutes(0).seconds(0).toDate()
+  checkoutFilter =
+    'schedule.expectedReturn': { $lt: today }
+    'schedule.timeReturned': { $exists: false }
+    'schedule.timeCheckedOut': { $exists: true }
+  ids = _.pluck Checkouts.find(checkoutFilter).fetch(), 'assetId'
+  find: ->
+    Inventory.find { checkout: true, _id: {$in: ids} }
+  children: [
+    find: (item) ->
+      newFilter = _.extend checkoutFilter, { assetId: item._id }
+      Checkouts.find newFilter
+  ]
 
 Meteor.publish 'models', ->
   if Roles.userIsInRole @userId, 'admin'

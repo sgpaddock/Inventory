@@ -8,7 +8,11 @@ Template.checkedOutToField.helpers
 
 Template.checkoutStatusField.helpers
   status: ->
-    if Checkouts.findOne { assetId: @documentId, 'schedule.timeCheckedOut': { $exists: true }, 'schedule.timeReturned': { $exists: false } }
+    today = moment().hours(0).minutes(0).seconds(0).toDate()
+    if Checkouts.findOne { assetId: @documentId, 'schedule.timeCheckedOut': { $exists: true }, 'schedule.timeReturned': { $exists: false }, 'schedule.expectedReturn': {$lt: today} }
+      message = "Overdue"
+      css = "unavailable"
+    else if Checkouts.findOne { assetId: @documentId, 'schedule.timeCheckedOut': { $exists: true }, 'schedule.timeReturned': { $exists: false } }
       message = "Checked Out"
       css = "unavailable"
     else if Checkouts.findOne { assetId: @documentId, 'schedule.timeReserved': { $lte: new Date() }, 'schedule.expectedReturn': { $gte: new Date() } , 'approval.approved': true , 'schedule.timeReturned': { $exists: false } }

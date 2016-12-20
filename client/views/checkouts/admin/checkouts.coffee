@@ -28,6 +28,13 @@ inventoryFilters = ->
   return filters
 
 Template.checkoutsAdmin.helpers
+  overdueItemsCount: ->
+    today = moment().hours(0).minutes(0).seconds(0).toDate()
+    Checkouts.find({
+      'schedule.expectedReturn': { $lt: today }
+      'schedule.timeReturned': { $exists: false }
+      'schedule.timeCheckedOut': { $exists: true }
+    }).count()
   upcomingItemsCount: ->
     # Count published checkouts between yesterday and a week from today for display.
     yesterday = moment().add(-1, 'days').hours(0).minutes(0).seconds(0).toDate()

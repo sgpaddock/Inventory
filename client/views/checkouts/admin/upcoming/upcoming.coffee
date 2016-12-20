@@ -9,7 +9,7 @@ Template.upcoming.helpers
 
  
 Template.upcoming.onRendered ->
-  Meteor.subscribe 'upcomingItems'
+  @subscribe 'upcomingItems'
 
 Template.upcoming.events
   'click button[data-action=checkOut]': (e, tpl) ->

@@ -33,6 +33,10 @@ Router.map ->
     path: '/checkouts/upcoming'
     template: 'upcoming'
 
+  @route 'overdue',
+    path: '/checkouts/overdue'
+    template: 'overdue'
+
   @route 'import',
     path: '/import'
     template: 'import'
