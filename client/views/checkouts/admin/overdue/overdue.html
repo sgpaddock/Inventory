@@ -1,0 +1,30 @@
+<template name="overdue">
+  <h2>Overdue Checkouts ({{count}})</h2>
+  <h5>Checkouts which have not yet been returned.  Users are emailed every weekday morning with reminders.</h5>
+  <table class="table table-condensed">
+    <thead>
+      <th>Requester</th>
+      <th>Item</th>
+      <th>Time Reserved</th>
+      <th>Expected Return</th>
+      <th>Actions</th>
+    </thead>
+    <tbody>
+      {{#each overdueCheckouts}}
+        <tr>
+          <td>{{>userPortrait userId=assignedTo class="in-row"}} {{displayName assignedTo}}</td>
+          <td>{{itemName}}</td>
+          <td><span class="{{todayHighlight schedule.timeReserved}}">{{commonDateFormatter schedule.timeReserved}}</span></td>
+          <td><span class="{{todayHighlight schedule.expectedReturn}}">{{commonDateFormatter schedule.expectedReturn}}</span></td>
+          <td>
+            {{#if checkedOut}}
+              <button class="btn btn-sm" type="button" data-action="checkIn">Check In</button>
+              {{else}}
+              <button class="btn btn-sm" type="button" data-action="checkOut">Check Out to {{usernameFromId assignedTo}}</button>
+            {{/if}}
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</template>
