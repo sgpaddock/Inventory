@@ -18,7 +18,7 @@ findOverdueItems = ->
         to: user?.mail
         subject: "Your checkout of item #{item.name} is overdue"
         html: "Your checkout of item #{item.name} was expected to be returned on #{moment(c.schedule.expectedReturn).format('LL')}.
-        By our records, it still has not been checked in. Please return the item to POT 915, 923, or 951.
+        By our records, it still has not been checked in. Please return the item to POT 915, 923, or 961.
         If you believe this message is in error, please submit a help request."
 
 SyncedCron.add
