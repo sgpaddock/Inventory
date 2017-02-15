@@ -1,11 +1,7 @@
 @scheduleMail = (mail) ->
   unless mail.checkoutId and Checkouts.findOne(mail.checkoutId)?.schedule?.timeReturned
     if mail.date <= new Date()
-      Email.send
-        from: Meteor.settings.email.fromEmail
-        to: mail.email
-        subject: mail.subject
-        html: mail.html
+      return
     else
       id = Random.id()
       SyncedCron.add
@@ -36,12 +32,13 @@ scheduleCheckoutReminders = (userId, doc) ->
       Please visit POT 915, 923, or 961 to pick up your item when ready."
     date: moment(doc.schedule.timeReserved).subtract(1, 'days').hours(17).minutes(0).seconds(0).toDate() # 1 day before time served, 5pm
 
-  scheduleMail
-    checkoutId: doc._id
-    email: user.mail
-    subject: "Your checkout of item #{name} is due soon"
-    html: "Your expected return date for item #{name} is #{moment(doc.schedule.expectedReturn).format('LL')}. Please have the item ready to return. It may be dropped off in POT 915, 923, or 961."
-    date: moment(doc.schedule.expectedReturn).subtract(3, 'days').hours(17).minutes(0).seconds(0).toDate() # 3 days before expected return, 5pm
+  unless moment(doc.schedule.expectedReturn).subtract(3, 'days').isBefore(doc.schedule.timeReserved)
+    scheduleMail
+      checkoutId: doc._id
+      email: user.mail
+      subject: "Your checkout of item #{name} is due soon"
+      html: "Your expected return date for item #{name} is #{moment(doc.schedule.expectedReturn).format('LL')}. Please have the item ready to return. It may be dropped off in POT 915, 923, or 961."
+      date: moment(doc.schedule.expectedReturn).subtract(3, 'days').hours(17).minutes(0).seconds(0).toDate() # 3 days before expected return, 5pm
 
   scheduleMail
     checkoutId: doc._id
