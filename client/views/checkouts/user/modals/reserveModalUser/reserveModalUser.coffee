@@ -3,6 +3,7 @@ Template.reserveModalUser.helpers
   checkout: -> Checkouts.find { assetId: @_id }
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
+  warning: -> Template.instance().warning.get()
   success: -> Template.instance().success.get()
 
 Template.reserveModalUser.rendered = ->
@@ -17,6 +18,12 @@ Template.reserveModalUser.rendered = ->
 Template.reserveModalUser.events
   'hidden.bs.modal': (e, tpl) ->
     Blaze.remove tpl.view
+
+  'change input[name=timeReserved], change input[name=expectedReturn]': (e, tpl) ->
+    if new Date(tpl.$('input[name=expectedReturn]').val()) - new Date(tpl.$('input[name=timeReserved]').val()) > 14*24*60*60*1000
+      tpl.warning.set "Checkouts are typically limited to 2 weeks.  To improve the chances of approving your reservation, please note your use case and justification in the notes field."
+    else
+      tpl.warning.set null
 
   'click button[data-action=submit]': (e, tpl) ->
     # TODO: Permissions. Maybe move everything into methods.
@@ -53,4 +60,5 @@ Template.reserveModalUser.events
 
 Template.reserveModalUser.onCreated ->
   @error = new ReactiveVar
+  @warning = new ReactiveVar
   @success = new ReactiveVar false
