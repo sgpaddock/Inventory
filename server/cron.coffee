@@ -1,8 +1,8 @@
 findOverdueItems = ->
   console.log "Finding overdue items"
-  endOfToday = moment().add(1, 'days').hours(0).minutes(0).seconds(0).toDate()
+  startOfToday = moment().hours(0).minutes(0).seconds(0).toDate()
   checkouts = Checkouts.find({
-    'schedule.expectedReturn': { $lt: endOfToday }
+    'schedule.expectedReturn': { $lt: startOfToday }
     'schedule.timeReturned': { $exists: false }
     'schedule.timeCheckedOut': { $exists: true }
   }).fetch()
