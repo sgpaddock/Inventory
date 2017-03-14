@@ -7,6 +7,8 @@ Template.inventoryFilters.events
     if e.keyCode is 13 or !e.keyCode
       Iron.query.set 'search', tpl.$('input[name=mobile-search]').val()
 
+  'change input.filter-archived': (e, tpl) ->
+    Iron.query.set 'archived', $(e.target).prop('checked')
 
 Template.inventoryFilters.helpers
   facetKeys: ->
@@ -32,6 +34,7 @@ Template.inventoryFilters.helpers
         checked: if l.name in active then 'checked'
 
   selection: -> Iron.query.get(@key) || "Any"
+  archiveFilterChecked: -> if Iron.query.get('archived') then "checked" else ""
 
 Template.facetCheckbox.events
   'change input:checkbox': (e, tpl) ->

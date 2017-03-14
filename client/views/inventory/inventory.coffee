@@ -21,6 +21,11 @@ getFilters = ->
   if _.isUndefined filters.$text.$search
     delete filters.$text
 
+  if Iron.query.get 'archived'
+    filters.archived = true
+  else
+    filters.archived = {$ne: true}
+
   return filters
 
 Template.inventory.helpers

@@ -1,5 +1,5 @@
 <template name="inventoryFilters">
-  <div class="hidden-xs inline-block">
+  <div class="hidden-xs inline-block col-md-12">
     {{#each facetKeys}}
       <div class="dropdown inline-block facet-dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" data-facet="{{key}}" data-toggle="dropdown">
@@ -20,6 +20,14 @@
       <span class="input-group-btn">
         <button class="btn btn-primary" name="search">Search</button>
       </span>
+    </div>
+    <div class="input-group pull-right">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" class="filter-archived" {{archiveFilterChecked}}>
+          Archived
+        </label>
+      </div>
     </div>
   </div>
   <div class="hidden-sm hidden-md hidden-lg">
@@ -46,6 +54,14 @@
             {{/each}}
           </div>
         {{/each}}
+        <div class="input-group">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" class="filter-archived" {{archiveFilterChecked}}>
+              Archived
+            </label>
+          </div>
+        </div>
       </div>
     </div>
   </div>

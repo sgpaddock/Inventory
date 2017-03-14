@@ -34,6 +34,7 @@ Template.editAssetModal.events
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
     obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
+    obj['archived'] = tpl.$('[data-schema-key=archived]').is(':checked')
     Inventory.update tpl.data.docId, { $set: obj }, (err, success) ->
       if (err)
         Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys

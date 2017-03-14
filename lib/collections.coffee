@@ -90,7 +90,10 @@ SimpleSchema.messages {
     label: "Delivered to User?"
     type: Boolean
     defaultValue: false
-
+  archived:
+    label: "Archived"
+    type: Boolean
+    defaultValue: false
   notes:
     type: [Object]
     optional: true
