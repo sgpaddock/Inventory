@@ -107,6 +107,10 @@ SimpleSchema.messages {
     type: String
   'notes.$.enteredAtTimestamp':
     type: new Date()
+  warrantyInfo:
+    type: Object
+    blackbox: true
+    optional: true
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema

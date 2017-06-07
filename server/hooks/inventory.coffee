@@ -4,6 +4,15 @@ Inventory.before.insert (userId, doc) ->
   Buildings.upsert { building: doc.building }, { $set: { lastUse: new Date() } }
   Models.upsert { model: doc.model }, { $set: { lastUse: new Date() } }
 
+Inventory.after.insert (userId, doc) ->
+  Job.push new WarrantyLookupJob
+    inventoryId: doc._id
+
+Inventory.after.update (userId, doc, fieldNames, modifier, options) ->
+  if @previous.serialNo != doc.serialNo
+    Job.push new WarrantyLookupJob
+      inventoryId: doc._id
+
 Inventory.before.update (userId, doc, fieldNames, modifier, options) ->
   _.each fieldNames, (fn) ->
     if fn is 'attachments'
