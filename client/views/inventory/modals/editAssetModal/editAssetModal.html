@@ -63,6 +63,14 @@
                       <button class="btn btn-primary" data-action="deliverWithoutUser">Mark as Picked Up without a User</button>
                     </div>
                   {{/if}}
+
+                  {{#if warrantyInfo}}
+                    <div class="form-group">
+                      Ship date: {{shipDate}}
+                      <button class="btn btn-primary pull-right" data-action="getWarrantyInfo">Warranty Details</button>
+                    </div>
+                  {{/if}}
+
                   {{> inventoryNoteArea}}
                 {{/autoForm}}
                 <button type="button" data-action="delete" class="btn btn-danger pull-left">Delete Asset</button>

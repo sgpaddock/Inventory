@@ -41,6 +41,10 @@ Template.editAssetModal.events
       else
         $('#editAssetModal').modal('hide')
 
+  'click button[data-action=getWarrantyInfo]': (e, tpl) ->
+    Blaze.renderWithData Template.warrantyInfoModal, this, $('body').get(0)
+    $('#warrantyInfoModal').modal('show')
+
   'click button[data-action=delete]': (e, tpl) ->
     Blaze.renderWithData Template.confirmDeleteModal, this, $('body').get(0)
     $('#editAssetModal').modal('hide')

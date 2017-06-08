@@ -111,6 +111,9 @@ SimpleSchema.messages {
     type: Object
     blackbox: true
     optional: true
+  shipDate:
+    type: new Date()
+    optional: true
 
 @Changelog = new Mongo.Collection 'changelog'
 @Changelog.attachSchema new SimpleSchema

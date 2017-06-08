@@ -35,4 +35,5 @@ class @WarrantyLookupJob extends Job
       Inventory.update item._id,
         $set:
           warrantyInfo: res.data
+          shipDate: new Date(res.data.AssetWarrantyResponse[0].AssetHeaderData.ShipDate)
 
