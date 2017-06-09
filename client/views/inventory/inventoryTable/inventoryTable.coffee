@@ -60,7 +60,11 @@ Template.inventoryTable.helpers
     sort = {}
     sortKey = @sortKey.get()
     sort[sortKey] = @sortOrder.get() || -1
-    Inventory.find(@getFiltersForClient(), { sort: sort })
+    filter = $and: [@getFiltersForClient(),{}]
+    filter['$and'][1][sortKey] = $ne: null
+    records = Inventory.find(filter, { sort: sort }).fetch()
+    filter['$and'][1][sortKey] = null
+    records.concat Inventory.find(filter).fetch()
     
   fieldCount: (f) ->
     (f or @).fields.length + @actionColumn

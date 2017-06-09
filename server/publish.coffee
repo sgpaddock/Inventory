@@ -13,8 +13,22 @@ Meteor.publishComposite 'inventory', (filter, options) ->
     # Non-admin/DM users can only view their own items.
     filter.owner = Meteor.users.findOne(@userId)?.username
 
-  [itemSet, facets] = Inventory.findWithFacets filter, options
+  # TODO: this hack is needed because Mongo lacks a "nulls first"/"nulls last" option...
+  # https://jira.mongodb.org/browse/SERVER-153
+  filterWithNoNull = if options.sort?.shipDate
+      $and: [
+        shipDate: $ne: null
+        filter
+      ]
+    else
+      filter
+
+  [itemSet, facets] = Inventory.findWithFacets filterWithNoNull, options
   itemSet = _.pluck itemSet.fetch(), '_id'
+
+  if itemSet.length < options.limit
+    options.limit -= itemSet.length
+    itemSet = itemSet.concat (_.pluck Inventory.find({$and: [filter, shipDate: null]}, options).fetch(), '_id')
   {
     find: ->
       Counts.publish this, 'inventoryCount', Inventory.find(filter), { noReady: true }

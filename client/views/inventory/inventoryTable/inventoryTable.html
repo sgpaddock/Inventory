@@ -37,7 +37,7 @@
       </thead>
       {{#if ready}}
         <tbody>
-          {{#unless records.count}}
+          {{#unless records.length}}
             No records found matching your filters. <a data-action="clearFilters">Clear your filters?</a>
           {{/unless}}
           {{#each records}}
