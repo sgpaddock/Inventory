@@ -59,7 +59,7 @@ Template.inventory.events
   'change input[name=pageLimit]': (e, tpl) ->
     tpl.pageLimit.set Number tpl.$('input[name=pageLimit]').val()
   'change input[name=selectAll]': (e, tpl) ->
-    $('input[type=checkbox]').prop 'checked', tpl.$(e.target).is(':checked')
+    $('input[type=checkbox][name=selectRow]').prop 'checked', tpl.$(e.target).is(':checked')
     $('input[name=selectRow]').trigger('change')
 
 
