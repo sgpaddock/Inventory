@@ -7,6 +7,8 @@ Migrations.add
         if roomNumber or building
           Inventory.update i._id, { $set: { building: building, roomNumber: roomNumber } }
           Buildings.upsert { building: building }, { $set: lastUse: new Date() }
+
+Migrations.add
   version: 2
   up: ->
     Inventory.find().forEach (i) ->
