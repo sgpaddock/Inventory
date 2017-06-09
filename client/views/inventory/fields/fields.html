@@ -1,3 +1,14 @@
+<template name="shipDateField">
+  {{#if value}}
+    <div class="time">
+      {{parsedTime}}
+      <div class="full-time">
+        {{fullTime}}
+      </div>
+    </div>
+  {{/if}}
+</template>
+
 <template name="inventoryBadges">
   {{#with item}}
     <input type="checkbox" name="selectRow">

@@ -112,6 +112,7 @@ SimpleSchema.messages {
     blackbox: true
     optional: true
   shipDate:
+    label: "Ship Date"
     type: new Date()
     optional: true
 

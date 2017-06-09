@@ -42,6 +42,7 @@ Template.inventory.helpers
       { key: 'owner', tpl: Template.ownerField },
       'roomNumber'
       'building'
+      { key: 'shipDate', tpl: Template.shipDateField, sortable: true },
       { key: 'attachments', tpl: Template.attachmentField, sortable: false, class: 'hidden-xs' }
     ]
     if Roles.userIsInRole Meteor.userId(), 'admin'

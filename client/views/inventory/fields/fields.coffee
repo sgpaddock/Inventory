@@ -1,3 +1,8 @@
+
+Template.shipDateField.helpers
+  parsedTime: -> moment(@value).format('MMM D, YYYY')
+  fullTime: -> moment(@value).format('MMMM Do YYYY, h:mm:ss a')
+
 Template.inventoryBadges.helpers
   item: -> Inventory.findOne(@documentId)
   noteCount: -> if @notes?.length then @notes.length # just to prevent 0-count badges from showing
