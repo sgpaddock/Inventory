@@ -7,6 +7,11 @@ Migrations.add
         if roomNumber or building
           Inventory.update i._id, { $set: { building: building, roomNumber: roomNumber } }
           Buildings.upsert { building: building }, { $set: lastUse: new Date() }
+  version: 2
+  up: ->
+    Inventory.find().forEach (i) ->
+      Job.push new WarrantyLookupJob
+        inventoryId: i._id
  
 Meteor.startup ->
-  Migrations.migrateTo(1)
+  Migrations.migrateTo(2)
