@@ -3,6 +3,7 @@ Template.editAssetModal.helpers
   item: -> Inventory.findOne(@docId)
   file: -> FileRegistry.findOne(@fileId)
   departments: -> _.map departments, (v) -> { label: v, value: v }
+  formatDate: (date) -> moment(date).format('MMM D, YYYY')
 
 Template.editAssetModal.events
   'show.bs.modal': (e, tpl) ->
