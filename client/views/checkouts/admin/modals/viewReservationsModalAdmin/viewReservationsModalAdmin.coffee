@@ -1,4 +1,5 @@
 Template.viewReservationsModalAdmin.helpers
+  isAdmin: -> Roles.userIsInRole Meteor.userId(), 'admin'
   item: -> Inventory.findOne { _id: @docId }
   checkout: -> Checkouts.find { assetId: @_id }, { sort: { 'schedule.timeReserved': 1 } }
   overdue: ->
@@ -54,6 +55,8 @@ Template.viewReservationsModalAdmin.events
     } }
     tpl.rejecting.set null
 
+  'click button[data-action=showFullHistory]': (e, tpl) ->
+    tpl.subscribe 'checkoutHistory', tpl.data.docId
 
 Template.viewReservationsModalAdmin.onCreated ->
   @error = new ReactiveVar

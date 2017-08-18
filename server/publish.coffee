@@ -88,6 +88,10 @@ Meteor.publishComposite 'inventorySet', (set) ->
     ]
   }
 
+Meteor.publish 'checkoutHistory', (assetId) ->
+  if Roles.userIsInRole @userId, 'admin'
+    Checkouts.find { assetId: assetId }
+
 Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) ->
   _.extend inventoryFilter, { checkout: true }
 

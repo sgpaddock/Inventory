@@ -78,6 +78,9 @@
                       {{/each}}
                     </tbody>
                   </table>
+                  {{#if isAdmin}}
+                    <button type="button" data-action="showFullHistory" class="btn btn-xs btn-primary">Show Full History</button>
+                  {{/if}}
                 </div>
               </div>
             </div>
