@@ -24,6 +24,11 @@
                         <td>Reserved From</td>
                         <td>Expected Return</td>
                         <td>Status</td>
+                        {{#if isViewingFullHistory}}
+                          <td>Approved by</td>
+                          <td>Checked out by</td>
+                          <td>Checked in by</td>
+                        {{/if}}
                       </tr>
                     </thead>
                     <tbody>
@@ -74,12 +79,19 @@
                               {{/if}}
                             {{/if}}
                           </td>
+                          {{#if isViewingFullHistory}}
+                            <td>{{usernameFromId approval.approvedId}}</td>
+                            <td>{{usernameFromId schedule.checkedOutBy}}</td>
+                            <td>{{usernameFromId schedule.checkedInBy}}</td>
+                          {{/if}}
                         </tr>
                       {{/each}}
                     </tbody>
                   </table>
                   {{#if isAdmin}}
+                    {{#unless isViewingFullHistory}}
                     <button type="button" data-action="showFullHistory" class="btn btn-xs btn-primary">Show Full History</button>
+                    {{/unless}}
                   {{/if}}
                 </div>
               </div>

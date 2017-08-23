@@ -1,5 +1,6 @@
 Template.viewReservationsModalAdmin.helpers
   isAdmin: -> Roles.userIsInRole Meteor.userId(), 'admin'
+  isViewingFullHistory: -> Template.instance().viewFullHistory.get()
   item: -> Inventory.findOne { _id: @docId }
   checkout: -> Checkouts.find { assetId: @_id }, { sort: { 'schedule.timeReserved': 1 } }
   overdue: ->
@@ -57,8 +58,10 @@ Template.viewReservationsModalAdmin.events
 
   'click button[data-action=showFullHistory]': (e, tpl) ->
     tpl.subscribe 'checkoutHistory', tpl.data.docId
+    tpl.viewFullHistory.set true
 
 Template.viewReservationsModalAdmin.onCreated ->
+  @viewFullHistory = new ReactiveVar false
   @error = new ReactiveVar
   @checkSuccess = new ReactiveVar
   @rejecting = new ReactiveVar null
