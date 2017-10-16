@@ -26,8 +26,10 @@
                 {{! First item is the item entry }}
                 <div class="row">
                   <div class="col-md-12">
-                    {{timestampFormatter enteredAtTimestamp}}:
-                    <strong>{{usernameFromId enteredByUserId}}</strong> entered this item into the database
+                    {{#if enteredAtTimestamp}}
+                      {{timestampFormatter enteredAtTimestamp}}:
+                      <strong>{{usernameFromId enteredByUserId}}</strong> entered this item into the database
+                    {{/if}}
                   </div>
                 </div>
                 {{#each changelog}}

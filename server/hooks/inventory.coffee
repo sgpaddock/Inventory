@@ -1,8 +1,18 @@
 Inventory.before.insert (userId, doc) ->
-  doc.enteredAtTimestamp = new Date()
+  now = new Date()
+  doc.enteredAtTimestamp = now
   doc.enteredByUserId = userId
-  Buildings.upsert { building: doc.building }, { $set: { lastUse: new Date() } }
-  Models.upsert { model: doc.model }, { $set: { lastUse: new Date() } }
+  Buildings.upsert { building: doc.building }, { $set: { lastUse: now } }
+  Models.upsert { model: doc.model }, { $set: { lastUse: now } }
+
+Inventory.before.upsert (userId, selector, modifier, options) ->
+  now = new Date()
+  modifier.$setOnInsert.enteredAtTimestamp = now
+  modifier.$setOnInsert.enteredByUserId = userId
+  if modifier.$set.building?
+    Buildings.upsert { building: modifier.$set.building }, { $set: { lastUse: now } }
+  if modifier.$set.model?
+    Models.upsert { model: doc.model }, { $set: { lastUse: now } }
 
 Inventory.after.insert (userId, doc) ->
   Job.push new WarrantyLookupJob
