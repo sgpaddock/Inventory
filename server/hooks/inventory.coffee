@@ -12,11 +12,12 @@ Inventory.before.upsert (userId, selector, modifier, options) ->
   if modifier.$set.building?
     Buildings.upsert { building: modifier.$set.building }, { $set: { lastUse: now } }
   if modifier.$set.model?
-    Models.upsert { model: doc.model }, { $set: { lastUse: now } }
+    Models.upsert { model: modifier.$set.model }, { $set: { lastUse: now } }
 
 Inventory.after.insert (userId, doc) ->
-  Job.push new WarrantyLookupJob
-    inventoryId: doc._id
+  if doc
+    Job.push new WarrantyLookupJob
+      inventoryId: doc._id
 
 Inventory.after.update (userId, doc, fieldNames, modifier, options) ->
   if @previous.serialNo != doc.serialNo

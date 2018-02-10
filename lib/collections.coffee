@@ -21,11 +21,9 @@ SimpleSchema.messages {
     label: "Serial Number"
   enteredByUserId:
     type: String
-    denyUpdate: true
     optional: true # Will be taken care of by the server.
   enteredAtTimestamp:
     type: new Date()
-    denyUpdate: true
     optional: true # Will be taken care of by the server.
   model:
     type: String
