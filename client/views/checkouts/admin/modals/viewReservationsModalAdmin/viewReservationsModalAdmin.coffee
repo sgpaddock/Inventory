@@ -8,6 +8,7 @@ Template.viewReservationsModalAdmin.helpers
     @schedule?.expectedReturn < today and (not @schedule.timeReturned?) and @schedule.timeCheckedOut?
   displayName: -> Meteor.users.findOne(@assignedTo)?.displayName
   error: -> Template.instance().error.get()
+  approvingThisCheckout: -> Template.instance().approving.get() is @_id
   rejectingThisCheckout: -> Template.instance().rejecting.get() is @_id
   currentlyCheckedOut: ->
     Checkouts.findOne({
@@ -38,7 +39,10 @@ Template.viewReservationsModalAdmin.events
     $('#confirmCheckoutModal').modal('show')
 
   'click button[data-action=approve]': (e, tpl) ->
-    Checkouts.update @_id, { $set: { 'approval.approved': true, 'approval.approverId': Meteor.userId() } }
+    tpl.approving.set @_id
+
+  'click button[data-action=approveConfirm]': (e, tpl) ->
+    Checkouts.update @_id, { $set: { 'approval.approved': true, 'approval.approverId': Meteor.userId(), 'approval.reason': tpl.$('input[name=reason]').val() } }
 
   'click button[data-action=reject]': (e, tpl) ->
     tpl.rejecting.set @_id
@@ -64,4 +68,5 @@ Template.viewReservationsModalAdmin.onCreated ->
   @viewFullHistory = new ReactiveVar false
   @error = new ReactiveVar
   @checkSuccess = new ReactiveVar
+  @approving = new ReactiveVar null
   @rejecting = new ReactiveVar null

@@ -43,7 +43,7 @@
                                 <span class="available">
                                   Checked In
                                 </span>
-                                {{else}}
+                              {{else}}
                                 <span class="unavailable">
                                   {{#if overdue}}
                                     Overdue
@@ -53,7 +53,7 @@
                                 </span>
                                 <button type="button" data-action="checkIn" class="btn btn-xs btn-primary checkout-action-btn">Check In</button>
                               {{/if}}
-                              {{else}}
+                            {{else}}
                               {{#if approval.approved}}
                                 <div>Approved by {{usernameFromId approval.approverId}}</div>
                                 <div>
@@ -64,16 +64,21 @@
                                     {{/unless}}
                                   {{/unless}}
                                 </div>
-                                {{else}}
+                              {{else}}
                                 {{#if approval.approverId}}
                                   Rejected by {{usernameFromId approval.approverId}}
-                                  {{else}}
+                                {{else}}
                                   {{#if rejectingThisCheckout}}
                                     <input type="text" name="reason" placeholder="Enter reason for rejection">
                                     <button type="button" data-action="rejectConfirm" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
                                   {{else}}
-                                    <button type="button" data-action="approve" class="btn btn-xs btn-success checkout-action-btn">Approve</button>
-                                    <button type="button" data-action="reject" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
+                                    {{#if approvingThisCheckout}}
+                                      <input type="text" name="reason" placeholder="Approval reason (optional)">
+                                      <button type="button" data-action="approveConfirm" class="btn btn-xs btn-danger checkout-action-btn">Approve</button>
+                                    {{else}}
+                                      <button type="button" data-action="approve" class="btn btn-xs btn-success checkout-action-btn">Approve</button>
+                                      <button type="button" data-action="reject" class="btn btn-xs btn-danger checkout-action-btn">Reject</button>
+                                    {{/if}}
                                   {{/if}}
                                 {{/if}}
                               {{/if}}

@@ -69,11 +69,12 @@ Checkouts.after.update (userId, doc, fieldNames, modifier, options) ->
   if modifier.$set?.approval?.approved or modifier.$set?['approval.approved']
     item = Inventory.findOne(doc.assetId)
     name = item.name || item.model
+    reason = if doc.approval.reason?.trim().length then "<br>Reason given: #{doc.approval.reason}" else ""
     scheduleMail
       email: Meteor.users.findOne(doc.assignedTo)?.mail
       subject: "Your reservation of #{name} has been approved"
       html: "Your reservation of #{name} for #{moment(doc.schedule.timeReserved).format('LL')} has been approved.
-      Please visit POT 915, 923, or 961 to pick up your item on that date when ready."
+      Please visit POT 915, 923, or 961 to pick up your item on that date when ready.#{reason}"
       date: new Date()
     scheduleCheckoutReminders userId, doc
 

@@ -214,7 +214,7 @@ SimpleSchema.messages {
     optional: true
     type: String
   'approval.reason':
-    label: "Rejection Reason"
+    label: "Approval/Rejection Reason"
     optional: true
     type: String
   'schedule.timeCheckedOut':
