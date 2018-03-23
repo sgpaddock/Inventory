@@ -8,7 +8,7 @@ Inventory.allow
   insert: (userId, doc) ->
     Roles.userIsInRole(userId, 'admin')
   update: (userId, doc, fields, modifier) ->
-    Roles.userIsInRole(userId, 'admin') and not _.intersection(fields, [ 'notes', 'enteredByUserId', 'enteredAtTimestamp' ]).length is 0
+    Roles.userIsInRole(userId, 'admin') and _.intersection(fields, [ 'notes', 'enteredByUserId', 'enteredAtTimestamp' ]).length is 0
   remove: -> false
 
 
