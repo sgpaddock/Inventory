@@ -91,12 +91,12 @@ Meteor.methods
       item = Inventory.findOne(checkout.assetId)
       console.log "User #{@userId} cancelling reservation: #{JSON.stringify(checkout)} for #{user.username}"
       Checkouts.remove { _id: checkoutId }
-      scheduleMail
-        email: user.mail
+      Email.send
+        from: Meteor.settings.email.fromEmail
+        to: user.mail
         subject: "Your checkout of item #{item?.name} has been cancelled."
         html: "Your checkout of item #{item?.name} for #{moment(checkout.schedule.timeReserved).format('LL')} has been cancelled.
         If you feel this is in error, please submit a help request."
-        date: new Date()
 
   addInventoryNote: (inventoryId, message) ->
     if Roles.userIsInRole @userId, 'admin'
