@@ -106,7 +106,7 @@ dueSoonReminders = ->
 
 SyncedCron.add
   name: '5:00 PM reminder emails'
-  schedule: (parser) -> parser.text 'at 5:00 pm every day'
+  schedule: (parser) -> parser.text 'at 5:00 pm'
   job: ->
     pickupReminders()
     dueSoonReminders()
