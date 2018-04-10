@@ -108,7 +108,7 @@ SyncedCron.add
   name: '5:00 PM reminder emails'
   schedule: (parser) -> parser.text 'at 5:00 pm every day'
   job: ->
-    pickupTomorrowReminders()
+    pickupReminders()
     dueSoonReminders()
 
 Meteor.startup ->
