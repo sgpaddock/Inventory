@@ -51,8 +51,12 @@ SyncedCron.add
   name: '8:00 AM reminder emails'
   schedule: (parser) -> parser.text 'at 8:00 am every weekday'
   job: ->
-    findOverdueItems()
-    findDueItems()
+    # HACK: syncedCron seems to run when either local time OR utc time matches, so check that it's the right one
+    if new Date().getHours() == 8
+      findOverdueItems()
+      findDueItems()
+    else
+      console.log 'it may be 8 am somewhere, but not here!'
 
 pickupReminders = ->
   console.log "Sending day-before-pickup reminders"
@@ -108,9 +112,12 @@ SyncedCron.add
   name: '5:00 PM reminder emails'
   schedule: (parser) -> parser.text 'at 5:00 pm'
   job: ->
-    pickupReminders()
-    dueSoonReminders()
+    # HACK: syncedCron seems to run when either local time OR utc time matches, so check that it's the right one
+    if new Date().getHours == 17
+      pickupReminders()
+      dueSoonReminders()
+    else
+      console.log 'It may be 5:00 pm somewhere, but not here!'
 
-Meteor.startup ->
-  SyncedCron.start()
+SyncedCron.start()
 
