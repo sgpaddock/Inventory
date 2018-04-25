@@ -580,7 +580,7 @@ blockquote {
   vertical-align: middle;
 }
 
-.input-group.input-group-flex {
+.filter-flex-container {
   display: flex;
   justify-content: space-between;
 }
