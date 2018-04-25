@@ -115,7 +115,7 @@ Meteor.methods
       _.each items, (i) ->
         Inventory.upsert { propertyTag: i.propertyTag }, {
           $set: i
-          $setOnInsert: { enteredIntoEbars: false, checkout: false, delivered: true, archived: false }
+          $setOnInsert: { enteredIntoEbars: false, checkout: false, delivered: true, archived: false, onReplacementCycle: false }
         }, (err, res) ->
           if err
             console.log err.message
