@@ -36,7 +36,7 @@ Template.editAssetModal.events
     checkUsername tpl
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
     obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
-    obj['onReplacementCycle'] = tpl.$('[data-schema-key=onReplacementCycle]').is(':checked')
+    obj['isPartOfReplacementCycle'] = tpl.$('[data-schema-key=isPartOfReplacementCycle]').is(':checked')
     obj['archived'] = tpl.$('[data-schema-key=archived]').is(':checked')
     Inventory.update tpl.data.docId, { $set: obj }, (err, success) ->
       if (err)

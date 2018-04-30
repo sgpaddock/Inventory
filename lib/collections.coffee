@@ -88,7 +88,7 @@ SimpleSchema.messages {
     label: "Delivered to User?"
     type: Boolean
     defaultValue: false
-  onReplacementCycle:  
+  isPartOfReplacementCycle:  
     label: "Part of Replacement Cycle"
     type: Boolean
     defaultValue: false

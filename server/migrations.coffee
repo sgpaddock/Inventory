@@ -14,6 +14,11 @@ Migrations.add
     Inventory.find().forEach (i) ->
       Job.push new WarrantyLookupJob
         inventoryId: i._id
+
+Migrations.add
+  version: 3
+  up: ->
+    Inventory.update { isPartOfReplacementCycle: { $exists: false }}, { $set: { isPartOfReplacementCycle: false }}, { multi: true }
  
 Meteor.startup ->
-  Migrations.migrateTo(2)
+  Migrations.migrateTo(3)
