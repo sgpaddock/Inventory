@@ -1,5 +1,5 @@
 fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name' ]
-boolFields = [ 'checkout', 'enteredIntoEbars', 'delivered' ]
+boolFields = [ 'checkout', 'enteredIntoEbars', 'delivered', 'isPartOfReplacementCycle' ]
 
 Template.newAssetModal.onCreated ->
   @error = new ReactiveVar ""
@@ -21,6 +21,8 @@ Template.newAssetModal.events
           $el.closest('.form-group').removeClass('has-error')
 
       obj[f] = $el.val()
+
+    checkUsername tpl
 
     _.each boolFields, (f) ->
       obj[f] = tpl.$("[data-schema-key=#{f}]").is(':checked')

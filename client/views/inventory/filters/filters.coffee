@@ -10,6 +10,9 @@ Template.inventoryFilters.events
   'change input.filter-archived': (e, tpl) ->
     Iron.query.set 'archived', $(e.target).prop('checked')
 
+  'change input.filter-isPartOfReplacementCycle': (e, tpl) ->
+    Iron.query.set 'isPartOfReplacementCycle', $(e.target).prop('checked')
+
 Template.inventoryFilters.helpers
   facetKeys: ->
     ###
@@ -35,6 +38,7 @@ Template.inventoryFilters.helpers
 
   selection: -> Iron.query.get(@key) || "Any"
   archiveFilterChecked: -> if Iron.query.get('archived') then "checked" else ""
+  isPartOfReplacementCycleFilterChecked: -> if Iron.query.get('isPartOfReplacementCycle') then "checked" else ""
 
 Template.facetCheckbox.events
   'change input:checkbox': (e, tpl) ->

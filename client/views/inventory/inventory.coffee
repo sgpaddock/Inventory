@@ -26,6 +26,9 @@ getFilters = ->
   else
     filters.archived = {$ne: true}
 
+  if Iron.query.get 'isPartOfReplacementCycle'
+    filters.isPartOfReplacementCycle = true
+
   return filters
 
 Template.inventory.helpers

@@ -33,8 +33,10 @@ Template.editAssetModal.events
     _.each fields, (f) ->
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
+    checkUsername tpl
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
     obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
+    obj['isPartOfReplacementCycle'] = tpl.$('[data-schema-key=isPartOfReplacementCycle]').is(':checked')
     obj['archived'] = tpl.$('[data-schema-key=archived]').is(':checked')
     Inventory.update tpl.data.docId, { $set: obj }, (err, success) ->
       if (err)

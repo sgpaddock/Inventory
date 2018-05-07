@@ -1,35 +1,49 @@
 <template name="inventoryFilters">
   <div class="hidden-xs inline-block col-md-12">
-    {{#each facetKeys}}
-      <div class="dropdown inline-block facet-dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" data-facet="{{key}}" data-toggle="dropdown">
-          {{label}}: {{selection}} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-          <li class="dropdown-header">{{label}}</li>
-          {{#each value}}
-            <li>
-              {{> facetCheckbox}}
-            </li>
-          {{/each}}
-        </ul>
+    <div class="filter-flex-container">  
+      <div> 
+        {{#each facetKeys}}
+          <div class="dropdown inline-block facet-dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" data-facet="{{key}}" data-toggle="dropdown">
+              {{label}}: {{selection}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li class="dropdown-header">{{label}}</li>
+              {{#each value}}
+                <li>
+                  {{> facetCheckbox}}
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/each}}
+        <div class="input-group input-group-inline">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" class="filter-isPartOfReplacementCycle" {{isPartOfReplacementCycleFilterChecked}}>
+                Replacement Cycle
+            </label>
+          </div>
+        </div>
       </div>
-    {{/each}}
-    <div class="input-group input-group-inline">
-      <input type="text" name="search" placeholder="Search..." class="form-control" value="{{ironQueryReactive 'search'}}">
-      <span class="input-group-btn">
-        <button class="btn btn-primary" name="search">Search</button>
-      </span>
+      <div>
+        <div class="input-group input-group-inline">
+            <input type="text" name="search" placeholder="Search..." class="form-control" value="{{ironQueryReactive 'search'}}">
+            <span class="input-group-btn">
+              <button class="btn btn-primary" name="search">Search</button>
+            </span>
+        </div>    
+        <div class="input-group input-group-inline">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" class="filter-archived" {{archiveFilterChecked}}>
+                Archived
+            </label>
+          </div>
+        </div>
+      </div>    
     </div>
-    <div class="input-group input-group-inline">
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" class="filter-archived" {{archiveFilterChecked}}>
-          Archived
-        </label>
-      </div>
-    </div>
-  </div>
+  </div>    
   <div class="hidden-sm hidden-md hidden-lg">
     <div class="mobile-filter-buttons">
       <button class="btn btn-primary" role="button" data-toggle="collapse" data-target="#mobileFilters" aria-expanded="false">

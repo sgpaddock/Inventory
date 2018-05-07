@@ -88,6 +88,10 @@ SimpleSchema.messages {
     label: "Delivered to User?"
     type: Boolean
     defaultValue: false
+  isPartOfReplacementCycle:  
+    label: "Part of Replacement Cycle"
+    type: Boolean
+    defaultValue: false
   archived:
     label: "Archived"
     type: Boolean

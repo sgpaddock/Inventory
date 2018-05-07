@@ -1,12 +1,12 @@
 <template name="inventoryActions">
-  <div class="row" style="margin-top: 10px;">
+  <div class="row col-md-12">
     <div class="col-md-12">
       {{#if admin}}
-        <button type="button" class="btn btn-primary" data-action="addNewAsset">Add New Asset</button>
+        <button type="button" class="btn btn-primary" data-action="addNewAsset">Add New Asset</button>        
         <button type="button" class="btn btn-success" data-action="bulkRecordPickup">Bulk Record Pickup</button>
         <!-- <button type="button" class="btn btn-danger" data-action="bulkSurplus">Bulk Surplus</button> -->
       {{/if}}
-      <a href="{{exportUrl}}" target="_blank"><button class="btn btn-warning">Export to CSV</button></a>
+        <a href="{{exportUrl}}" target="_blank"><button class="btn btn-warning">Export to CSV</button></a>
     </div>
   </div>
 </template>
