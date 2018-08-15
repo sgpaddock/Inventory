@@ -76,7 +76,7 @@ Router.map ->
         filter = @params.query
         if filter.search
           filter.$text = { $search: filter.search }
-        delete filter.search  
+          delete filter.search  
         if filter.archived
           filter.archived = true
         else
