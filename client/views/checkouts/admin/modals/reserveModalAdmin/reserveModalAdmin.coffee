@@ -10,6 +10,7 @@ Template.reserveModalAdmin.rendered = ->
   @.$('.datepicker').datepicker({
     todayHighlight: true
     orientation: "up" # up is down
+    daysOfWeekDisabled: ['0','6']
     beforeShowDay: (date) ->
       if Checkouts.findOne({ assetId: tpl.data.docId, 'schedule.timeReserved': { $lte: date }, 'schedule.expectedReturn': { $gte: date, }, 'schedule.timeReturned': { $exists: false }, 'approval.approved': { $ne: false }})
         return { enabled: false, classes: "datepicker-date-reserved", tooltip: "Reserved" }

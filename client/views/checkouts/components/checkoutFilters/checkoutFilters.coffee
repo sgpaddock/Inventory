@@ -26,4 +26,5 @@ Template.checkoutFilters.rendered = ->
     clearBtn: true
     todayHighlight: true
     format: 'yyyy-mm-dd'
+    daysOfWeekDisabled: ['0','6']
   })
