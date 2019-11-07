@@ -81,7 +81,7 @@ Template.editAssetModal.events
 
 Template.editAssetModal.created = ->
   @subscribe 'buildings'
-  @subscribe 'item', @data.docId
+  @subscribe 'item', { _id:@data.docId }
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.
