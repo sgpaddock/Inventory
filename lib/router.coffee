@@ -18,6 +18,15 @@ Router.map ->
     template: 'inventory'
     waitOn: ->
       Meteor.subscribe 'userData'
+
+  @route 'asset',
+    path: '/inventory/asset/:propertyTag'
+    template: 'asset'
+    onBeforeAction: ->
+      Session.set 'propertyTag', @params.propertyTag
+      @next()
+    waitOn: -> 
+      Meteor.subscribe 'item', { propertyTag:@params.propertyTag }
   
   @route 'checkouts',
     path: '/checkouts'
