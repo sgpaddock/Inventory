@@ -19,7 +19,23 @@ UI.registerHelper 'usernameFromId', (userId) ->
 UI.registerHelper 'isCordova', ->
   Meteor.isCordova
 
+UI.registerHelper 'isAdmin', ->
+  Roles.userIsInRole Meteor.userId(), 'admin'
 
+  ###
+  Need to remove the isAdmin: -> here - you're returning an object with key 'isAdmin' that returns a function
+  
+  In vanilla JS, this would be:
+  UI.registerHelper('isAdmin', function() {
+    return {
+      isAdmin: function() {
+        return Roles.userIsInRole(Meteor.userId(), 'admin');
+      }
+    };
+  });
+
+  But you just want the initial function to return the Roles.userIsInRole value that you want
+  ###
 
 UI.registerHelper 'arrayify', (obj) ->
   #Transforms objects with k/v pairs into arrays of objects so Handlebars can iterate over them properly.

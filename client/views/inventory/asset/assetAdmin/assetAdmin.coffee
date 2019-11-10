@@ -1,15 +1,15 @@
 fields = [ 'name', 'propertyTag', 'serialNo', 'model', 'department', 'roomNumber', 'building', 'owner', 'shipDate', 'deviceType' ]
 
-Template.asset.helpers
+Template.assetAdmin.helpers
   asset: ->
     return Inventory.findOne {propertyTag: Session.get('propertyTag')}
-  item: -> Inventory.findOne(@docId)
+  #item: -> Inventory.findOne(@docId)
   file: -> FileRegistry.findOne(@fileId)
   departments: -> _.map departments, (v) -> { label: v, value: v }
   deviceTypes: -> _.map deviceTypes, (v) -> { label: v, value: v }
   formatDate: (date) -> moment(date).format('MMM D, YYYY')
 
-Template.editAssetModal.events
+Template.assetAdmin.events
   'show.bs.modal': (e, tpl) ->
     zIndex = 1040 + ( 10 * $('.modal:visible').length)
     $(e.target).css('z-index', zIndex)
@@ -26,7 +26,7 @@ Template.editAssetModal.events
      Media.pickLocalFile (fileId) =>
        Inventory.update @_id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
   'click a[data-action=removeAttachment]': (e, tpl) ->
-    Blaze.renderWithData Template.removeAttachmentModal, { attachmentId: @fileId, itemId: tpl.data.docId }, $('body').get(0)
+    Blaze.renderWithData Template.removeAttachmentModal, { attachmentId: @fileId, itemId: tpl.docId }, $('body').get(0)
     $('#removeAttachmentModal').modal('show')
 
   'click a[data-action=showAttachmentModal]': (e, tpl) ->
@@ -42,7 +42,7 @@ Template.editAssetModal.events
     obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
     obj['isPartOfReplacementCycle'] = tpl.$('[data-schema-key=isPartOfReplacementCycle]').is(':checked')
     obj['archived'] = tpl.$('[data-schema-key=archived]').is(':checked')
-    Inventory.update tpl.data.docId, { $set: obj }, (err, success) ->
+    Inventory.update tpl.docId, { $set: obj }, (err, success) ->
       if (err)
         Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys
       else
@@ -67,15 +67,15 @@ Template.editAssetModal.events
     lookupShipDate tpl 
 
   'click button[data-action=recordNewDelivery]': (e, tpl) ->
-    Blaze.renderWithData Template.pickupModal, { docId: tpl.data.docId }, $('body').get(0)
+    Blaze.renderWithData Template.pickupModal, { docId: tpl.docId }, $('body').get(0)
     $('#pickupModal').modal('show')
 
   'click button[data-action=deliverWithoutUser]': (e, tpl) ->
-    Meteor.call 'recordItemDeliveryWithoutUser', tpl.data.docId
+    Meteor.call 'recordItemDeliveryWithoutUser', tpl.docId
 
-Template.editAssetModal.created = ->
+Template.assetAdmin.created = ->
   @subscribe 'buildings'
-  @subscribe 'item', { _id:@data.docId }
+  @docId = Inventory.findOne()?._id
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.
