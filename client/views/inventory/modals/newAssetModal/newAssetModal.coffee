@@ -1,4 +1,4 @@
-fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name', 'shipDate', 'deviceType' ]
+fields = [ 'serialNo', 'model', 'offCampus', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name', 'shipDate', 'deviceType' ]
 boolFields = [ 'checkout', 'enteredIntoEbars', 'delivered', 'isPartOfReplacementCycle' ]
 
 Template.newAssetModal.onCreated ->

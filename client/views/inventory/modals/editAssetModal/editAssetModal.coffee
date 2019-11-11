@@ -44,6 +44,7 @@ Template.editAssetModal.events
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
     checkUsername tpl
+    obj['offCampus'] = tpl.$('[data-schema-key=offCampus]').is(':checked')
     obj['checkout'] = tpl.$('[data-schema-key=checkout]').is(':checked')
     obj['enteredIntoEbars'] = tpl.$('[data-schema-key=enteredIntoEbars]').is(':checked')
     obj['isPartOfReplacementCycle'] = tpl.$('[data-schema-key=isPartOfReplacementCycle]').is(':checked')

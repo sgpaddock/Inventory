@@ -27,6 +27,10 @@ SimpleSchema.messages {
     optional: true # Will be taken care of by the server.
   model:
     type: String
+  offCampus:
+    label: "Off campus/mobile device"
+    type: Boolean
+    defaultValue: false
   department:
     type: String
   owner:

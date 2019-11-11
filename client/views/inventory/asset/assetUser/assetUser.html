@@ -1,3 +1,29 @@
 <template name="assetUser">
-    {{asset.propertyTag}}
+  {{#with asset}}
+    <div class="container"> 
+      <div class="row">    
+        <div class="filter-flex-container">
+          <h4>{{asset.propertyTag}}</h4>
+          <button type="button" data-action="submit" class="btn btn-primary">Update</button>              
+        </div>
+        <hr>
+        <div class="col-sm-4">
+          <ul class="list-group">
+            {{#autoForm collection="Inventory" id="assetForm" doc=this}}
+              {{> afQuickField name='name' disabled=true}}
+              {{> afQuickField name='propertyTag' disabled=true}}
+              {{> afQuickField name='serialNo' disabled=true}}
+              {{> afQuickField name='model' disabled=true}}
+              {{> afQuickField name='offCampus' disabled=true}}
+              {{> afQuickField name='department' disabled=true}}
+              {{> afQuickField name='roomNumber' disabled=true}}
+            {{/autoForm}}
+          </ul>  
+        </div>  
+        <div class="col-sm-8">
+          <button type="button" data-modal="offCampusRecordModal" data-toggle="modal" class="btn btn-sm btn-default hidden-xs">Off-campus</button>
+        </div>      
+      </div>
+    </div>
+  {{/with}}
 </template>
