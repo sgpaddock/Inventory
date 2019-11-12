@@ -11,26 +11,25 @@
               <div class="row">
                 <div class="col-xs-12">
                   {{#autoForm collection="Inventory" id="assetForm" type="update" doc=this}}
-                    {{> afQuickField name='propertyTag' disabled=true}}
+                    {{> afQuickField name='propertyTag' }}
                     {{> afQuickField name='serialNo' disabled=true}}
                     {{> afQuickField name='model' disabled=true}}
                     {{> afQuickField name='offCampusStreetAddress'}}
                     {{> afQuickField name='offCampusJustification'}}
-                    {{> afQuickField name='offCampusCertification'}}
-                  {{/autoForm}}
                   <form>
                     <div class="form-group">
                       <div class="alert alert-info">
                         I accept full responsibility for the security and proper utilization of this equipment while at this temporary location.
+                        {{> afQuickField name='offCampusCertification'}}
                       </div>
-                      <button type="button" class="btn btn-primary" data-action="submit">Submit</button>
                     </div>  
                   </form>
+                  {{/autoForm}}
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" data-dismiss="modal" class="btn btn-default">Close</button>
+              <button type="button" data-action="submit" class="btn btn-primary">Submit</button>
             </div>
           </div>
         </div>

@@ -98,9 +98,9 @@ SimpleSchema.messages {
     defaultValue: false
   offCampusCertification:
     type: Boolean
-    optional: true
-  'offCampusCertification.$.enteredAtTimestamp':
-    type: new Date()
+    defaultValue: false
+  #'offCampusCertification.$.enteredAtTimestamp':
+  #  type: new Date()
   offCampusStreetAddress:
     type: String
     autoform:  

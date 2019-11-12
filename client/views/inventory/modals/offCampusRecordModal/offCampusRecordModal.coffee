@@ -1,5 +1,5 @@
 
-fields = [ 'offCampusStreetAddress', 'offCampusJustification' ]
+fields = [ 'propertyTag', 'offCampusStreetAddress', 'offCampusJustification' ]
 Template.offCampusRecordModal.helpers
   asset: ->
     return Inventory.findOne {propertyTag: Session.get('propertyTag')}
@@ -20,36 +20,26 @@ Template.offCampusRecordModal.events
     if $('.modal:visible').length
       $(document.body).addClass('modal-open')
 
-  'click button[data-action=login], keyup input': (e, tpl) ->
-    if e.keyCode is 13 or !e.keyCode
-      item = @
-      username = tpl.$('input[name=ldap]').val()
-      Meteor.call 'recordItemDelivery',
-        username,
-        tpl.$('input[name=password]').val(),
-        item._id
-        (err, res) ->
-          if err
-            tpl.error.set('Invalid credentials. Please try again.')
-          else if username isnt item.owner
-            tpl.warning.set "User checking out is not the user this item was originally assigned to.
-             The delivery has been recorded for user #{username}."
-          else
-            tpl.success.set(true)
-
   'click button[data-action=submit]': (e, tpl) ->
     obj = {}
     _.each fields, (f) ->
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
         obj[f] = tpl.$("[data-schema-key=#{f}]").val()
+        console.log (obj[f])
     obj['offCampusCertification'] = tpl.$('[data-schema-key=offCampusCertification]').is(':checked')
+    console.log(obj['offCampusCertification'] )
     Inventory.update tpl.docId, { $set: obj }, (err, success) ->
       if (err)
+        console.log("error")
         Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys
       else
         $('#offCampusRecordModal').modal('hide')
 
-Template.offCampusRecordModal.onCreated ->
-  @error = new ReactiveVar()
-  @success = new ReactiveVar(false)
-  @warning = new ReactiveVar()
+
+Template.offCampusRecordModal.created = ->
+  @docId = Inventory.findOne()?._id
+
+#Template.offCampusRecordModal.onCreated ->
+ # @error = new ReactiveVar()
+  #@success = new ReactiveVar(false)
+  #@warning = new ReactiveVar()
