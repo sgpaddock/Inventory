@@ -96,6 +96,23 @@ SimpleSchema.messages {
     label: "Archived"
     type: Boolean
     defaultValue: false
+  offCampusCertification:
+    type: Boolean
+    optional: true
+  'offCampusCertification.$.enteredAtTimestamp':
+    type: new Date()
+  offCampusStreetAddress:
+    type: String
+    autoform:  
+      afFieldInput:
+        type: 'textarea'
+        rows: 3
+  offCampusJustification:
+    type: String
+    autoform:  
+      afFieldInput:
+        type: 'textarea'
+        rows: 4
   notes:
     type: [Object]
     optional: true

@@ -1,5 +1,8 @@
+
+fields = [ 'offCampusStreetAddress', 'offCampusJustification' ]
 Template.offCampusRecordModal.helpers
-  item: -> Inventory.findOne(@docId)
+  asset: ->
+    return Inventory.findOne {propertyTag: Session.get('propertyTag')}
   success: -> Template.instance().success.get()
   error: -> Template.instance().error.get()
   warning: -> Template.instance().warning.get()
@@ -33,6 +36,18 @@ Template.offCampusRecordModal.events
              The delivery has been recorded for user #{username}."
           else
             tpl.success.set(true)
+
+  'click button[data-action=submit]': (e, tpl) ->
+    obj = {}
+    _.each fields, (f) ->
+      unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
+        obj[f] = tpl.$("[data-schema-key=#{f}]").val()
+    obj['offCampusCertification'] = tpl.$('[data-schema-key=offCampusCertification]').is(':checked')
+    Inventory.update tpl.docId, { $set: obj }, (err, success) ->
+      if (err)
+        Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys
+      else
+        $('#offCampusRecordModal').modal('hide')
 
 Template.offCampusRecordModal.onCreated ->
   @error = new ReactiveVar()

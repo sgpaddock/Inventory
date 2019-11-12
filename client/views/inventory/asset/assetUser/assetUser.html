@@ -9,7 +9,7 @@
         <hr>
         <div class="col-sm-4">
           <ul class="list-group">
-            {{#autoForm collection="Inventory" id="assetForm" doc=this}}
+            {{#autoForm collection="Inventory" id="assetUserForm" doc=this}}
               {{> afQuickField name='name' disabled=true}}
               {{> afQuickField name='propertyTag' disabled=true}}
               {{> afQuickField name='serialNo' disabled=true}}
@@ -17,11 +17,14 @@
               {{> afQuickField name='offCampus' disabled=true}}
               {{> afQuickField name='department' disabled=true}}
               {{> afQuickField name='roomNumber' disabled=true}}
+              {{> afQuickField name='offCampusStreetAddress' disabled=true}}
+              {{> afQuickField name='offCampusJustification' disabled=true}}
+              {{> afQuickField name='offCampusCertification' disabled=true}}
             {{/autoForm}}
           </ul>  
         </div>  
         <div class="col-sm-8">
-          <button type="button" data-modal="offCampusRecordModal" data-toggle="modal" class="btn btn-sm btn-default hidden-xs">Off-campus</button>
+          <button type="button" data-modal="offCampusRecordModal" data-toggle="modal" class="btn btn-sm btn-primary">Off-campus</button>
         </div>      
       </div>
     </div>
