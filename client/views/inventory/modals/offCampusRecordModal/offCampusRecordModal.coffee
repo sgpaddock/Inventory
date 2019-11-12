@@ -1,5 +1,5 @@
-
 fields = [ 'propertyTag', 'offCampusStreetAddress', 'offCampusJustification' ]
+
 Template.offCampusRecordModal.helpers
   asset: ->
     return Inventory.findOne {propertyTag: Session.get('propertyTag')}
@@ -21,16 +21,15 @@ Template.offCampusRecordModal.events
       $(document.body).addClass('modal-open')
 
   'click button[data-action=submit]': (e, tpl) ->
-    obj = {}
+    offCampusRecord = {}
     _.each fields, (f) ->
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
-        obj[f] = tpl.$("[data-schema-key=#{f}]").val()
-        console.log (obj[f])
-    obj['offCampusCertification'] = tpl.$('[data-schema-key=offCampusCertification]').is(':checked')
-    console.log(obj['offCampusCertification'] )
-    Inventory.update tpl.docId, { $set: obj }, (err, success) ->
+        offCampusRecord[f] = tpl.$("[data-schema-key=#{f}]").val()
+        console.log (offCampusRecord[f])
+    offCampusRecord['offCampusCertification'] = tpl.$('[data-schema-key=offCampusCertification]').is(':checked')
+    Meteor.call 'updateOffCampusInformation', tpl.docId, offCampusRecord, (err, success) ->
       if (err)
-        console.log("error")
+        console.log(err)
         Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys
       else
         $('#offCampusRecordModal').modal('hide')

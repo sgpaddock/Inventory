@@ -35,6 +35,16 @@ Meteor.methods
     LDAP.bind client, username, password
     return LDAP.search(client, username)?
 
+  updateOffCampusInformation: (itemId, offCampusRecord) ->
+    Inventory.update itemId, {$set: {
+      offCampusStreetAddress: offCampusRecord.offCampusStreetAddress,
+      offCampusJustification: offCampusRecord.offCampusJustification, 
+      offCampusCertification: offCampusRecord.offCampusCertification }
+    }, (err, success) ->
+      if (err)
+        throw new Meteor.Error(err)
+      else
+        return success
  
   deleteItem: (itemId) ->
     if Roles.userIsInRole @userId, 'admin'
