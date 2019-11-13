@@ -1,4 +1,4 @@
-fields = [ 'propertyTag', 'offCampusStreetAddress', 'offCampusJustification' ]
+fields = [ 'offCampusStreetAddress', 'offCampusJustification' ]
 
 Template.offCampusRecordModal.helpers
   asset: ->

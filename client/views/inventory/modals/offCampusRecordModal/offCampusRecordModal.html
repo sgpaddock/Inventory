@@ -8,16 +8,22 @@
               <h4 class="modal-title">Off Campus Information</h4>
             </div>
             <div class="modal-body"> 
-              <div class="row">
-                <div class="col-xs-12">
+              <div class="alert alert-info">
+                University of Kentucky policy sets responsibility for maintaining the official record of capital equipment in the office of University Financial Services, and each University department is charged with responsibility for implementing internal controls designed to safeguard UK-owned equipment. <br>
+                In keeping with this policy, equipment may not be permanently removed from University owned premises. However, equipment may be temporarily removed upon written justification, proper approval, and notification of the A&S Space and Facilities Team.
+              </div>
+
+              
                   {{#autoForm collection="Inventory" id="assetForm" type="update" doc=this}}
-                    {{> afQuickField name='propertyTag' }}
+                    {{> afQuickField name='propertyTag' disabled=true}}
                     {{> afQuickField name='serialNo' disabled=true}}
                     {{> afQuickField name='model' disabled=true}}
-                    {{> afQuickField name='offCampusStreetAddress' data-required=true}}
-                    {{> afQuickField name='offCampusJustification' data-required=true}}
                   <form>
                     <div class="form-group">
+                      <label for="offCampusStreetAddress" class="control-label">Street Address<span class="required">*</span></label>
+                      
+                        <textarea class="form-control" data-schema-key="offCampusStreetAddress" value="{{offCampusStreetAddress}}"></textarea>
+                      
                       <div class="alert alert-info">
                         I accept full responsibility for the security and proper utilization of this equipment while at this temporary location.
                         {{> afQuickField name='offCampusCertification'}}
@@ -26,8 +32,7 @@
                   </form>
                   {{/autoForm}}
                 </div>
-              </div>
-            </div>
+              
             <div class="modal-footer">
               <button type="button" data-action="submit" class="btn btn-primary">Submit</button>
             </div>

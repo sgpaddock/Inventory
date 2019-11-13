@@ -102,6 +102,7 @@ SimpleSchema.messages {
   #'offCampusCertification.$.enteredAtTimestamp':
   #  type: new Date()
   offCampusStreetAddress:
+    label: "Street Address"
     type: String
     autoform:  
       afFieldInput:
