@@ -24,6 +24,12 @@ Template.offCampusRecordModal.events
     offCampusRecord = {}
     _.each fields, (f) ->
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
+        $el = tpl.$("[data-schema-key=#{f}]")
+        if $el.data('required')
+          if !$el.val().length
+            $el.closest('.form-group').addClass('has-error')
+          else
+            $el.closest('.form-group').removeClass('has-error')
         offCampusRecord[f] = tpl.$("[data-schema-key=#{f}]").val()
         console.log (offCampusRecord[f])
     offCampusRecord['offCampusCertification'] = tpl.$('[data-schema-key=offCampusCertification]').is(':checked')
