@@ -3,7 +3,7 @@
     <div class="container"> 
       <div class="row">    
         <div class="filter-flex-container">
-          <h4>{{asset.propertyTag}}</h4>
+          <h4>{{propertyTag}}</h4>
           <button type="button" data-action="submit" class="btn btn-primary">Update</button>              
         </div>
         <hr>
@@ -17,14 +17,21 @@
               {{> afQuickField name='offCampus' disabled=true}}
               {{> afQuickField name='department' disabled=true}}
               {{> afQuickField name='roomNumber' disabled=true}}
-              {{> afQuickField name='offCampusStreetAddress' }}
-              {{> afQuickField name='offCampusJustification' }}
-              {{> afQuickField name='offCampusCertification' disabled=true}}
             {{/autoForm}}
           </ul>  
         </div>  
         <div class="col-sm-8">
-          <button type="button" data-modal="offCampusRecordModal" data-toggle="modal" class="btn btn-sm btn-primary">Off-campus</button>
+          {{#if offCampus}}
+            {{#if offCampusCertification}}
+              {{#autoForm collection="Inventory" id="assetUserForm" doc=this}}
+                {{> afQuickField name='offCampusStreetAddress' disabled=true}}
+                {{> afQuickField name='offCampusJustification' disabled=true}}
+              {{/autoForm}}
+              <button type="button" data-modal="offCampusRecordModal" data-toggle="modal" class="btn btn-primary">Update Off-campus Information</button>
+            {{else}}
+              <button type="button" data-modal="offCampusRecordModal" data-toggle="modal" class="btn btn-primary">Record Off-campus Information</button>
+            {{/if}}  
+          {{/if}}
         </div>      
       </div>
     </div>

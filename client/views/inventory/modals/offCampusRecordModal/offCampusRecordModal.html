@@ -8,6 +8,7 @@
               <h4 class="modal-title">Off Campus Information</h4>
             </div>
             <div class="modal-body"> 
+              <span class="error">{{error}}</span>
               <div class="alert alert-info">
                 University of Kentucky policy sets responsibility for maintaining the official record of capital equipment in the office of University Financial Services, and each University department is charged with responsibility for implementing internal controls designed to safeguard UK-owned equipment. <br>
                 In keeping with this policy, equipment may not be permanently removed from University owned premises. However, equipment may be temporarily removed upon written justification, proper approval, and notification of the A&S Space and Facilities Team.
@@ -20,20 +21,20 @@
                     <div class="form-group">
                       <label for="offCampusStreetAddress" class="control-label">Street Address<span class="required">*</span></label>
                         <textarea class="form-control" rows="3" data-schema-key="offCampusStreetAddress" value="{{offCampusStreetAddress}}"></textarea>  
-                      <label for="offCampusJustification" class="control-label">Justification<span class="required">*</span></label>
+                    </div>  
+                    <div class="form-group">  
+                        <label for="offCampusJustification" class="control-label">Justification<span class="required">*</span></label>
                         <textarea class="form-control" rows="3" data-schema-key="offCampusJustification" placeholder="Include the specific dates of the period the equipment will be located off University premises." value="{{offCampusJustification}}"></textarea>  
-                      <br>  
-                      <div class="alert alert-info">
-                        <label>
-                          <input type="checkbox" name="offCampusCertification" data-schema-key="offCampusCertification">
-                          &nbsp;I accept full responsibility for the security and proper utilization of this equipment while at this temporary location.
-                        </label>
-                      </div>
+                    </div>  
+                    <div class="alert alert-info">
+                      <label>
+                        <input type="checkbox" name="offCampusCertification" data-schema-key="offCampusCertification">
+                        &nbsp;I accept full responsibility for the security and proper utilization of this equipment while at this temporary location.
+                      </label>
                     </div>  
                   </form>
                   {{/autoForm}}
-                </div>
-              
+            </div>  
             <div class="modal-footer">
               <button type="button" data-action="submit" class="btn btn-primary">Submit</button>
             </div>

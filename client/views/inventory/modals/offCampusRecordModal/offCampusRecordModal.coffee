@@ -25,20 +25,27 @@ Template.offCampusRecordModal.events
     _.each fields, (f) ->
       unless tpl.$("[data-schema-key=#{f}]").is(':disabled')
         offCampusRecord[f] = tpl.$("[data-schema-key=#{f}]").val()
-        console.log (offCampusRecord[f])
+        if !offCampusRecord[f].length
+          tpl.$("textarea[data-schema-key=#{f}]").closest('.form-group').addClass('has-error')
+        else
+          tpl.$("textarea[data-schema-key=#{f}]").closest('.form-group').removeClass('has-error')
+    console.log("test")
     offCampusRecord['offCampusCertification'] = tpl.$('[data-schema-key=offCampusCertification]').is(':checked')
-    Meteor.call 'updateOffCampusInformation', tpl.docId, offCampusRecord, (err, success) ->
-      if (err)
-        console.log(err)
-        Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys
-      else
-        $('#offCampusRecordModal').modal('hide')
+    if (offCampusRecord['offCampusCertification'])
+      Meteor.call 'updateOffCampusInformation', tpl.docId, offCampusRecord, (err, success) ->
+        if (err)
+          console.log(err)
+          Inventory.simpleSchema().namedContext('assetForm').addInvalidKeys err.invalidKeys
+        else
+          $('#offCampusRecordModal').modal('hide')
+    else 
+      tpl.$('[data-schema-key=offCampusCertification]').closest('.alert').addClass('alert-danger')
 
 
 Template.offCampusRecordModal.created = ->
   @docId = Inventory.findOne()?._id
 
-#Template.offCampusRecordModal.onCreated ->
- # @error = new ReactiveVar()
-  #@success = new ReactiveVar(false)
-  #@warning = new ReactiveVar()
+Template.offCampusRecordModal.onCreated ->
+  @error = new ReactiveVar ""
+  @success = new ReactiveVar(false)
+  @warning = new ReactiveVar()
