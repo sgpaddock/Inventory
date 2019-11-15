@@ -14,6 +14,7 @@
             <label for="model" class="control-label">Model<span class="required">*</span></label>
             {{> inputAutocomplete type="text" name="model" data-required=true data-schema-key="model" class="form-control" settings=modelSettings}}
           </div>
+          {{> addAssetQuickField name='isOffCampusDevice'}}
           {{> addAssetQuickField name='department' options=departments}}
           {{> addAssetQuickField name='roomNumber'}}
           <div class="form-group">

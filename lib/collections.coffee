@@ -27,7 +27,7 @@ SimpleSchema.messages {
     optional: true # Will be taken care of by the server.
   model:
     type: String
-  offCampus:
+  isOffCampusDevice:
     label: "Off campus/mobile device"
     type: Boolean
     defaultValue: false
@@ -92,6 +92,10 @@ SimpleSchema.messages {
     label: "Part of Replacement Cycle"
     type: Boolean
     defaultValue: false
+  isUnsupportedDevice:
+    label: "Not Hive Supported"
+    type: Boolean
+    defaultValue: false  
   archived:
     label: "Archived"
     type: Boolean
@@ -104,12 +108,14 @@ SimpleSchema.messages {
   offCampusStreetAddress:
     label: "Street Address"
     type: String
+    optional: true
     autoform:  
       afFieldInput:
         type: 'textarea'
         rows: 3
   offCampusJustification:
     type: String
+    optional: true
     autoform:  
       afFieldInput:
         type: 'textarea'

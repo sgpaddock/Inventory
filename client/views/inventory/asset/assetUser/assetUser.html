@@ -14,14 +14,14 @@
               {{> afQuickField name='propertyTag' disabled=true}}
               {{> afQuickField name='serialNo' disabled=true}}
               {{> afQuickField name='model' disabled=true}}
-              {{> afQuickField name='offCampus' disabled=true}}
+              {{> afQuickField name='isOffCampusDevice' disabled=true}}
               {{> afQuickField name='department' disabled=true}}
               {{> afQuickField name='roomNumber' disabled=true}}
             {{/autoForm}}
           </ul>  
         </div>  
         <div class="col-sm-8">
-          {{#if offCampus}}
+          {{#if isOffCampusDevice}}
             {{#if offCampusCertification}}
               {{#autoForm collection="Inventory" id="assetUserForm" doc=this}}
                 {{> afQuickField name='offCampusStreetAddress' disabled=true}}

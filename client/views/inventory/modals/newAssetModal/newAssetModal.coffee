@@ -1,5 +1,5 @@
-fields = [ 'serialNo', 'model', 'offCampus', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name', 'shipDate', 'deviceType' ]
-boolFields = [ 'checkout', 'enteredIntoEbars', 'delivered', 'isPartOfReplacementCycle' ]
+fields = [ 'serialNo', 'model', 'department', 'propertyTag', 'roomNumber', 'building', 'owner', 'name', 'shipDate', 'deviceType' ]
+boolFields = [ 'checkout', 'enteredIntoEbars', 'delivered', 'isOffCampusDevice', 'isPartOfReplacementCycle' ]
 
 Template.newAssetModal.onCreated ->
   @error = new ReactiveVar ""
