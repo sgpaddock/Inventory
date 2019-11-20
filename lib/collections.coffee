@@ -27,10 +27,6 @@ SimpleSchema.messages {
     optional: true # Will be taken care of by the server.
   model:
     type: String
-  isOffCampusDevice:
-    label: "Off campus/mobile device"
-    type: Boolean
-    defaultValue: false
   department:
     type: String
   owner:
@@ -60,10 +56,7 @@ SimpleSchema.messages {
   'attachments.$.purpose':
     type: String
     allowedValues: [
-      'ApprovedQuote'
-      'PurchaseAcknowledgement'
-      'PackingSlip'
-      'DeliveryForm'
+      'HiveSupportWaiver'
       'OffCampusEquipmentForm'
       'Other'
     ]
@@ -86,6 +79,13 @@ SimpleSchema.messages {
           "currentlyCheckedOut"
   delivered:
     label: "Delivered to User?"
+    type: Boolean
+    defaultValue: false
+  isOffCampusDevice:
+    label: "Off campus/mobile device"
+    type: Boolean
+    defaultValue: false
+  hasOffCampusForm:
     type: Boolean
     defaultValue: false
   isPartOfReplacementCycle:  

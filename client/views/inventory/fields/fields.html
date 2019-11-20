@@ -35,13 +35,15 @@
 </template>
 
 <template name="attachmentField">
-  <div class="btn-group">
-    <button class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">Attach Item <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-      <li><a href="#" data-action="uploadFile">Upload File</a></li>
-      <div Class="dropdown-divider"> </div>
-      <li><a href="#" data-action="uploadFile">Off-campus Form</a></li>
-    </ul>
+  <div class="btn-group dropright">
+    <button type="" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">Attach Item <span class="caret"></span></button>
+    <div class="dropdown-menu">
+      <li><a href="#" data-action="uploadOffCampusForm">Off-campus Form</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a href="#" data-action="uploadSupportWaiver">Support Waiver</a></li>
+      <li role="separator" class="divider"></li>
+      <li><a href="#" data-action="uploadOther">Other Document</a></li>
+    </div>
   </div>
 
   {{#each value}}

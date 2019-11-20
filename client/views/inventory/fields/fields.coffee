@@ -25,7 +25,23 @@ Template.attachmentField.events
     e.stopPropagation()
     Iron.query.set 'attachmentId', @fileId
 
-  'click a[data-action=uploadFile]': (e, tpl) ->
+  'click a[data-action=uploadOffCampusForm]': (e, tpl) ->
+    obj = {}
+    e.stopPropagation()
+    id = @documentId
+    Media.pickLocalFile (fileId) ->
+      Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'OffCampusEquipmentForm' } } }
+      obj['hasOffCampusForm'] = "true"
+    tpl.$('.dropdown-toggle').dropdown('toggle')
+
+  'click a[data-action=uploadSupportWaiver]': (e, tpl) ->
+    e.stopPropagation()
+    id = @documentId
+    Media.pickLocalFile (fileId) ->
+      Inventory.update id, { $addToSet: { attachments: { fileId: fileId , purpose: 'HiveSupportWaiver' } } }
+    tpl.$('.dropdown-toggle').dropdown('toggle')
+
+  'click a[data-action=uploadOther]': (e, tpl) ->
     e.stopPropagation()
     id = @documentId
     Media.pickLocalFile (fileId) ->
