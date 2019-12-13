@@ -172,11 +172,13 @@ Meteor.publishComposite 'checkouts', (checkoutFilter, inventoryFilter, options) 
   }
 
 Meteor.publish 'item', (query) ->
-  itemId = Inventory.findOne(query)?._id
+  item = Inventory.findOne(query)
+  itemId = item._id
+  fileIds = _.pluck item.attachments, 'fileId'
   if Roles.userIsInRole @userId, 'admin'
-    [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }), Deliveries.find({assetId: itemId}) ]
+    [ Inventory.find({ _id: itemId }), Changelog.find({ itemId: itemId }), Deliveries.find({assetId: itemId}), FileRegistry.find { _id: { $in: fileIds } } ]
   else if Inventory.findOne(itemId).owner is Meteor.users.findOne(@userId).username
-    Inventory.find { _id: itemId }
+    [ Inventory.find { _id: itemId }, FileRegistry.find { _id: { $in: fileIds } } ]
 
 Meteor.publishComposite 'upcomingItems', ->
   # Publish checkouts that are either expected to be picked up between yesterday and next week, or returned in the same time frame.
