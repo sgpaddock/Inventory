@@ -31,6 +31,23 @@
             {{else}}
               <button type="button" data-modal="offCampusRecordModal" data-toggle="modal" class="btn btn-primary">Record Off-campus Information</button>
             {{/if}}  
+          <div class="panel panel-default">
+                <div class="panel-heading">Attachments</div>
+                <div class="panel-body">
+                  <button type="button" class="btn btn-primary" data-action="attachFile">Attach File</button>
+                  {{#each attachments}}
+                    <div class="attachment">
+                      <div class="attachment-link">
+                        <a data-action="removeAttachment"><span class="glyphicon glyphicon-remove unavailable"></span></a>
+                        {{#if file.thumbnail}}
+                          <img class="img-thumbnail" style="max-width: 64px; max-height:24px;" src="/file/{{file.thumbnail}}" />
+                        {{/if}}
+                        <a data-action="showAttachmentModal" data-fileId="{{file._id}}">{{file.filename}}</a><br />
+                      </div>
+                    </div>
+                  {{/each}}
+                </div>
+              </div>   
           {{/if}}
         </div>      
       </div>
