@@ -39,10 +39,12 @@ Inventory.before.update (userId, doc, fieldNames, modifier, options) ->
         timestamp: new Date()
         userId: userId
         username: Meteor.users.findOne(userId)?.username
-    else
-      if _.isString doc[fn]
-        oldValue = escape(doc[fn])
-        newValue = escape(modifier.$set[fn])
+    else 
+      oldValue = doc[fn]
+      newValue = modifier.$set[fn]
+      if _.isString oldValue
+        oldValue = escape(oldValue)
+        newValue = escape(newValue)
       unless oldValue is newValue
         Changelog.insert
           itemId: doc._id
