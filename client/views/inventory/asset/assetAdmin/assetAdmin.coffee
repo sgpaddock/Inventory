@@ -25,6 +25,7 @@ Template.assetAdmin.events
   'click button[data-action=attachFile]': (e, tpl) ->
      Media.pickLocalFile (fileId) =>
        Inventory.update @_id, { $addToSet: { attachments: { fileId: fileId , purpose: 'Other' } } }
+  
   'click a[data-action=removeAttachment]': (e, tpl) ->
     Blaze.renderWithData Template.removeAttachmentModal, { attachmentId: @fileId, itemId: tpl.docId }, $('body').get(0)
     $('#removeAttachmentModal').modal('show')
@@ -52,11 +53,6 @@ Template.assetAdmin.events
     Blaze.renderWithData Template.warrantyInfoModal, this, $('body').get(0)
     $('#warrantyInfoModal').modal('show')
 
-  'click button[data-action=delete]': (e, tpl) ->
-    Blaze.renderWithData Template.confirmDeleteModal, this, $('body').get(0)
-    $('#editAssetModal').modal('hide')
-    $('#confirmDeleteModal').modal('show')
-
   'hidden.bs.modal': (e, tpl) ->
     Blaze.remove tpl.view
 
@@ -66,16 +62,10 @@ Template.assetAdmin.events
   'click button[data-action=lookupShipDate]': (e, tpl)->
     lookupShipDate tpl 
 
-  'click button[data-action=recordNewDelivery]': (e, tpl) ->
-    Blaze.renderWithData Template.pickupModal, { docId: tpl.docId }, $('body').get(0)
-    $('#pickupModal').modal('show')
-
-  'click button[data-action=deliverWithoutUser]': (e, tpl) ->
-    Meteor.call 'recordItemDeliveryWithoutUser', tpl.docId
-
 Template.assetAdmin.created = ->
   @subscribe 'buildings'
   @docId = Inventory.findOne()?._id
+  console.log(@docId)
 
 checkUsername = (tpl, winCb, failCb) ->
   # A check username function for this template only.

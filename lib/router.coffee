@@ -24,11 +24,12 @@ Router.map ->
     template: 'asset'
     onBeforeAction: ->
       Session.set 'propertyTag', @params.propertyTag
-      Meteor.subscribe 'item', { propertyTag:@params.propertyTag }
       if Meteor.isClient and not Meteor.userId()
         @render 'login'
-      else
-        @next()
+      @next()
+    waitOn: -> 
+      if Meteor.isClient and Meteor.userId()
+        Meteor.subscribe 'item', { propertyTag:@params.propertyTag }
 
   @route 'checkouts',
     path: '/checkouts'
