@@ -147,6 +147,8 @@ deviceTypes = [
   'PC laptop'
   'Mac laptop'
   'iPad'
+  'Webcam'
+  'Headset with microphone'
   'Video Camera/Audio Recorder'
   'Projector'
   'Miscellaneous'
