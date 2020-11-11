@@ -31,7 +31,8 @@ Template.assetAdmin.events
     $('#removeAttachmentModal').modal('show')
 
   'click a[data-action=showAttachmentModal]': (e, tpl) ->
-    Iron.query.set 'attachmentId', @fileId
+    Blaze.renderWithData Template.attachmentModal, { attachmentId: @fileId }, $('body').get(0)
+    $('#attachmentModal').modal('show')
 
   'click button[data-action=submit]': (e, tpl) ->
     obj = {}
